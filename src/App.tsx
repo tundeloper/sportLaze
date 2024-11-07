@@ -3,16 +3,20 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import { lazy, Suspense } from 'react';
-const Login = lazy(() => import('./components/login'))
+const Login = lazy(() => import('./components/auth'))
+const SignUp = lazy(() => import('./components/signUp'))
+const Home = lazy(() => import('./components/home'))
 
 function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path='/' element={<div className='text-primary font-bold'>Home</div>} />
         <Route 
-          path='/login' element={<Suspense fallback={<div>Loading...</div>}><Login /></Suspense>}/>
-        <Route path='/signup' element={<div>Signup</div>} />
+          path='/' element={<Suspense fallback={<div>Loading...</div>}><Home /></Suspense>} />
+        <Route 
+          path='/auth' element={<Suspense fallback={<div>Loading...</div>}><Login /></Suspense>} />
+        <Route 
+          path='/signup' element={<Suspense fallback={<div>Loading...</div>}><SignUp /></Suspense>} />
       </Routes>
       {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
