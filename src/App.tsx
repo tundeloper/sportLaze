@@ -3,9 +3,8 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import { lazy, Suspense } from 'react';
-const Login = lazy(() => import('./components/auth'))
-const SignUp = lazy(() => import('./components/signUp'))
-const Home = lazy(() => import('./components/home'))
+const Welcome = lazy(() => import('./pages/auth'))
+const Home = lazy(() => import('./pages/home'))
 
 function App() {
   return (
@@ -14,9 +13,11 @@ function App() {
         <Route 
           path='/' element={<Suspense fallback={<div>Loading...</div>}><Home /></Suspense>} />
         <Route 
-          path='/auth' element={<Suspense fallback={<div>Loading...</div>}><Login /></Suspense>} />
-        <Route 
-          path='/signup' element={<Suspense fallback={<div>Loading...</div>}><SignUp /></Suspense>} />
+          path='/auth' element={<Suspense fallback={<div>Loading...</div>}><Welcome /></Suspense>} />
+          <Route 
+          path='*' element={<Suspense fallback={<div>Loading...</div>}><div>Invalid Route</div></Suspense>} />
+        {/* <Route 
+          path='/signup' element={<Suspense fallback={<div>Loading...</div>}><SignUp /></Suspense>} /> */}
       </Routes>
       {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />

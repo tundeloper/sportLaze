@@ -38,7 +38,7 @@
 }
 
 .sliding-component {
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.5s ease-in-out;
 }
 
 .slide-in {
@@ -46,5 +46,20 @@
 }
 
 .slide-out {
-  transform: translateX(100%);
+  transform: translateX(300%);
+}
+
+.scale {
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.scale-down {
+  transform: scale(0);
+  opacity: 0;
+}
+
+.reset-position {
+  transform: scale(1);
+  opacity: 1;
+  z-index: 1;
 }
