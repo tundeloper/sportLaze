@@ -24,8 +24,8 @@ const Login : React.FC = () => {
       setSignUpIsVisible(false)
     }
     const overlay = (signInIsVisible || signUpIsVisible)
-    return <div className="flex justify-between items-center h-screen bg-contain mx-[8%]" style={{backgroundImage: `linear-gradient(rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.2)), url(${bg})`, justifyContent: 'space-around ', overflow: 'hidden'}}>
-        { overlay && <div className="w-screen h-screen bg-[#8987874d]" style={{position : 'absolute'}} onClick={removeHandler}/>}
+    return <div className="flex justify-between items-center h-screen bg-contain" style={{backgroundImage: `linear-gradient(rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.2)), url(${bg})`, justifyContent: 'space-around ', overflow: 'hidden'}}>
+        { overlay && <div className="w-screen h-screen bg-[#c07a7a4d]" style={{position : 'absolute'}} onClick={removeHandler}/>}
         <div className="flex justify-center items-center text-[red]"><img src={logo} alt="SPorlaze logo" className="w-[18rem] h-[18rem]" /></div>
         <div className="flex flex-col px-[1rem] relative rounded-[1rem] py-[1rem] w-[25rem]">
         <h1 className="text-5xl px-8 text-center font-bold">Welcome!</h1>
@@ -41,7 +41,7 @@ const Login : React.FC = () => {
               Already have an account ?
               <div className="flex-1 h-[.1px] bg-white" />
             </div>
-            <Button sx={{color: 'white', background: '#463a85', borderRadius: '2rem', textTransform: 'capitalize', padding: '10px'}} onClick={handleSignInClicked}>Create Account</Button>
+            <Button sx={{color: 'white', background: '#463a85', borderRadius: '2rem', textTransform: 'capitalize', padding: '10px'}} onClick={handleSignInClicked}>Sign In</Button>
             <SignIn visible={signInIsVisible} setIsVisible={setSignInIsVisible}/>
             <SignUp visible={signUpIsVisible}/>
         </div>

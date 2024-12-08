@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #0d0dad;
   min-height: 100vh;
   /* display: flex; */
   /* flex-direction: column; */
@@ -62,4 +62,40 @@
   transform: scale(1);
   opacity: 1;
   z-index: 1;
+}
+
+.people {
+  transform: translateX(20px);
+}
+
+.people img:nth-child(2) {
+  transform: translateX(-10px);
+}
+
+.people img:nth-child(3) {
+  transform: translateX(-20px);
+}
+
+.profile {
+  transform: translateX(-200%)
+}
+
+.no-profile {
+  transform: translateX(0);
+}
+
+.gradient {
+  background: linear-gradient(to left, #463a85, #9a1b39);
+}
+
+.gradient-r {
+  background: linear-gradient(to left, #9a1b39, #463a85);
+}
+
+.gradient-bb {
+  background: linear-gradient(to bottom, #9a1b39, #463a85);
+}
+
+.gradient-b {
+  background: linear-gradient(to bottom, #f1f1f1, #f1f1f1, #473a8574);
 }
