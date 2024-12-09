@@ -34,8 +34,8 @@ const Landing = () => {
         {/* posts */}
 
         <div className="flex w-full gap-4">
-            <div className="w-[10rem]">
-                <img src={user} alt="user" className="h-[10rem] w-[10rem]"/>
+            <div className="w-[5-rem]">
+                <img src={user} alt="user" className="h-[5rem] w-[5rem]"/>
             </div>
             <div className="w-[80%] mb-4">
                 <div className="flex gap-4 items-center mb-2 ">
@@ -49,7 +49,7 @@ const Landing = () => {
                     <div><ExpandGray /></div>
                 </div>
                 <p className="mb-2">🏆 Elevate your game with SportLaze!!!!! Connect, compete, and support your favourite team with a community that's as passionate as you are! 💪⚽️ <span className="font-bold">#SportLaze #GameOn</span></p>
-                <div className="h-[20rem] w-full gradient rounded-[1.5rem] mb-2" style={{overflow: 'hidden'}}>
+                <div className="w-full gradient rounded-[1.5rem] mb-2" style={{overflow: 'hidden', height: 'auto'}}>
                     {/* img */}
                     <img src={post} alt="post" className="w-full"/>
                 </div>
@@ -66,10 +66,10 @@ const Landing = () => {
         </div>
 
         <div className="flex w-full gap-4">
-            <div className="w-[10rem]">
-                <img src={user} alt="user" className="h-[10rem] w-[10rem]"/>
+            <div className="w-[5-rem]">
+                <img src={user} alt="user" className="h-[5rem] w-[5rem]"/>
             </div>
-            <div className="w-[80%]">
+            <div className="w-[80%] mb-4">
                 <div className="flex gap-4 items-center mb-2 ">
                     <div className="flex gap-2 justify-between w-full">
                         <div className="flex flex-col"><p className="font-bold">Evans Patrick</p> <p>@evansPatrick</p></div>
@@ -80,13 +80,24 @@ const Landing = () => {
                     </div>
                     <div><ExpandGray /></div>
                 </div>
-                <p>🏆 Elevate your game with SportLaze!!!!! Connect, compete, and support your favourite team with a community that's as passionate as you are! 💪⚽️</p>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae enim libero voluptatibus. Omnis voluptates totam eos quos nesciunt dignissimos optio recusandae repellendus atque ab aliquam ipsam, obcaecati eveniet voluptatem vel.</p>
-                <div className="h-[20rem] w-full gradient rounded-[1rem]">
-                    imgage
+                <p className="mb-2">🏆 Elevate your game with SportLaze!!!!! Connect, compete, and support your favourite team with a community that's as passionate as you are! 💪⚽️ <span className="font-bold">#SportLaze #GameOn</span></p>
+                <div className="w-full gradient rounded-[1.5rem] mb-2" style={{overflow: 'hidden', height: 'auto'}}>
+                    {/* img */}
+                    <img src={post} alt="post" className="w-full"/>
+                </div>
+                <div className="flex justify-between items-center w-full">
+                    <div className="flex gap-4">
+                        <div className="flex gap-[4px] items-center"><LikeIcon /> <p>15.3k</p></div>
+                        <div className="flex gap-[4px] items-center"><CommentIcon /> <p>15.3k</p></div>
+                        <div className="flex gap-[1px] items-center"><SendIcon /> <p>15.3k</p></div>
+                    </div>
+                    {/* Bookmark */}
+                    {/* <div><Bookmarkicon /></div> */}
                 </div>
             </div>
         </div>
+
+        
         </div>
     </div>
 }
