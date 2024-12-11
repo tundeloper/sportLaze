@@ -15,6 +15,8 @@ function App() {
         <Route 
           path='/auth' element={<Suspense fallback={<div>Loading...</div>}><Welcome /></Suspense>} />
           <Route 
+          path='/lounge' element={<Suspense fallback={<div>Loading...</div>}><div>Lounge Route</div></Suspense>} />
+          <Route 
           path='*' element={<Suspense fallback={<div>Loading...</div>}><div>Invalid Route</div></Suspense>} />
       </Routes>
       {/* <header className="App-header">
