@@ -1,72 +1,51 @@
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import Trends from "../components/Trends"
-import Lounge from "../components/lounges"
-import Fixture from "../components/Fixture"
-import NotIcon from "../assets/notifications"
-import MessageIcon from "../assets/messageIcon"
-import BarIcon from "../assets/NavBar"
-import SearchIcon from "../assets/Search"
-import SideBarIcon from "../assets/sideBarIcon"
-import UserIcon from "../assets/userIcon"
-import img from '../assets/logo gradient.svg'
-import Landing from "../components/landing"
-import Profile from "../components/profile"
-import PostSlider from "../components/postSlide"
-import LiveScore from "../components/predictions"
+import React, { useState } from "react"
+import { Link } from "react-router-dom"
+import bg from '../assets/background.jpg'
+import logo from '../assets/whitelogo1.png'
+import GoogleIcon from "../assets/svgs/googlesvg"
+import AppleIcon from "../assets/svgs/apple"
+import { Button } from "@mui/material"
+import SignIn from "./signIn"
+import SignUp from "./signUp"
 
-const Home = () => {
-    const [profile, setProfile] = useState<boolean>(false)
-    const navigate = useNavigate()
-    useEffect(() => {
-    // navigate('/auth')
-    }, [navigate])
-
-    return <div className="w-screen relative bg-[#dbd2d2] h-screen" style={{overflowX: 'hidden'}}>
-        <Profile profile={profile} setIsVisible={setProfile}/>
-        <div className="flex sticky top-0 justify-between items-center p-4 bg-[red] gradient z-[2] sm:p-6">
-            <div className="flex items-center gap-6 sm:gap-12">
-            <div style={{cursor: 'pointer'}} onClick={() => setProfile(true)}><SideBarIcon /></div>
-            <div className="relative">
-                <input type="text" className="w-[13rem] text-secondary p-2 pl-8 sm:w-[18rem]" placeholder="Search Sportlaze" style={{borderRadius: '1rem', outline: 'none'}} />
-                <div style={{position: 'absolute', top: '10px', left: '6px'}}><SearchIcon /></div>
+const Login : React.FC = () => {
+  const [signInIsVisible, setSignInIsVisible] = useState<boolean>(false)
+  const [signUpIsVisible, setSignUpIsVisible] = useState<boolean>(false)
+    const handleSignInClicked  = () => {
+      setSignInIsVisible(true)
+      setSignUpIsVisible(false)
+    }
+    const handleSignUpClicked  = () => {
+      setSignUpIsVisible(true)
+      setSignInIsVisible(false)
+    }
+    const removeHandler  = () => {
+      setSignInIsVisible(false)
+      setSignUpIsVisible(false)
+    }
+    const overlay = (signInIsVisible || signUpIsVisible)
+    return <div className="flex justify-between items-center h-screen bg-contain" style={{backgroundImage: `linear-gradient(rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.2)), url(${bg})`, justifyContent: 'space-around ', overflow: 'hidden'}}>
+        { overlay && <div className="w-screen h-screen bg-[#c07a7a4d]" style={{position : 'absolute'}} onClick={removeHandler}/>}
+        <div className="hidden justify-center items-center text-[red] sm:flex"><img src={logo} alt="SPorlaze logo" className="w-[18rem] h-[18rem]" /></div>
+        <div className="flex flex-col px-[1rem] relative rounded-[1rem] py-[1rem] w-[25rem]">
+        <h1 className="text-5xl px-8 text-center font-bold">Welcome!</h1>
+            <h1 className="text-xl text-left mt-6 mb-4 font-bold">Sign Up Now</h1>
+            <div className="flex gap-3 flex-col text-center">
+              <Link to='#' className="bg-white flex-1 text-black py-2 rounded-[2rem] font-bold"><div className="flex justify-center items-center gap-2"><GoogleIcon /><p>Sign Up with Google</p></div></Link>
+              <Link to='#' className="bg-white flex-1 text-black py-2 rounded-[2rem] font-bold"><div className="flex justify-center items-center gap-2"><AppleIcon /><p>Sign Up with Apple</p></div></Link>
+              <Button sx={{color: 'white', background: '#9a1b39', borderRadius: '2rem', textTransform: 'capitalize', padding: '10px'}}  onClick={handleSignUpClicked}>Create Account</Button>
             </div>
+            <p className="mt-2 text-[12px]">By sigining up you agreed to the<Link to='#' style={{textDecoration: 'underline', fontWeight: 'bold'}}>Terms of Service</Link> and <Link to='#' style={{textDecoration: 'underline', fontWeight: 'bold'}}>Privacy Policy</Link> including cookie use.</p>
+            <div className="flex justify-between items-center gap-2 my-8">
+              <div className="flex-1 h-[.1px] bg-white" />
+              Already have an account ?
+              <div className="flex-1 h-[.1px] bg-white" />
             </div>
-            <div className="flex items-center gap-2">
-                <div className="p-2 hidden bg-primary relative sm:block" style={{borderRadius: '10rem'}}>
-                    <BarIcon />
-                </div>
-                <div className="p-2 bg-primary relative" style={{borderRadius: '10rem'}}>
-                    <MessageIcon />
-                    <div className="flex justify-center items-center bg-[white] text-[red] text-[10px] w-4 h-4" style={{position: "absolute", top: '-.6rem', right: '-.3rem', borderRadius: '2rem'}}>3</div>
-                </div>
-                <div className="p-2 bg-primary relative" style={{borderRadius: '10rem'}}>
-                    <NotIcon />
-                    <div className="flex justify-center items-center bg-[white] text-[red] text-[10px] w-4 h-4" style={{position: "absolute", top: '-.6rem', right: '-.3rem', borderRadius: '2rem'}}>5</div>
-                </div>
-                <div className="p-2 hidden bg-primary sm:block" style={{borderRadius: '10rem'}}>
-                    <UserIcon />
-                </div>
-            </div>
-        </div>
-        <div className="flex w-full flex-row-reverse text-black lg:flex-row" style={{overflow: 'hidden'}}>
-            <div className="w-[35%] hidden m-2 lg:block">
-                <Trends />
-                <Lounge />
-            </div>
-            <div className="bg-white w-full h-[auto] p-4 sm: w-full sm:rounded-[1rem]">
-                <div className="flex justify-center mb-2"><img src={img} alt="gradient" /></div>
-                <Landing />
-            </div>
-            <div className="w-[40%] hidden m-2 sm:block">
-                <Fixture />
-                <div className="bg-white w-full p-2 rounded-[1rem]">
-                    <LiveScore />
-                    <PostSlider />
-                </div>
-            </div>
+            <Button sx={{color: 'white', background: '#463a85', borderRadius: '2rem', textTransform: 'capitalize', padding: '10px'}} onClick={handleSignInClicked}>Sign In</Button>
+            <SignIn visible={signInIsVisible} setIsVisible={setSignInIsVisible}/>
+            <SignUp visible={signUpIsVisible}/>
         </div>
     </div>
 }
 
-export default Home
+export default Login
