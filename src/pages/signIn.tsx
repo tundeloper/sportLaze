@@ -16,7 +16,7 @@ const SignIn : React.FC<{visible: boolean, setIsVisible: Dispatch<SetStateAction
     return () => window.removeEventListener('keydown', handleKeydown)
   }, [visible, setIsVisible])
 
-  return <div className={`flex flex-col px-[1rem] justify-between relative rounded-[1rem] bg-[#463a85] py-[1rem] w-[25rem] sliding-component ${visible ? 'slide-in' : 'slide-out'}`} style={{position: 'absolute'}}>
+  return <div className={`flex flex-col px-[1rem] justify-between relative rounded-[1rem] bg-[#463a85] py-[1rem] w-[23rem] sliding-component ${visible ? 'slide-in' : 'slide-out'}`} style={{position: 'absolute'}}>
     <div className="flex justify-center gap-4 mt-4 mb-4">
       <p className="font-bold text-xl">Sign In to</p>
       <img src={logo} alt="sportlaze logo" className="w-[3rem] h-[3rem]" />

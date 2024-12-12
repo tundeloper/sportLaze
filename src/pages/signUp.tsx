@@ -6,7 +6,7 @@ import FavTeam from "../components/FavTeam"
 import DOB from "../components/DOB"
 
 const SignUp: React.FC<{visible: boolean}> = ({visible}) => {
-    return <div className={`flex flex-col p-[2rem] justify-center items-center text-black rounded-[1rem] bg-[white] w-[28rem] scale ${visible ? 'reset-position' : 'scale-down'}`} style={{position: "absolute"}} >
+    return <div className={`flex flex-col p-[2rem] justify-center items-center text-black rounded-[1rem] bg-[white] w-[23rem] scale ${visible ? 'reset-position' : 'scale-down'}`} style={{position: "absolute"}} >
         <Box component="form" className="w-full">
             {/* <input placeholder="Name" style={{outline: 'none'}} className="mb-2" /> */}
             <TextField fullWidth placeholder="Name" style={{marginBottom: '.5rem'}}/>
