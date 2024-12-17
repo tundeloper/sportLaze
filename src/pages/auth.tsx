@@ -24,10 +24,10 @@ const Login : React.FC = () => {
       setSignUpIsVisible(false)
     }
     const overlay = (signInIsVisible || signUpIsVisible)
-    return <div className="flex flex-col justify-between items-center h-screen bg-contain sm:flex-row" style={{backgroundImage: `linear-gradient(rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.2)), url(${bg})`, justifyContent: 'space-around ', overflow: 'hidden'}}>
+    return <div className="flex flex-col justify-between items-center h-screen bg-contain sm:flex-row" style={{backgroundImage: `linear-gradient(rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.2)), url(${bg})`, justifyContent: 'space-around ', overflowX: 'hidden'}}>
         { overlay && <div className="w-screen h-screen bg-[#c07a7a4d]" style={{position : 'absolute'}} onClick={removeHandler}/>}
-        <div className="flex justify-center items-center text-[red] sm:flex"><img src={logo} alt="SPorlaze logo" className="w-[10rem] h-[10rem] sm: w-[18rem] sm: h-[18rem]" /></div>
-        <div className="flex flex-col px-[1rem] relative rounded-[1rem] py-[1rem] w-[25rem]">
+        <div className="flex justify-center items-center text-[red] mb-[3rem] mt-[2rem] sm:mt[0]"><img src={logo} alt="SPorlaze logo" className="w-[10rem] h-[10rem] sm: w-[18rem] sm: h-[18rem]" /></div>
+        <div className="flex flex-col px-[1rem] relative rounded-[1rem] py-[1rem] w-[25rem] mb-[6rem] sm:mb-[0]">
         <h1 className="text-5xl px-8 text-center font-bold">Welcome!</h1>
             <h1 className="text-xl text-left mt-6 mb-4 font-bold">Sign Up Now</h1>
             <div className="flex gap-3 flex-col text-center">
