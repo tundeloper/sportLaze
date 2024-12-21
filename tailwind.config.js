@@ -9,7 +9,8 @@ module.exports = {
         primary: '#9a1b39', // red color 
         primary50: '#9a1b395e',
         secondary: '#463a85', // blue color
-        secondary20: '#463a85a6'
+        secondary20: '#463a85a6',
+        grey: '#86888a'
       },
       fontFamily: {
         roboto: ["Roboto", "Playwrite HU", "serif"],

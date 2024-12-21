@@ -82,3 +82,21 @@ body {
   /* background-position: center; */
   background-repeat: no-repeat; 
 }
+
+.loading {
+  background: linear-gradient(90deg, rgb(146, 145, 145), rgb(206, 204, 204), rgb(206, 206, 206));
+  background-size: 200% 100%; /* Doubling the background size */
+  animation: colorShift 3s ease-in-out infinite; /* Infinite color-shift animation */
+}
+
+@keyframes colorShift {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 0%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
