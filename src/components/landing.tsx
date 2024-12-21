@@ -24,8 +24,8 @@ const Landing = () => {
     //     {name: 'lounge', path: '/lounge', icon: <LoungeIcon h={22} w={34} fill="#463a85" />},
     //     {name: 'share', path: '/share', icon: <Share />},
     // ]
-    return <div>
-        <nav className="flex justify-between mb-2">
+    return <div className="relative">
+        <nav className="flex sticky top-0 z-[6] justify-between mb-2">
         <NavLink to={'/'} className={({isActive}) => `px-8 py-4 ${isActive ? 'border-b-2 border-secondary' : ''}`}><HomeIcon /></NavLink>
         <NavLink to={'/videos'} className={({isActive}) => `px-8 py-4 ${isActive ? 'border-b-3 border-secondary' : ''}`}><img src={vid} alt="video icon"/></NavLink>
         <NavLink to={'/lounge'} className={({isActive}) => `px-8 py-4 ${isActive ? 'border-b border-secondary' : ''}`}><LoungeIcon h={22} w={34} fill="#463a85"/></NavLink>

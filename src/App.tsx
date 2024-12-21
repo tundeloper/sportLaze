@@ -3,6 +3,7 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import { lazy, Suspense } from 'react';
+import Lounge from './pages/lounge';
 const Welcome = lazy(() => import('./pages/auth'))
 const Home = lazy(() => import('./pages/home'))
 
@@ -15,7 +16,7 @@ function App() {
         <Route 
           path='/auth' element={<Suspense fallback={<div>Loading...</div>}><Welcome /></Suspense>} />
           <Route 
-          path='/lounge' element={<Suspense fallback={<div>Loading...</div>}><div>Lounge Route</div></Suspense>} />
+          path='/lounge' element={<Suspense fallback={<div>Loading...</div>}><Lounge /></Suspense>} />
           <Route 
           path='*' element={<Suspense fallback={<div>Loading...</div>}><div>Invalid Route</div></Suspense>} />
       </Routes>
@@ -23,8 +24,6 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
           className="App-link"
           href="https://reactjs.org"
           target="_blank"

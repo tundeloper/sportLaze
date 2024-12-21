@@ -1,32 +1,83 @@
 import { Box, Button, TextField, Typography } from "@mui/material"
-import React from "react"
+import React, { useState } from "react"
 import CountriesDropDown from "../components/contrydropdown"
 import FavSport from "../components/FavSport"
 import FavTeam from "../components/FavTeam"
 import DOB from "../components/DOB"
+import { SingleValue } from "react-select"
+import axios from "axios"
+
+// interface userData {
+//     name: string,
+//     email: string,
+//     date_of_birth: string,
+//     country: string,
+//     favorite_sport: string,
+//     favorite_team: string,
+//     password:string,
+//   }
+
+interface formprps {name: string, email: string, dateOfBirth: string, country: SingleValue<{label: string, value: string,}>, favSport: SingleValue<{label: string, value: string,}>, FavSportTeam: SingleValue<{label: string, value: string,}>}
 
 const SignUp: React.FC<{visible: boolean}> = ({visible}) => {
-    return <div className={`flex flex-col p-[2rem] justify-center items-center text-black rounded-[1rem] bg-[white] w-[23rem] scale ${visible ? 'reset-position' : 'scale-down'}`} style={{position: "absolute"}} >
-        <Box component="form" className="w-full">
+    const [userData, setUserData] = useState<formprps>({name: '', email: '', dateOfBirth: '2014-12-14', country: {label: '', value: ''}, favSport: {label: '', value: ''}, FavSportTeam: {label: '', value: ''}})
+    // const [error, setError] = useState<string | null>(null)
+
+    const userCredentials = {
+        name: userData.name,
+        email: userData.email,
+        date_of_birth: userData.dateOfBirth,
+        country: userData.country?.value,
+        favorite_sport: userData.favSport?.value,
+        favorite_team: userData.FavSportTeam?.value,
+        password: 'hagagagaagaga',
+    }
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setUserData((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+      };
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        try {
+            console.log(userData)
+            const response = await axios.post("https://lazeapi-2.onrender.com/signup/", userCredentials)
+            console.log(response)
+        } catch (error) {
+            if(axios.isAxiosError(error)) {
+                console.log(error.status)
+                console.log(error.message)
+            }
+        }
+    }
+
+
+    return <div className={`flex hidden flex-col p-[2rem] justify-center items-center text-black rounded-[1rem] bg-[white] w-[23rem] scale ${visible ? 'reset-position' : 'scale-down'}`} style={{position: "absolute"}} >
+        <Box component="form" className="w-full" onSubmit={handleSubmit}>
             {/* <input placeholder="Name" style={{outline: 'none'}} className="mb-2" /> */}
-            <TextField fullWidth placeholder="Name" style={{marginBottom: '.5rem'}}/>
-            <TextField fullWidth placeholder="Email" style={{marginBottom: '.5rem'}}/>
+            <TextField fullWidth placeholder="Name" style={{marginBottom: '.5rem'}} name="name" value={userData.name} onChange={handleInputChange}/>
+            <TextField fullWidth placeholder="Email" style={{marginBottom: '.5rem'}} name="email" value={userData.email} onChange={handleInputChange}/>
+            {/* <TextField fullWidth placeholder="Password" style={{marginBottom: '.5rem'}}/> */}
             <Typography gutterBottom >Date of Birth</Typography>
             <DOB />
-            <p className="text-[12px] mb-2">Your Date of Birth will not appear on your profile. Please confirm your real age</p>
+            <p className="text-a[12px] mb-2">Your Date of Birth will not appear on your profile. Please confirm your real age</p>
             <div className="mb-4">
-                <CountriesDropDown />
+                <CountriesDropDown setUserData={setUserData} userData={userData} />
             </div>
             <div className="mb-4">
-                <FavSport />
+                <FavSport setUserData={setUserData} userData={userData} />
             </div>
             <div className="mb-4">
-                <FavTeam />
+                <FavTeam setUserData={setUserData} userData={userData}/>
             </div>
             {/* <TextField fullWidth placeholder="Favourite Sport" style={{marginBottom: '.5rem'}}/>
             <TextField fullWidth placeholder="Favourite Sport Team"/> */}
             <div className="flex justify-center w-full">
-            <Button sx={{color: 'white', background: '#463a85', borderRadius: '2rem', textTransform: 'capitalize', padding: '10px 2.5rem',}}>Create Account</Button>
+            <Button sx={{color: 'white', background: '#463a85', borderRadius: '2rem', textTransform: 'capitalize', padding: '10px 2.5rem',}} type="submit">Create Account</Button>
             </div>
         </Box>
     </div>

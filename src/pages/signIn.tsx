@@ -12,7 +12,6 @@ const SignIn : React.FC<{visible: boolean, setIsVisible: Dispatch<SetStateAction
       if(e.key === "Escape" && visible) setIsVisible(false)
     }
     window.addEventListener('keydown', handleKeydown)
-    // clean up
     return () => window.removeEventListener('keydown', handleKeydown)
   }, [visible, setIsVisible])
 
@@ -27,7 +26,7 @@ const SignIn : React.FC<{visible: boolean, setIsVisible: Dispatch<SetStateAction
       <Link to='#' className="bg-white flex-1 text-black py-2 rounded-[1rem] font-bold"><div className="flex justify-center items-center gap-2"><AppleIcon /><p>Sign In with Apple</p></div></Link>
       
       </div>
-      <div className="flex justify-between items-center gap-10 my-8">
+      <div className="flex justify-between items-center gap-12 my-8">
         <div className="flex-1 h-[.1px] bg-white" />
           Sign In with
         <div className="flex-1 h-[.1px] bg-white" />
