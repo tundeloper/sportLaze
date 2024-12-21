@@ -42,7 +42,7 @@ const Lounge = () => {
                     </div>
                 </div>
             </div>
-            <div className="flex justify-center w-full min-h-[100vh] items-center  bg-white pb-10">
+            <div className="flex justify-center w-full min-h-[100vh - 15rem] items-center  bg-white pb-10">
             <Box className="p-4  border-2 mx-4 border-primary rounded-lg text-black lg:mx-[10%]">
                 <Box className="flex justify-between items-center mb-3 px-5">
                     <Typography variant="h5" style={{fontWeight: 'bold', color: '#463a85'}}>
