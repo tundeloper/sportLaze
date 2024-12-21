@@ -2,7 +2,7 @@ import { Button } from "@mui/material"
 import React, { Dispatch, SetStateAction } from "react"
 import logo from '../assets/1.png'
 import UserIcon from "../assets/userIcon"
-import ReplayOutlinedIcon from '@mui/icons-material/ReplayOutlined';
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import ArrowRightCircle from "../assets/arrowRightCircle"
 import Bookmark from "../assets/bookmark"
 import { Link } from "react-router-dom"
@@ -10,7 +10,7 @@ import LoungeIcon from "../assets/lounge"
 
 const Profile: React.FC<{ profile: boolean, setIsVisible: Dispatch<SetStateAction<boolean>> }> = ({ profile, setIsVisible }) => {
     return <div className={`sliding-component gradient-bb relative pt-10 p-2 bg-[red] w-[20rem] ${profile ? 'no-profile' : 'profile'}`} style={{ position: 'fixed', left: '0', top: '0', zIndex: '3', borderTopRightRadius: '1rem', borderBottomRightRadius: '1rem' }}>
-        <Button onClick={() => setIsVisible(false)} style={{ position: 'absolute', top: '.5rem', right: '0', color: 'red' }}><ReplayOutlinedIcon /></Button>
+        <Button onClick={() => setIsVisible(false)} style={{ position: 'absolute', top: '.5rem', right: '0', color: 'red' }}><ClearOutlinedIcon /></Button>
         <div className="border-b border-grey pb-10 mb-4">
             <div className="flex justify-center flex-col items-center mb-8">
                 <img src={logo} alt="current user" className="h-14 w-14 rounded-[100%]" />
