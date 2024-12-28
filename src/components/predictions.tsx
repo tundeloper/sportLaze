@@ -12,16 +12,16 @@ const matches = [
     date: "Sunday, 27 October",
   },
   {
-    team1: "Brighton & Hove Albion",
-    team2: "Manchester City",
-    logo1: "https://upload.wikimedia.org/wikipedia/en/thumb/f/fd/Brighton_%26_Hove_Albion_logo.svg/800px-Brighton_%26_Hove_Albion_logo.svg.png",
-    logo2: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/800px-Manchester_City_FC_badge.svg.png",
-    time: "17:50",
-    date: "Sunday, 27 October",
+    team1: "Manchester United",
+    team2: "Liverpool",
+    logo1: "https://en.wikipedia.org/wiki/File:Manchester_United_FC_crest.svg",
+    logo2: "https://en.wikipedia.org/wiki/File:Liverpool_FC.svg",
+    time: "16:50",
+    date: "Friday, 28 October",
   },
 ];
 
-const LiveScore: React.FC = () => {
+const Predictions: React.FC = () => {
   return (
     <div className="gradient mb-4 rounded-[.5rem] py-3" style={{background: "linear-gradient(to top, #3b0768, #881273)",}}>
         <div className="flex justify-center w-full bg-white"><h1 className="font-bold text-secondary">PREDICTIONS</h1></div>
@@ -31,7 +31,6 @@ const LiveScore: React.FC = () => {
       animation="slide"
       autoPlay={false} 
       duration={500}
-      navButtonsAlwaysInvisible={true}
       activeIndicatorIconButtonProps={{
           style: { color: '#fff'}
       }}
@@ -77,4 +76,4 @@ const LiveScore: React.FC = () => {
   );
 };
 
-export default LiveScore;
+export default Predictions;

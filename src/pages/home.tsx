@@ -6,8 +6,9 @@ import Fixture from "../components/Fixture"
 import img from '../assets/logo gradient.svg'
 import Landing from "../components/landing"
 import PostSlider from "../components/poatSlide"
-import LiveScore from "../components/predictions"
 import Layout from "../components/layout/layout"
+import Predictions from "../components/predictions"
+import LiveScore from "../components/livesscore"
 
 const Home = () => {
     const navigate = useNavigate()
@@ -28,8 +29,9 @@ const Home = () => {
             </div>
             <div className="w-[40%] hidden m-2 sm:block">
                 <Fixture />
+                <LiveScore />
                 <div className="bg-white w-full p-2 rounded-[1rem]">
-                    <LiveScore />
+                    <Predictions />
                     <PostSlider />
                 </div>
             </div>

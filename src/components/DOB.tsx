@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import Select, { SingleValue } from 'react-select'
 interface optionsTypes {
     label: string,
     value: string,
 }
+interface formprps {name: string, email: string, dateOfBirth: string, country: SingleValue<optionsTypes>, favSport: SingleValue<optionsTypes>, FavSportTeam: SingleValue<optionsTypes>}
 
 const date = new Date()
 const monthData = [{label: 'January', value: 'January'}, {label: 'February', value: 'February'}, {label: 'March', value: 'March'}, {label: 'April', value: 'April'}, {label: 'May', value: 'May'}, {label: 'June', value: 'June'}, {label: 'July', value: 'July'}, {label: 'August', value: 'August'}, {label: 'September', value: 'September'}, {label: 'October', value: 'October'}, {label: 'November', value: 'November'}, {label: 'December', value: 'December'}]
@@ -17,11 +18,14 @@ for (let day = 0.; day <= 30; day++) {
     dayData.push({label: day.toString(), value: day})
 }
 
-const DOB: React.FC = () => {
+const DOB: React.FC<{userData: formprps, setUserData: Dispatch<SetStateAction<formprps>>}> = ({setUserData, userData}) => {
     const [selectedMonth, setSelectedMonth] = useState<SingleValue<optionsTypes> | null>(null)
     const [selectedDay, setSelectedDay] = useState<SingleValue<{label: string, value: number}> | null>(null)
     const [selectedYear, setSelectedYear] = useState<SingleValue<{label: string, value: number}> | null>(null)
 
+    useEffect(() => {
+        setUserData({...userData, dateOfBirth: `${selectedYear?.value}-${selectedMonth?.value}-${selectedMonth?.value}`})
+    }, [selectedDay, selectedMonth, selectedYear, setUserData, userData])
 
     const monthChange = (selectedOptions: SingleValue<optionsTypes>) => {
         setSelectedMonth(selectedOptions)

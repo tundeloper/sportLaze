@@ -15,13 +15,13 @@ const SignIn : React.FC<{visible: boolean, setIsVisible: Dispatch<SetStateAction
     return () => window.removeEventListener('keydown', handleKeydown)
   }, [visible, setIsVisible])
 
-  return <div className={`flex flex-col px-[1rem] justify-between relative rounded-[1rem] bg-[#463a85] py-[1rem] w-[23rem] sliding-component ${visible ? 'slide-in' : 'slide-out'}`} style={{position: 'absolute'}}>
+  return <div className={`flex flex-col px-[1rem] justify-between relative rounded-[1rem] bg-[#463a85] py-[1rem] w-[23rem] sliding-component ${visible ? 'slide-in' : 'slide-out'}`} style={{position: "absolute", marginTop: '-2.5rem'}}>
     <div className="flex justify-center gap-4 mt-4 mb-4">
       <p className="font-bold text-xl">Sign In to</p>
       <img src={logo} alt="sportlaze logo" className="w-[3rem] h-[3rem]" />
     </div>
     <div className="text-center">
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-4">
       <Link to='#' className="bg-white flex-1 text-black py-2 rounded-[1rem] font-bold"><div className="flex justify-center items-center gap-2"><GoogleIcon /><p>Sign In with Google</p></div></Link>
       <Link to='#' className="bg-white flex-1 text-black py-2 rounded-[1rem] font-bold"><div className="flex justify-center items-center gap-2"><AppleIcon /><p>Sign In with Apple</p></div></Link>
       
