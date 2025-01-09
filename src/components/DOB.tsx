@@ -24,7 +24,11 @@ const DOB: React.FC<{userData: formprps, setUserData: Dispatch<SetStateAction<fo
     const [selectedYear, setSelectedYear] = useState<SingleValue<{label: string, value: number}> | null>(null)
 
     useEffect(() => {
-        setUserData({...userData, dateOfBirth: `${selectedYear?.value}-${selectedMonth?.value}-${selectedMonth?.value}`})
+        const formatDate = new Date(`${selectedYear?.value}-${selectedMonth?.value}-${selectedDay?.value}`)
+        const month = (formatDate.getMonth()+1).toString().padStart(2, '0')
+        const year = formatDate.getFullYear()
+        const day = (formatDate.getDate()).toString().padStart(2, '0')
+        setUserData({...userData, dateOfBirth: `${year}-${month}-${day}`})
     }, [selectedDay, selectedMonth, selectedYear, setUserData, userData])
 
     const monthChange = (selectedOptions: SingleValue<optionsTypes>) => {
