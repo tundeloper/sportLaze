@@ -1,15 +1,17 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
+import { SportlazeContext } from '../store/context';
 
-const MUISnackbar: React.FC<{message: string, open: boolean}> = ({message, open}) => {
+const MUISnackbar: React.FC = () => {
+    const ctx = React.useContext(SportlazeContext)
     return  <Snackbar
-    open={open}
-    autoHideDuration={6000}
+    open={!(ctx?.loading)}
+    autoHideDuration={4000}
+    anchorOrigin={{horizontal: 'center',vertical: 'top' }}
     // onClose={handleClose}
-    message={message}
+    message={ctx?.errorMesssage}
     // action={action}
   />
 }
+
+export default MUISnackbar

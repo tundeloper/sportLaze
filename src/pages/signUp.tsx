@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { Box, Button, IconButton, InputAdornment, TextField, Typography } from "@mui/material"
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import CountriesDropDown from "../components/contrydropdown"
@@ -7,6 +7,8 @@ import FavTeam from "../components/FavTeam"
 import DOB from "../components/DOB"
 import { SingleValue } from "react-select"
 import axios from "axios"
+import { SportlazeContext } from "../store/context";
+import MUISnackbar from "../utils/snackBar";
 
 // interface userData {
 //     name: string,
@@ -23,12 +25,12 @@ interface formprps { name: string, email: string, password?: string, dateOfBirth
 const SignUp: React.FC<{ visible: boolean }> = ({ visible }) => {
     const [userData, setUserData] = useState<formprps>({ name: '', email: '', dateOfBirth: '2014-12-14', country: { label: '', value: '' }, favSport: { label: '', value: '' }, FavSportTeam: { label: '', value: '' } })
     const [showPassword, setShowPassword] = useState(false);
-    const [loading, setLoading] = useState(false)
+
+    const ctx = useContext(SportlazeContext)
 
     const togglePasswordVisibility = () => {
         setShowPassword((prev) => !prev);
     };
-    // const [error, setError] = useState<string | null>(null)
 
     const userCredentials = {
         name: userData.name,
@@ -53,14 +55,17 @@ const SignUp: React.FC<{ visible: boolean }> = ({ visible }) => {
         e.preventDefault()
         console.log(userCredentials)
         try {
-            setLoading(true)
+            ctx?.setLoading(true)
             const response = await axios.post("https://lazeapi-2.onrender.com/signup/", userCredentials)
-            console.log(response)
+            console.log(response.data)
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                console.log(error.status)
-                console.log(error.message)
+                // console.log(error.status)
+                // console.log(error.message)
+                ctx?.setError(error.message)
             }
+        } finally {
+            ctx?.setLoading(false)
         }
     }
 

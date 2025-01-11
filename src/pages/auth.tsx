@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { Link } from "react-router-dom"
 import bg from '../assets/background.jpg'
 import logo from '../assets/whitelogo1.png'
@@ -7,14 +7,21 @@ import AppleIcon from "../assets/svgs/apple"
 import { Button } from "@mui/material"
 import SignIn from "./signIn"
 import SignUp from "./signUp"
+import Overlay from "../utils/overlay"
+import { SportlazeContext } from "../store/context"
+import MUISnackbar from "../utils/snackBar"
 
 const Login: React.FC = () => {
   const [signInIsVisible, setSignInIsVisible] = useState<boolean>(false)
   const [signUpIsVisible, setSignUpIsVisible] = useState<boolean>(false)
+
+  // const ctx = useContext(SportlazeContext)
+
   const handleSignInClicked = () => {
     setSignInIsVisible(true)
     setSignUpIsVisible(false)
   }
+
   const handleSignUpClicked = () => {
     setSignUpIsVisible(true)
     setSignInIsVisible(false)
@@ -25,6 +32,7 @@ const Login: React.FC = () => {
   }
   const overlay = (signInIsVisible || signUpIsVisible)
   return <div className="flex justify-between items-center h-screen bg-contain" style={{ backgroundImage: `linear-gradient(rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.2)), url(${bg})`, justifyContent: 'space-around ', overflow: 'hidden' }}>
+    <MUISnackbar />
     {overlay && <div className="w-screen h-screen bg-[#c07a7a4d]" style={{ position: 'absolute' }} onClick={removeHandler} />}
     <div className="flex-col justify-center items-center text-[red] sm:flex-row"><img src={logo} alt="SPorlaze logo" className="w-[18rem] h-[18rem]" /></div>
     <div className="flex flex-col px-[1rem] relative rounded-[1rem] py-[1rem] w-[25rem]">

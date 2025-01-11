@@ -2,6 +2,10 @@ import React, { createContext, ReactNode } from 'react';
 
 interface ContextType {
     isAuthenticated: boolean;
+    loading: boolean;
+    errorMesssage: string | null;
+    setError: (payload: string) => void,
+    setLoading: (payload: boolean) => void,
     token?: null | string,
     logout: () => void;
     login: (token: string) => void
@@ -10,12 +14,9 @@ interface ContextType {
 export const SportlazeContext = createContext<ContextType | undefined>(undefined);
 
 export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    // const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+    const [isloading, setIsLoading] = React.useState(false);
     const [token, setTokekn] = React.useState<string | null>(null);
-
-    // const login = () => {
-    //     setIsAuthenticated(true)
-    // };
+    const [message, setErrorMessage] = React.useState<string>('');
 
     const logout = () => {
         // setIsAuthenticated(false)
@@ -25,11 +26,18 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({ children 
         setTokekn(token)
     }
 
+    const setLoading = (payload: boolean) => {
+        setIsLoading(payload)
+    }
+
+    const setError = (payload: string) => {
+        setErrorMessage(String)
+    }
     // const value = { isAuthenticated: !!token, tokenHandler, login, token, logout }
 
 
     return (
-        <SportlazeContext.Provider value={{ isAuthenticated: !!token, login, token, logout }}>
+        <SportlazeContext.Provider value={{ isAuthenticated: !!token, login, token, logout, loading: isloading, setLoading: setLoading, errorMesssage: message, setError }}>
             {children}
         </SportlazeContext.Provider>
     );
