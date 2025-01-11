@@ -1,109 +1,88 @@
-import React, { useState } from "react"
-import { Box, Button, IconButton, InputAdornment, TextField, Typography } from "@mui/material"
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import CountriesDropDown from "../components/contrydropdown"
-import FavSport from "../components/FavSport"
-import FavTeam from "../components/FavTeam"
-import DOB from "../components/DOB"
-import { SingleValue } from "react-select"
+import { Box, Button } from "@mui/material"
+import logo from '../assets/whitelogo1.png'
+import { Link } from "react-router-dom"
+import GoogleIcon from "../assets/svgs/googlesvg"
+import AppleIcon from "../assets/svgs/apple"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import axios from "axios"
+import { useSportlaze } from "../hooks/useContext"
+import { useNavigate } from "react-router-dom"
 
-// interface userData {
-//     name: string,
-//     email: string,
-//     date_of_birth: string,
-//     country: string,
-//     favorite_sport: string,
-//     favorite_team: string,
-//     password:string,
-//   }
+interface formProps {email: string, password: string}
 
-interface formprps { name: string, email: string, password?: string, dateOfBirth: string, country: SingleValue<{ label: string, value: string, }>, favSport: SingleValue<{ label: string, value: string, }>, FavSportTeam: SingleValue<{ label: string, value: string, }> }
+const SignIn: React.FC<{ visible: boolean, setIsVisible: Dispatch<SetStateAction<boolean>> }> = ({ visible, setIsVisible }) => {
+  const [userData, setUserData] = useState<formProps>({ email: '', password: ''})
 
-const SignUp: React.FC<{ visible: boolean }> = ({ visible }) => {
-    const [userData, setUserData] = useState<formprps>({ name: '', email: '', dateOfBirth: '2014-12-14', country: { label: '', value: '' }, favSport: { label: '', value: '' }, FavSportTeam: { label: '', value: '' } })
-    const [showPassword, setShowPassword] = useState(false);
-
-    const togglePasswordVisibility = () => {
-        setShowPassword((prev) => !prev);
-    };
-    // const [error, setError] = useState<string | null>(null)
-
-    const userCredentials = {
-        name: userData.name,
-        email: userData.email,
-        date_of_birth: userData.dateOfBirth,
-        country: userData.country?.value,
-        favorite_sport: userData.favSport?.value,
-        favorite_team: userData.FavSportTeam?.value,
-        password: userData.password
-        // '123u3uu'
+  const { login, token } = useSportlaze()
+  const navigate = useNavigate()
+  //hadle esc keypress
+  useEffect(() => {
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && visible) setIsVisible(false)
     }
+    window.addEventListener('keydown', handleKeydown)
+    return () => window.removeEventListener('keydown', handleKeydown)
+  }, [visible, setIsVisible])
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setUserData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
+  useEffect(() => {
+    console.log(token)
+  }, [token])
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        console.log(userCredentials)
-        try {
-            const response = await axios.post("https://lazeapi-2.onrender.com/signup/", userCredentials)
-            console.log(response)
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                console.log(error.status)
-                console.log(error.message)
-            }
-        }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+          const { name, value } = e.target;
+          setUserData((prev) => ({
+              ...prev,
+              [name]: value,
+          }));
+      };
+
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    console.log(userData)
+    try {
+      const response = await axios.post("https://lazeapi-2.onrender.com/signin/", { email: userData.email, password: userData.password })
+      if (response.data?.access_token) {
+        login(response.data?.access_token)
+        console.log(response.data, token)
+        console.log(token)
+        navigate('/', { replace: true })
+      }
+      console.log(response.data)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error.status)
+        console.log(error.message)
+      }
     }
+  }
 
-
-    return <div className={`flex hidden flex-col p-[2rem] justify-center items-center text-black rounded-[1rem] bg-[white] w-[23rem] scale ${visible ? 'reset-position' : 'scale-down'}`} style={{ position: "absolute", marginTop: '-3rem' }}>
-        <Box component="form" className="w-full" onSubmit={handleSubmit}>
-            {/* <input placeholder="Name" style={{outline: 'none'}} className="mb-2" /> */}
-            <TextField fullWidth placeholder="Name" style={{ marginBottom: '.5rem' }} name="name" value={userData.name} onChange={handleInputChange} />
-            <TextField fullWidth placeholder="Email" style={{ marginBottom: '.5rem' }} name="email" value={userData.email} onChange={handleInputChange} />
-            <TextField
-                type={showPassword ? 'text' : 'password'}
-                name="password"
-                placeholder="Password"
-                fullWidth
-                onChange={handleInputChange}
-                InputProps={{
-                    endAdornment: (
-                        <InputAdornment position="end">
-                            <IconButton onClick={togglePasswordVisibility} edge="end">
-                                {showPassword ? <Visibility /> : <VisibilityOff />}
-                            </IconButton>
-                        </InputAdornment>
-                    ),
-                }}
-            />
-            {/* <TextField fullWidth placeholder="Password" style={{marginBottom: '.5rem'}}/> */}
-            <Typography gutterBottom >Date of Birth</Typography>
-            <DOB setUserData={setUserData} userData={userData} />
-            <p className="text-a[12px] mb-2">Your Date of Birth will not appear on your profile. Please confirm your real age</p>
-            <div className="mb-4">
-                <CountriesDropDown setUserData={setUserData} userData={userData} />
-            </div>
-            <div className="mb-4">
-                <FavSport setUserData={setUserData} userData={userData} />
-            </div>
-            <div className="mb-4">
-                <FavTeam setUserData={setUserData} userData={userData} />
-            </div>
-            {/* <TextField fullWidth placeholder="Favourite Sport" style={{marginBottom: '.5rem'}}/>
-            <TextField fullWidth placeholder="Favourite Sport Team"/> */}
-            <div className="flex justify-center w-full">
-                <Button sx={{ color: 'white', background: '#463a85', borderRadius: '2rem', textTransform: 'capitalize', padding: '10px 2.5rem', }} type="submit">Create Account</Button>
-            </div>
-        </Box>
+  return <div className={`flex flex-col px-[1rem] justify-between relative rounded-[1rem] bg-[#463a85] py-[1rem] w-[23rem] sliding-component ${visible ? 'slide-in' : 'slide-out'}`} style={{ position: "absolute", marginTop: '-2.5rem' }}>
+    <div className="flex justify-center gap-4 mt-4 mb-4">
+      <p className="font-bold text-xl">Sign In to</p>
+      <img src={logo} alt="sportlaze logo" className="w-[3rem] h-[3rem]" />
     </div>
+    <div className="text-center">
+      <div className="flex flex-col gap-4">
+        <Link to='#' className="bg-white flex-1 text-black py-2 rounded-[1rem] font-bold"><div className="flex justify-center items-center gap-2"><GoogleIcon /><p>Sign In with Google</p></div></Link>
+        <Link to='#' className="bg-white flex-1 text-black py-2 rounded-[1rem] font-bold"><div className="flex justify-center items-center gap-2"><AppleIcon /><p>Sign In with Apple</p></div></Link>
+
+      </div>
+      <div className="flex justify-between items-center gap-12 my-8">
+        <div className="flex-1 h-[.1px] bg-white" />
+        Sign In with
+        <div className="flex-1 h-[.1px] bg-white" />
+      </div>
+
+      <Box component='form' className="flex flex-col gap-4" onSubmit={submitHandler}>
+        <input placeholder="Email, Username or Phone" className="h-2" style={{ textAlign: 'center', color: 'white', outline: 'none', margin: '0 3rem 0 3rem', height: '2rem', borderRadius: '2rem', border: '1px solid white', background: 'transparent', padding: '1.2rem', fontSize: '' }} name="email" value={userData.email} onChange={handleInputChange} />
+        <input placeholder="Password" className="h-2" style={{ textAlign: 'center', color: 'white', outline: 'none', margin: '0 3rem 0 3rem', height: '2rem', borderRadius: '2rem', border: '1px solid white', background: 'transparent', padding: '1.2rem' }} name="password" value={userData.password} onChange={handleInputChange} type="password" />
+        <Link to="#"><p>Forgot Password</p></Link>
+        <Button sx={{ color: 'white', background: '#9a1b39', borderRadius: '2rem', textTransform: 'capitalize', padding: '10px', margin: '0 5rem 0 5rem' }} type="submit">Sign In</Button>
+      </Box>
+    </div>
+
+    <p className="text-center mb-2 ">Don't have an account? <Link to='#' className="font-bold" style={{ textDecoration: 'underline' }}>Sign Up</Link></p>
+  </div>
 }
 
-export default SignUp
+export default SignIn

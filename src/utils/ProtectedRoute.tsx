@@ -9,7 +9,7 @@ const Protect: React.FC<{ children: React.ReactNode, redirectPath: string }> = (
 
 
   if (!isAuthenticated) {
-    return <Navigate to={redirectPath} replace />;
+    return <Navigate to={'/auth'} replace />;
   }
 
   return <>{children}</>;

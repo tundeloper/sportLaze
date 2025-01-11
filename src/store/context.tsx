@@ -10,14 +10,16 @@ interface ContextType {
 export const SportlazeContext = createContext<ContextType | undefined>(undefined);
 
 export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+    // const [isAuthenticated, setIsAuthenticated] = React.useState(false);
     const [token, setTokekn] = React.useState<string | null>(null);
 
     // const login = () => {
     //     setIsAuthenticated(true)
     // };
 
-    const logout = () => setIsAuthenticated(false);
+    const logout = () => {
+        // setIsAuthenticated(false)
+    };
 
     const login = (token: string) => {
         setTokekn(token)
