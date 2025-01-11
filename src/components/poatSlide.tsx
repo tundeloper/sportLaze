@@ -1,6 +1,6 @@
 import React from "react";
 import Carousel from "react-material-ui-carousel";
-import { Card, CardContent, Avatar, Typography, Box} from "@mui/material";
+import { Card, CardContent, Avatar, Typography, Box } from "@mui/material";
 
 const slides = [
   {
@@ -27,7 +27,7 @@ const slides = [
 ];
 
 const PostSlider = () => {
-    const FixedHeight = '190px'
+  const FixedHeight = '190px'
   return (
     <Box
       sx={{
@@ -44,15 +44,15 @@ const PostSlider = () => {
         indicators={true} // Enable pagination dots
         navButtonsAlwaysVisible={false}
         animation="slide"
-        autoPlay={true} 
+        autoPlay={true}
         duration={500}
         navButtonsAlwaysInvisible={true}
         activeIndicatorIconButtonProps={{
-            style: { color: '#463a85'}
+          style: { color: '#463a85' }
         }}
       >
         {slides.map((slide) => (
-          <Card key={slide.id} sx={{ borderRadius: 3, textAlign: "left", boxShadow: 0, height: FixedHeight}}>
+          <Card key={slide.id} sx={{ borderRadius: 3, textAlign: "left", boxShadow: 0, height: FixedHeight }}>
             <CardContent>
               <Box display="flex" alignItems="center" mb={2}>
                 <Avatar

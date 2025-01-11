@@ -23,6 +23,7 @@ interface formprps { name: string, email: string, password?: string, dateOfBirth
 const SignUp: React.FC<{ visible: boolean }> = ({ visible }) => {
     const [userData, setUserData] = useState<formprps>({ name: '', email: '', dateOfBirth: '2014-12-14', country: { label: '', value: '' }, favSport: { label: '', value: '' }, FavSportTeam: { label: '', value: '' } })
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false)
 
     const togglePasswordVisibility = () => {
         setShowPassword((prev) => !prev);
@@ -52,6 +53,7 @@ const SignUp: React.FC<{ visible: boolean }> = ({ visible }) => {
         e.preventDefault()
         console.log(userCredentials)
         try {
+            setLoading(true)
             const response = await axios.post("https://lazeapi-2.onrender.com/signup/", userCredentials)
             console.log(response)
         } catch (error) {

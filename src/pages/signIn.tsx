@@ -8,10 +8,10 @@ import axios from "axios"
 import { useSportlaze } from "../hooks/useContext"
 import { useNavigate } from "react-router-dom"
 
-interface formProps {email: string, password: string}
+interface formProps { email: string, password: string }
 
 const SignIn: React.FC<{ visible: boolean, setIsVisible: Dispatch<SetStateAction<boolean>> }> = ({ visible, setIsVisible }) => {
-  const [userData, setUserData] = useState<formProps>({ email: '', password: ''})
+  const [userData, setUserData] = useState<formProps>({ email: '', password: '' })
 
   const { login, token } = useSportlaze()
   const navigate = useNavigate()
@@ -29,12 +29,12 @@ const SignIn: React.FC<{ visible: boolean, setIsVisible: Dispatch<SetStateAction
   }, [token])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-          const { name, value } = e.target;
-          setUserData((prev) => ({
-              ...prev,
-              [name]: value,
-          }));
-      };
+    const { name, value } = e.target;
+    setUserData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()

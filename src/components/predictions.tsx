@@ -23,55 +23,55 @@ const matches = [
 
 const Predictions: React.FC = () => {
   return (
-    <div className="gradient mb-4 rounded-[.5rem] py-3" style={{background: "linear-gradient(to top, #3b0768, #881273)",}}>
-        <div className="flex justify-center w-full bg-white"><h1 className="font-bold text-secondary">PREDICTIONS</h1></div>
-    <Carousel
-      indicators={true} // Enable pagination dots
-      navButtonsAlwaysVisible={false}
-      animation="slide"
-      autoPlay={false} 
-      duration={500}
-      activeIndicatorIconButtonProps={{
-          style: { color: '#fff'}
-      }}
-    >
-      {matches.map((match, index) => (
-        <Box
-          key={index}
-          sx={{
-            // background: "linear-gradient(to top, #3b0768, #881273)",
-            color: "#fff",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            borderRadius: "10px",
-            padding: "20px",
-            minHeight: "250px",
-          }}
-        >
+    <div className="gradient mb-4 rounded-[.5rem] py-3" style={{ background: "linear-gradient(to top, #3b0768, #881273)", }}>
+      <div className="flex justify-center w-full bg-white"><h1 className="font-bold text-secondary">PREDICTIONS</h1></div>
+      <Carousel
+        indicators={true} // Enable pagination dots
+        navButtonsAlwaysVisible={false}
+        animation="slide"
+        autoPlay={false}
+        duration={500}
+        activeIndicatorIconButtonProps={{
+          style: { color: '#fff' }
+        }}
+      >
+        {matches.map((match, index) => (
           <Box
+            key={index}
             sx={{
+              // background: "linear-gradient(to top, #3b0768, #881273)",
+              color: "#fff",
               display: "flex",
+              flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              gap: "20px",
-              marginBottom: "20px",
+              borderRadius: "10px",
+              padding: "20px",
+              minHeight: "250px",
             }}
           >
-            <Box component="img" src={match.logo1} alt={match.team1} sx={{ width: 70, height: 70 }} />
-            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-              VS
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "20px",
+                marginBottom: "20px",
+              }}
+            >
+              <Box component="img" src={match.logo1} alt={match.team1} sx={{ width: 70, height: 70 }} />
+              <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                VS
+              </Typography>
+              <Box component="img" src={match.logo2} alt={match.team2} sx={{ width: 70, height: 70 }} />
+            </Box>
+            <Typography variant="h4" sx={{ fontWeight: "bolder", marginBottom: "10px" }}>
+              {match.time}
             </Typography>
-            <Box component="img" src={match.logo2} alt={match.team2} sx={{ width: 70, height: 70 }} />
+            <Typography variant="subtitle1" sx={{ textTransform: "uppercase" }}>{match.date}</Typography>
           </Box>
-          <Typography variant="h4" sx={{ fontWeight: "bolder", marginBottom: "10px" }}>
-            {match.time}
-          </Typography>
-          <Typography variant="subtitle1" sx={{textTransform: "uppercase"}}>{match.date}</Typography>
-        </Box>
-      ))}
-    </Carousel>
+        ))}
+      </Carousel>
     </div>
   );
 };

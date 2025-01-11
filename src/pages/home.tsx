@@ -13,29 +13,29 @@ import LiveScore from "../components/livesscore"
 const Home = () => {
     const navigate = useNavigate()
     useEffect(() => {
-    // navigate('/auth')
+        // navigate('/auth')
     }, [navigate])
 
-    return <div className="w-screen relative bg-[#dbd2d2] h-screen" style={{overflowX: 'hidden'}}>
+    return <div className="w-screen relative bg-[#dbd2d2] h-screen" style={{ overflowX: 'hidden' }}>
         <Layout>
-        <div className="flex w-full flex-row-reverse text-black lg:flex-row" style={{overflow: 'hidden'}}>
-            <div className="w-[35%] hidden m-2 lg:block">
-                <Trends />
-                <Lounge />
-            </div>
-            <div className="bg-white w-full h-[auto] p-4 sm: w-full sm:rounded-[1rem]">
-                <div className="flex justify-center mb-2"><img src={img} alt="gradient" /></div>
-                <Landing />
-            </div>
-            <div className="w-[40%] hidden m-2 sm:block">
-                <Fixture />
-                <LiveScore />
-                <div className="bg-white w-full p-2 rounded-[1rem]">
-                    <Predictions />
-                    <PostSlider />
+            <div className="flex w-full flex-row-reverse text-black lg:flex-row" style={{ overflow: 'hidden' }}>
+                <div className="w-[35%] hidden m-2 lg:block">
+                    <Trends />
+                    <Lounge />
+                </div>
+                <div className="bg-white w-full h-[auto] p-4 sm: w-full sm:rounded-[1rem]">
+                    <div className="flex justify-center mb-2"><img src={img} alt="gradient" /></div>
+                    <Landing />
+                </div>
+                <div className="w-[40%] hidden m-2 sm:block">
+                    <Fixture />
+                    <LiveScore />
+                    <div className="bg-white w-full p-2 rounded-[1rem]">
+                        <Predictions />
+                        <PostSlider />
+                    </div>
                 </div>
             </div>
-        </div>
         </Layout>
     </div>
 }
