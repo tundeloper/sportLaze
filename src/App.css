@@ -19,7 +19,7 @@ body {
 }
 
 .hide-snack {
-  transform: translateY(-300%);
+  transform: translateY(-3000%);
 }
 
 .scale {

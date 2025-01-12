@@ -58,6 +58,7 @@ const SignUp: React.FC<{ visible: boolean }> = ({ visible }) => {
         console.log(userCredentials)
         try {
             ctx?.setLoading(true)
+            ctx?.setSnackIsOpen(false)
             const response = await axios.post("https://lazeapi-2.onrender.com/signup/", userCredentials)
             console.log(response.status)
             if (response.status === 200) {
