@@ -11,6 +11,10 @@ import Predictions from "../components/predictions"
 import LiveScore from "../components/livesscore"
 
 const Home = () => {
+    const navigate = useNavigate()
+    useEffect(() => {
+        // navigate('/auth')
+    }, [navigate])
 
     return <div className="w-screen relative bg-[#dbd2d2] h-screen" style={{ overflowX: 'hidden' }}>
         <Layout>

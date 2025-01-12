@@ -8,7 +8,7 @@ import DOB from "../components/DOB"
 import { SingleValue } from "react-select"
 import axios from "axios"
 import { SportlazeContext } from "../store/context";
-import MUISnackbar from "../utils/snackBar";
+// import MUISnackbar from "../utils/snackBar";
 
 // interface userData {
 //     name: string,
@@ -25,8 +25,10 @@ interface formprps { name: string, email: string, password?: string, dateOfBirth
 const SignUp: React.FC<{ visible: boolean }> = ({ visible }) => {
     const [userData, setUserData] = useState<formprps>({ name: '', email: '', dateOfBirth: '2014-12-14', country: { label: '', value: '' }, favSport: { label: '', value: '' }, FavSportTeam: { label: '', value: '' } })
     const [showPassword, setShowPassword] = useState(false);
-
+    
     const ctx = useContext(SportlazeContext)
+    
+    // useEffect(() => {console.log(ctx?.errorMesssage + 'jjjj')}, [ctx])
 
     const togglePasswordVisibility = () => {
         setShowPassword((prev) => !prev);
@@ -57,15 +59,23 @@ const SignUp: React.FC<{ visible: boolean }> = ({ visible }) => {
         try {
             ctx?.setLoading(true)
             const response = await axios.post("https://lazeapi-2.onrender.com/signup/", userCredentials)
-            console.log(response.data)
+            console.log(response.status)
+            if (response.status === 200) {
+                ctx?.setMessage({message : response.data.message, error: false});
+              } else {
+                throw new Error("Request failed");
+              }
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 // console.log(error.status)
-                // console.log(error.message)
-                ctx?.setError(error.message)
+                ctx?.setMessage({message: error.message, error: true})
             }
         } finally {
             ctx?.setLoading(false)
+            ctx?.setSnackIsOpen(true)
+            setTimeout(() => {
+            ctx?.setSnackIsOpen(false)
+            }, 5000)
         }
     }
 

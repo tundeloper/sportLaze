@@ -14,6 +14,14 @@ body {
   transform: translateX(300%);
 }
 
+.show-snack {
+  transform: translateX(0);
+}
+
+.hide-snack {
+  transform: translateY(-300%);
+}
+
 .scale {
   transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }
