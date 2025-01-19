@@ -71,11 +71,11 @@ const Loading = () => {
         {/* main content ///// */}
         <div className="bg-grey w-full h-[auto] p-4 sm: w-full sm:rounded-[1rem]">
            {/* MAIN CONTENT */}
-           <nav className="flex sticky top-0 z-[6] justify-between mb-2">
-           <div className="w-[2rem] h-[2rem] bg-secondary rounded-md loading" />
-           <div className="w-[2rem] h-[2rem] bg-secondary rounded-md loading" />
-           <div className="w-[2rem] h-[2rem] bg-secondary rounded-md loading" />
-           <div className="w-[2rem] h-[2rem] bg-secondary rounded-md loading" />
+           <nav className="flex gap-4 sticky top-0 z-[6] justify-between mb-2">
+           <div className="w-full h-[2rem] bg-secondary rounded-md loading" />
+           <div className="w-full h-[2rem] bg-secondary rounded-md loading" />
+           <div className="w-full h-[2rem] bg-secondary rounded-md loading" />
+           <div className="w-full h-[2rem] bg-secondary rounded-md loading" />
             {/* {navs.map(link => {
                 return <NavLink key={link.name} to={link.path} className={({isActive}) => `p-4 ${isActive ? 'text-[red] border-b border-secondary' : 'text-[blue]'}`}>{link.icon}</NavLink>
             })} */}
@@ -84,6 +84,8 @@ const Loading = () => {
         <div className="w-full bg-grey h-[10rem] loading rounded-md mb-2" />
         <div className="w-full bg-grey h-[10rem] loading rounded-md mb-2" />
         <div className="w-full bg-grey h-[3rem] loading rounded-md" />
+        <div className="w-full bg-grey h-[10rem] loading rounded-md mb-2" />
+        <div className="w-full bg-grey h-[1rem] loading rounded-md mb-2" />
         </div>
             {/* right nav /// */}
             <div className="w-[40%] hidden m-2 sm:block">

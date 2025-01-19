@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import LoungeCard from "./loungeCard";
+import { ScrollLeft, ScrollRight } from "../assets/lounge/scroll";
 
 // Sample data for lounges
 const lounges = [
@@ -64,7 +65,7 @@ const TopLounges: React.FC = () => {
             onClick={scrollLeft}
             className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-200 text-blue-900 p-2 rounded-full shadow-md hover:bg-gray-300"
           >
-            &#8592;
+            <ScrollLeft />
           </button>
 
           {/* Scrollable Container */}
@@ -83,7 +84,7 @@ const TopLounges: React.FC = () => {
             onClick={scrollRight}
             className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-200 text-blue-900 p-2 rounded-full shadow-md hover:bg-gray-300"
           >
-            &#8594;
+            <ScrollRight />
           </button>
         </div>
       </div>

@@ -10,11 +10,11 @@ const date = new Date()
 const monthData = [{ label: 'January', value: 'January' }, { label: 'February', value: 'February' }, { label: 'March', value: 'March' }, { label: 'April', value: 'April' }, { label: 'May', value: 'May' }, { label: 'June', value: 'June' }, { label: 'July', value: 'July' }, { label: 'August', value: 'August' }, { label: 'September', value: 'September' }, { label: 'October', value: 'October' }, { label: 'November', value: 'November' }, { label: 'December', value: 'December' }]
 const dayData: { label: string, value: number }[] = []
 const yearData: { label: string, value: number }[] = []
-for (let year = date.getFullYear(); year >= 1980; year--) {
+for (let year = date.getFullYear(); year >= 1950; year--) {
     yearData.push({ label: year.toString(), value: year })
 }
 
-for (let day = 0.; day <= 30; day++) {
+for (let day = 1.; day <= 31; day++) {
     dayData.push({ label: day.toString(), value: day })
 }
 
