@@ -110,11 +110,11 @@ const SignUp: React.FC<{ visible: boolean }> = ({ visible }) => {
                 } finally {
                     ctx?.setLoading(false)
                     ctx?.setSnackIsOpen(true)
+                    setSubmitting(false);
                     setTimeout(() => {
                         ctx?.setSnackIsOpen(false)
                     }, 5000)
                 }
-                setSubmitting(false);
             }}
         >
             {({ isSubmitting, errors, touched }) => (
