@@ -9,10 +9,14 @@ import LivesScoreIcon from "../assets/lounge/liveScoreIcon"
 import ChannelIIcon from "../assets/lounge/channelIcon"
 import ChallengeIcon from "../assets/lounge/challengeIcon"
 import HeartIcon from "../assets/lounge/heart"
-import soccer from '../assets/lounge/soccer.png'
-import basketBall from '../assets/svgs/Mask group.png'
-import hockey from '../assets/svgs/Hockey.png'
-import nfl from '../assets/svgs/the nfl.png'
+// import soccer from '../assets/lounge/soccer.png'
+import soccer from '../assets/svgs/ballEdit.jpg'
+// import basketBall from '../assets/svgs/Mask group.png'
+import basketBall from '../assets/svgs/basketball_big.jpg'
+// import hockey from '../assets/svgs/Hockey.png'
+import hockey from '../assets/svgs/hockey_big.jpg'
+// import nfl from '../assets/svgs/the nfl.png'
+import nfl from '../assets/svgs/nfl_big.jpg'
 import logo from '../assets/whitelogo.png'
 import InfoIcon from "../assets/lounge/infoIcon"
 
@@ -32,12 +36,12 @@ const LoungeId = () => {
     }
   }
   return <Layout>
-    <div className="min-h-screen bg-[#F9F2F2]">
+    <div className="bg-[#F9F2F2]">
       {/* Header Section */}
       <header className="relative text-white">
         <div className="relative flex justify-beween h-[25rem] flex" style={{ overflow: 'hidden', background: 'rgb(0, 12, 234)' }}>
         <img className="h-[10rem] w-auto absolute right-0 bottom-[-1rem] z-20"  src={logo} alt={lounge} style={{}}/>
-          <div className="w-full h-full absolute left-0 top-0 z-10 bg-[blue]" style={{background: 'linear-gradient(to right, rgb(0, 12, 234), rgb(0, 12, 234), transparent, transparent)'}}>
+          <div className="w-full h-full absolute left-0 top-0 z-10 bg-[blue]" style={{background: 'linear-gradient(to right, #463a85, #463a85, transparent, transparent)'}}>
             <div className="mt-[5rem] max-w-7xl m-auto py-10 px-6 flex flex-col md:flex p-8 relative">
               <div className="md:w-1/2">
                 <h1 className="text-5xl font-bold mb-4">{lounge}</h1>
@@ -52,11 +56,13 @@ const LoungeId = () => {
             </div>
           </div>
           <div
-            className="min-w-[60%] h-[full] ml-[40%] relative overflow-hidden rounded-xl bg-cover bg-center relative flex items-end shadow-lg bg-gradient-to-t from-secondary/90 to-primary text-white hover:scale-105 transition-transform"
+            className="w-[70%] h-[full] ml-[30%] relative overflow-hidden rounded-xl bg-cover bg-center relative flex items-end shadow-lg bg-gradient-to-t from-secondary/90 to-primary text-white hover:scale-105 transition-transform"
             style={{
               backgroundImage: `
-                linear-gradient(to right,rgb(0, 12, 234), rgba(105, 27, 154, 0.41)),
+                linear-gradient(to right, #5f4de2, rgba(105, 27, 154, 0.41), rgba(154, 27, 80, 0.41)),
                 url('${soccerImage()}')`,
+                // backgroundSize: '50rem 30rem',
+                backgroundRepeat: 'no-repeat',
               outline: 'none',
               border: '0px',
               float: 'right'
@@ -105,7 +111,7 @@ const LoungeId = () => {
             <div
               key={index}
               className="flex justify-between items-center bg-white text-secondary shadow-md rounded-lg p-3 text-center hover:bg-blue-100 transition"
-              style={{ border: '2px solidrgb(36, 15, 137)' }}
+              style={{ border: '2px solid rgb(36, 15, 137)' }}
             >
               <h2 className="text-sm font-semibold w-[4px] sm:text-lg">{item.name}</h2>
               <div className="text-sm">{item.icon}</div>

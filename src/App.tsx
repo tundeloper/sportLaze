@@ -25,11 +25,22 @@ function App() {
           <Route
             path='/videos' element={<Suspense fallback={<div>Loading...</div>}><Protect redirectPath='auth'><div>Videos Route</div></ Protect></Suspense>} />
           <Route
-            path='/lounge/:lounge' element={<Suspense fallback={<div>Loading...</div>}><Protect redirectPath='auth'><LoungeId /></Protect></Suspense>} />
+            path='/lounge/:lounge' element={<Suspense fallback={<div>Loading...</div>}><Protect redirectPath='auth'><LoungeId /></ Protect></Suspense>} />
           <Route
             path='*' element={<Suspense fallback={<div>Loading...</div>}><div>Invalid Route</div></Suspense>} />
         </Routes>
-        
+        {/* <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.tsx</code> and save to reload.
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header> */}
       </div>
     </SportlazeProvider>
   );

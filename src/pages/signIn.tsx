@@ -3,19 +3,17 @@ import logo from '../assets/whitelogo1.png'
 import { Link } from "react-router-dom"
 import GoogleIcon from "../assets/svgs/googlesvg"
 import AppleIcon from "../assets/svgs/apple"
-import { Dispatch, SetStateAction, useContext, useEffect, } from "react"
+import { Dispatch, SetStateAction, useEffect, } from "react"
 import axios from "axios"
 import { useSportlaze } from "../hooks/useContext"
 import { useNavigate } from "react-router-dom"
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { SignInSchema } from "../utils/validator"
-import { SportlazeContext } from "../store/context"
 
 
 const SignIn: React.FC<{ visible: boolean, setIsVisible: Dispatch<SetStateAction<boolean>> }> = ({ visible, setIsVisible }) => {
 
-  const { login, token, setLoading, setSnackIsOpen, setMessage } = useSportlaze()
-
+  const { login, setLoading, setSnackIsOpen, setMessage } = useSportlaze()
   const navigate = useNavigate()
   //hadle esc keypress
   useEffect(() => {
@@ -25,6 +23,33 @@ const SignIn: React.FC<{ visible: boolean, setIsVisible: Dispatch<SetStateAction
     window.addEventListener('keydown', handleKeydown)
     return () => window.removeEventListener('keydown', handleKeydown)
   }, [visible, setIsVisible])
+
+  const googleSignIn = async () => {
+    try {
+      setLoading(true)
+      setSnackIsOpen(false)
+      const response = await axios.post("https://lazeapi-2.onrender.com/google-signin")
+      console.log(response.status)
+      if (response.data?.access_token) {
+        login(response.data?.access_token)
+        navigate('/', { replace: true })
+      } else {
+        throw new Error("Request failed");
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // console.log(error.status)
+        setMessage({ message: error.message, error: true })
+      }
+    } finally {
+      setLoading(false)
+      setSnackIsOpen(true)
+      // setMessage({ message: 'Invalid email or password', error: true })
+      setTimeout(() => {
+        setSnackIsOpen(false)
+      }, 5000)
+    }
+  }
 
   // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   const { name, value } = e.target;
@@ -59,7 +84,7 @@ const SignIn: React.FC<{ visible: boolean, setIsVisible: Dispatch<SetStateAction
     </div>
     <div className="text-center">
       <div className="flex flex-col gap-3">
-        <Link to='#' className="bg-white flex-1 text-black py-2 rounded-[1rem] font-bold"><div className="flex justify-center items-center gap-2"><GoogleIcon /><p>Sign In with Google</p></div></Link>
+        <div onClick={googleSignIn} className="bg-white flex-1 text-black py-2 rounded-[1rem] font-bold"><div className="flex justify-center items-center gap-2"><GoogleIcon /><p>Sign In with Google</p></div></div>
         <Link to='#' className="bg-white flex-1 text-black py-2 rounded-[1rem] font-bold"><div className="flex justify-center items-center gap-2"><AppleIcon /><p>Sign In with Apple</p></div></Link>
 
       </div>
@@ -72,31 +97,30 @@ const SignIn: React.FC<{ visible: boolean, setIsVisible: Dispatch<SetStateAction
         initialValues={{ email: "", password: "", }}
         validationSchema={SignInSchema}
         onSubmit={async (values, { setSubmitting }) => {
-          console.log("Form Submitted", values);
           try {
             setLoading(true)
             setSnackIsOpen(false)
             const response = await axios.post("https://lazeapi-2.onrender.com/signin/", values)
+            console.log(response.status)
             if (response.data?.access_token) {
-              console.log(response.status)
-              if (response.status === 200) {
-                login(response.data?.access_token)
-                // setMessage({ message: response.data.message, error: false });
-                navigate('/', { replace: true })
-              } else {
-                throw new Error("Request failed");
-              }
+              login(response.data?.access_token)
+              navigate('/', { replace: true })
+            } else {
+              throw new Error("Request failed");
             }
-            console.log(response.data)
           } catch (error) {
             if (axios.isAxiosError(error)) {
-              console.log(error.status)
-              console.log(error.message)
+              // console.log(error.status)
+              if (error.message === "Network Error") {
+                setMessage({ message: error.message, error: true })
+              } else {
+                setMessage({message: error.response?.data.detail, error: true })
+              }
             }
           } finally {
             setLoading(false)
-            // setSnackIsOpen(true)
-            setSubmitting(false);
+            setSnackIsOpen(true)
+            // setMessage({ message: 'Invalid email or password', error: true })
             setTimeout(() => {
               setSnackIsOpen(false)
             }, 5000)
@@ -105,9 +129,9 @@ const SignIn: React.FC<{ visible: boolean, setIsVisible: Dispatch<SetStateAction
       >
         {({ isSubmitting, errors, touched }) => (
           <Form className="flex flex-col gap-2">
-            <ErrorMessage name="email" component="div" className="text-[red] text-[10px] mb-[-.7rem]" />
+            <ErrorMessage name="email" component="div" className="text-[red] text-[12px] mb-[-.5rem]" />
             <Field className={`w-full h-[40px] p-3 text-center mb-[.5rem] bg-[transparent] outline-none rounded border ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'}`} placeholder="Email, Username or Phone" name="email" style={{ borderRadius: '3rem' }} />
-            <ErrorMessage name="password" component="div" className="text-[red] text-[10px] mb-[-.7rem]" />
+            <ErrorMessage name="password" component="div" className="text-[red] text-[12px] mb-[-.5rem]" />
             <Field className={`w-full h-[40px] p-3 text-center mb-[.5rem] bg-[transparent] outline-none rounded border ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'}`} placeholder="Password" name="password" style={{ borderRadius: '3rem' }} type="password" />
             <Link to="#" style={{ textDecoration: 'underline' }}><p>Forgot Password?</p></Link>
             <Button sx={{ color: 'white', background: '#9a1b39', borderRadius: '2rem', textTransform: 'capitalize', padding: '10px', margin: '0 5rem 0 5rem' }} type="submit" disabled={isSubmitting}>Sign In</Button>

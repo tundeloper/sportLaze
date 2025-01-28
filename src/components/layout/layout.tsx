@@ -24,7 +24,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <div className="p-2 hidden bg-primary relative sm:block" style={{ borderRadius: '10rem' }}>
                     <BarIcon />
                 </div>
-                <div className="p-2 bg-primary relative" style={{ borderRadius: '10rem' }}>
+                <div className="p-[10px] bg-primary relative" style={{ borderRadius: '10rem' }}>
                     <MessageIcon />
                     <div className="flex justify-center items-center bg-[white] text-[red] text-[10px] w-4 h-4" style={{ position: "absolute", top: '-.6rem', right: '-.3rem', borderRadius: '2rem' }}>3</div>
                 </div>

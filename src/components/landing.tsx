@@ -42,7 +42,7 @@ const Landing = () => {
         {/* posts */}
 
         <div className="flex w-full gap-4">
-            <div className="w-[5-rem]">
+            <div className="w-[5rem] h-[5rem] sm:w-[3.5rem h-[3.5rem]]">
                 <img src={user} alt="user" className="h-[5rem] w-[5rem]"/>
             </div>
             <div className="w-[90%] mb-4">
@@ -62,10 +62,10 @@ const Landing = () => {
                     <img src={post} alt="post" className="w-full"/>
                 </div>
                 <div className="flex justify-between items-center w-full">
-                    <div className="flex gap-4">
-                        <div className="flex gap-[4px] items-center"><LikeIcon /> <p>15.3k</p></div>
-                        <div className="flex gap-[4px] items-center"><CommentIcon /> <p>15.3k</p></div>
-                        <div className="flex gap-[1px] items-center"><SendIcon /> <p>15.3k</p></div>
+                    <div className="flex items-center justify-center gap-4">
+                        <div className="flex gap-[4px] items-center"><LikeIcon /> <p className="text-[13px]">15.3k</p></div>
+                        <div className="flex gap-[4px] items-center"><CommentIcon /> <p className="text-[13px]">15.3k</p></div>
+                        <div className="flex gap-[1px] items-center"><SendIcon /> <p className="text-[13px]">15.3k</p></div>
                     </div>
                     {/* Bookmark */}
                     {/* <div><Bookmarkicon /></div> */}

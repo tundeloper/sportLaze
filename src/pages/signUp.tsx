@@ -91,12 +91,11 @@ const SignUp: React.FC<{ visible: boolean }> = ({ visible }) => {
             onSubmit={async (values, { setSubmitting }) => {
                 console.log("Form Submitted", values);
                 const credential = {...values, date_of_birth: userData.dateOfBirth, country: userData.country?.value, favorite_sport: userData.favSport?.value}
-                console.log(credential)
                 try {
                     ctx?.setLoading(true)
                     ctx?.setSnackIsOpen(false)
                     const response = await axios.post("https://lazeapi-2.onrender.com/signup/", credential)
-                    console.log(response.status)
+                    console.log(response)
                     if (response.status === 200) {
                         ctx?.setMessage({ message: response.data.message, error: false });
                     } else {
@@ -104,17 +103,22 @@ const SignUp: React.FC<{ visible: boolean }> = ({ visible }) => {
                     }
                 } catch (error) {
                     if (axios.isAxiosError(error)) {
-                        // console.log(error.status)
-                        ctx?.setMessage({ message: error.message, error: true })
+                        console.log(error)
+                        if (error.message === "Network Error") {
+                            ctx?.setMessage({ message: error.message, error: true })
+                          } else {
+                            ctx?.setMessage({message: error.response?.data.detail, error: true })
+                          }
+                        // ctx?.setMessage({ message: error.response?.data.detail, error: true })
                     }
                 } finally {
                     ctx?.setLoading(false)
                     ctx?.setSnackIsOpen(true)
-                    setSubmitting(false);
                     setTimeout(() => {
                         ctx?.setSnackIsOpen(false)
                     }, 5000)
                 }
+                setSubmitting(false);
             }}
         >
             {({ isSubmitting, errors, touched }) => (

@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=New+Amsterdam&family=Playwrite+HU:wght@100..400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
 body {
   font-family: "Roboto", "New Amsterdam", serif;
 }
+
 .sliding-component {
   transition: transform 0.5s ease-in-out;
 }
@@ -62,8 +64,33 @@ body {
 }
 
 .no-scrollbar {
-  -ms-overflow-style: none; /* Internet Explorer */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* Internet Explorer */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.scrollable {
+  overflow-y: scroll;
+  /* Still scrollable */
+  scrollbar-width: none;
+}
+
+.scrollable::-webkit-scrollbar {
+  display: none;
+  /* Hides scrollbar for WebKit browsers */
+}
+
+/* Medium screens and above (md breakpoint) */
+@media (min-width: 768px) {
+  .scrollable {
+    overflow-y: scroll;
+    /* Enables scrolling */
+    scrollbar-width: none;
+    /* Hides scrollbar width for Firefox */
+    -ms-overflow-style: none;
+    /* Hides scrollbar for IE 10+ */
+  }
 }
 
 .gradient {
@@ -83,27 +110,31 @@ body {
 }
 
 .gradient-mask {
-  background-image: 
+  background-image:
     linear-gradient(to top, white, #f1f1f1d9, #cdc9f13e),
     url('./assets/Mask group.png');
-  background-size: cover; 
+  background-size: cover;
   /* background-position: center; */
-  background-repeat: no-repeat; 
+  background-repeat: no-repeat;
 }
 
 .loading {
   background: linear-gradient(90deg, rgb(146, 145, 145), rgb(206, 204, 204), rgb(206, 206, 206));
-  background-size: 200% 100%; /* Doubling the background size */
-  animation: colorShift 3s ease-in-out infinite; /* Infinite color-shift animation */
+  background-size: 200% 100%;
+  /* Doubling the background size */
+  animation: colorShift 3s ease-in-out infinite;
+  /* Infinite color-shift animation */
 }
 
 @keyframes colorShift {
   0% {
     background-position: 0% 0%;
   }
+
   50% {
     background-position: 100% 0%;
   }
+
   100% {
     background-position: 0% 0%;
   }
