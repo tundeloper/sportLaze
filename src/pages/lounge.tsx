@@ -62,7 +62,7 @@ const Lounge = () => {
                     </Box>
 
                     {/* Grid Layout */}
-                    <Box className="grid grid-cols-3 gap-2 rounded-lg py-2 px-0 overflow-y-scroll overflow-x-hidden custom-scrollbar sm:px-5 sm:grid-cols-3 md:grid-cols-4" style={{ maxHeight: "500px" }}>
+                    <Box className="grid grid-cols-2 gap-2 rounded-lg py-2 px-0 overflow-y-scroll overflow-x-hidden custom-scrollbar sm:px-5 sm:grid-cols-3 md:grid-cols-4" style={{ maxHeight: "500px" }}>
                         {lounges.map((lounge, index) => (
                             <LoungeCard key={index} image={lounge.image} stats={lounge.stats} title={lounge.name} />
                         ))}
