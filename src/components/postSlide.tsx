@@ -1,6 +1,6 @@
 import React from "react";
 import Carousel from "react-material-ui-carousel";
-import { Card, CardContent, Avatar, Typography, Box } from "@mui/material";
+import { CardContent, Avatar, Typography, Box } from "@mui/material";
 
 const slides = [
   {

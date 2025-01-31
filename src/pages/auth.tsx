@@ -1,8 +1,8 @@
 import React, { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import bg from '../assets/background.jpg'
 import logo from '../assets/whitelogo1.png'
-import GoogleIcon from "../assets/svgs/googlesvg"
+// import GoogleIcon from "../assets/svgs/googlesvg"
 import AppleIcon from "../assets/svgs/apple"
 import { Button } from "@mui/material"
 import SignIn from "./signIn"
@@ -10,15 +10,16 @@ import SignUp from "./signUp"
 import MUISnackbar from "../utils/snackBar"
 import Overlay from "../utils/overlay"
 import { useSportlaze } from "../hooks/useContext"
-import axios from "axios"
-import { CredentialResponse, GoogleLogin } from "@react-oauth/google"
+// import axios from "axios"
+// import { CredentialResponse, GoogleLogin } from "@react-oauth/google"
 import GoogleLoginButton from "../utils/googleLoginBtn"
 
 const Login: React.FC = () => {
   const [signInIsVisible, setSignInIsVisible] = useState<boolean>(false)
   const [signUpIsVisible, setSignUpIsVisible] = useState<boolean>(false)
-  const navigate = useNavigate()
-  const { login, loading, setLoading, setSnackIsOpen, setMessage } = useSportlaze()
+  // const navigate = useNavigate()
+  // const { login, loading, setLoading, setSnackIsOpen, setMessage } = useSportlaze()
+  const { loading } = useSportlaze()
 
   const handleSignInClicked = () => {
     setSignInIsVisible(true)
@@ -36,26 +37,26 @@ const Login: React.FC = () => {
 
   const overlay = (signInIsVisible || signUpIsVisible)
 
-  const handleLoginSuccess = async (response: CredentialResponse) => {
-    console.log("Encoded JWT ID token:", response.credential);
+  // const handleLoginSuccess = async (response: CredentialResponse) => {
+  //   console.log("Encoded JWT ID token:", response.credential);
 
-    try {
-      const { data } = await axios.post("https://lazeapi-2.onrender.com/google-signin", {
-        token: response.credential,
-      });
+  //   try {
+  //     const { data } = await axios.post("https://lazeapi-2.onrender.com/google-signin", {
+  //       token: response.credential,
+  //     });
 
-      if (data.access_token) {
-        // localStorage.setItem("access_token", data.access_token);
-        console.log(data.access_token)
-        alert("Login successful!");
-      } else {
-        alert("Login failed: " + data.detail);
-      }
-    } catch (error) {
-      console.error("Google Sign-In error:", error);
-      alert("An error occurred during login.");
-    }
-  };
+  //     if (data.access_token) {
+  //       localStorage.setItem("access_token", data.access_token);
+  //       console.log(data.access_token)
+  //       alert("Login successful!");
+  //     } else {
+  //       alert("Login failed: " + data.detail);
+  //     }
+  //   } catch (error) {
+  //     console.error("Google Sign-In error:", error);
+  //     alert("An error occurred during login.");
+  //   }
+  // };
 
   // const googleSignIn = async (response) => {
   //   try {

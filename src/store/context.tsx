@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useEffect } from 'react';
+import React, { createContext, Dispatch, ReactNode, SetStateAction, useEffect } from 'react';
 import getInitialTheme from '../utils/initialTheme';
 
 interface ContextType {
@@ -11,7 +11,9 @@ interface ContextType {
     setLoading: (payload: boolean) => void,
     token?: null | string,
     logout: () => void;
-    login: (token: string) => void
+    login: (token: string) => void,
+    darkMode: boolean,
+    setDarkMode: Dispatch<SetStateAction<boolean>>
 }
 
 export const SportlazeContext = createContext<ContextType | undefined>(undefined);
@@ -52,7 +54,7 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({ children 
 
 
     return (
-        <SportlazeContext.Provider value={{ isAuthenticated: !!token, login, token, logout, loading: isloading, setLoading: setLoading, disMesssage: message, setMessage : setMessage, snacksisOpen: opensnacks, setSnackIsOpen: (open: boolean) => setOpensnacks(open) }}>
+        <SportlazeContext.Provider value={{ isAuthenticated: !!token, darkMode: darkMode, setDarkMode, login, token, logout, loading: isloading, setLoading: setLoading, disMesssage: message, setMessage : setMessage, snacksisOpen: opensnacks, setSnackIsOpen: (open: boolean) => setOpensnacks(open) }}>
             {children}
         </SportlazeContext.Provider>
     );
