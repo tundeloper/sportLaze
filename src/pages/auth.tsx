@@ -11,6 +11,8 @@ import MUISnackbar from "../utils/snackBar"
 import Overlay from "../utils/overlay"
 import { useSportlaze } from "../hooks/useContext"
 import axios from "axios"
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google"
+import GoogleLoginButton from "../utils/googleLoginBtn"
 
 const Login: React.FC = () => {
   const [signInIsVisible, setSignInIsVisible] = useState<boolean>(false)
@@ -34,33 +36,50 @@ const Login: React.FC = () => {
 
   const overlay = (signInIsVisible || signUpIsVisible)
 
-   const googleSignIn = async () => {
+  const handleLoginSuccess = async (response: CredentialResponse) => {
+    console.log("Encoded JWT ID token:", response.credential);
+
     try {
-      setLoading(true)
-      setSnackIsOpen(false)
-      const response = await axios.post("https://lazeapi-2.onrender.com/google-signin",)
-      console.log(response.status)
-      if (response.data?.access_token) {
-        login(response.data?.access_token)
-        navigate('/', { replace: true })
+      const { data } = await axios.post("https://lazeapi-2.onrender.com/google-signin", {
+        token: response.credential,
+      });
+
+      if (data.access_token) {
+        // localStorage.setItem("access_token", data.access_token);
+        console.log(data.access_token)
+        alert("Login successful!");
       } else {
-        throw new Error("Request failed");
+        alert("Login failed: " + data.detail);
       }
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        // console.log(error.status)
-        console.log(error)
-        setMessage({ message: error.message, error: true })
-      }
-    } finally {
-      setLoading(false)
-      setSnackIsOpen(true)
-      // setMessage({ message: 'Invalid email or password', error: true })
-      setTimeout(() => {
-        setSnackIsOpen(false)
-      }, 5000)
+      console.error("Google Sign-In error:", error);
+      alert("An error occurred during login.");
     }
-  }
+  };
+
+  // const googleSignIn = async (response) => {
+  //   try {
+  //     const { data } = await axios.post("http://localhost:8000/google-signin/", {
+  //       token: response.credential,
+  //     });
+
+  //     if (data.access_token) {
+  //       localStorage.setItem("access_token", data.access_token);
+  //       alert("Login successful!");
+  //     } else {
+  //       alert("Login failed: " + data.detail);
+  //     }
+  //   } catch (error) {
+  //     console.error("Google Sign-In error:", error);
+  //     alert("An error occurred during login.");
+  //   } finally {
+  //     setLoading(false)
+  //     setSnackIsOpen(true)
+  //     setTimeout(() => {
+  //       setSnackIsOpen(false)
+  //     }, 5000)
+  //   }
+  // }
 
   return <div className="flex justify-between items-center h-screen bg-contain sm:flex-row" style={{ backgroundImage: `linear-gradient(rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.2)), url(${bg})`, justifyContent: 'space-around ', overflow: 'hidden' }}>
     {overlay && <div className="w-screen h-screen bg-[#c07a7a4d]" style={{ position: 'absolute' }} onClick={removeHandler} />}
@@ -71,7 +90,10 @@ const Login: React.FC = () => {
       <h1 className="text-5xl px-8 text-center font-bold">Welcome!</h1>
       <h1 className="text-xl text-left mt-6 mb-4 font-bold">Sign Up Now</h1>
       <div className="flex gap-3 flex-col text-center">
-        <div  onClick={googleSignIn} className="bg-white flex-1 text-black py-2 rounded-[2rem] cursor-pointer font-bold"><div className="flex justify-center items-center gap-2"><GoogleIcon /><p>Sign Up with Google</p></div></div>
+
+        {/* <GoogleLogin onSuccess={handleLoginSuccess} onError={() => console.error("Login Failed")} /> */}
+        <GoogleLoginButton />
+        {/* <div onClick={googleSignIn} className="bg-white flex-1 text-black py-2 rounded-[2rem] cursor-pointer font-bold"><div className="flex justify-center items-center gap-2"><GoogleIcon /><p>Sign Up with Google</p></div></div> */}
         <Link to='#' className="bg-white flex-1 text-black py-2 rounded-[2rem] font-bold"><div className="flex justify-center items-center gap-2"><AppleIcon /><p>Sign Up with Apple</p></div></Link>
         <Button sx={{ color: 'white', background: '#9a1b39', borderRadius: '2rem', textTransform: 'capitalize', padding: '10px' }} onClick={handleSignUpClicked}>Create Account</Button>
       </div>

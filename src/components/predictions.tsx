@@ -24,7 +24,7 @@ const matches = [
 const Predictions: React.FC = () => {
   return (
     <div className="gradient mb-4 rounded-[.5rem] py-3" style={{ background: "linear-gradient(to top, #3b0768, #881273)", }}>
-      <div className="flex justify-center w-full bg-white"><h1 className="font-bold text-secondary">PREDICTIONS</h1></div>
+      <div className="flex justify-center w-full bg-white dark:bg-[black]"><h1 className="font-bold text-secondary dark:text-white">PREDICTIONS</h1></div>
       <Carousel
         indicators={true} // Enable pagination dots
         navButtonsAlwaysVisible={false}

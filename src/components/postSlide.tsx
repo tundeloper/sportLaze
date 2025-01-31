@@ -52,7 +52,8 @@ const PostSlider = () => {
         }}
       >
         {slides.map((slide) => (
-          <Card key={slide.id} sx={{ borderRadius: 3, textAlign: "left", boxShadow: 0, height: FixedHeight }}>
+          // Card
+          <div key={slide.id} className="bg-white dark:bg-[black]" style={{ borderRadius: 2, textAlign: "left", height: FixedHeight, }}>
             <CardContent>
               <Box display="flex" alignItems="center" mb={2}>
                 <Avatar
@@ -61,19 +62,19 @@ const PostSlider = () => {
                   sx={{ width: 50, height: 50 }}
                 />
                 <Box ml={2}>
-                  <Typography variant="subtitle1" fontWeight="bold">
+                  <div className="font-bold dark:text-white">
                     {slide.name}
-                  </Typography>
+                  </div>
                   <Typography variant="body2" color="text.secondary">
-                    {slide.handle}
+                    <p className="dark:text-white">{slide.handle}</p>
                   </Typography>
                 </Box>
               </Box>
               <Typography variant="body2" color="text.primary">
-                {slide.text}
+                <p className="dark:text-white">{slide.text}</p>
               </Typography>
             </CardContent>
-          </Card>
+          </div>
         ))}
       </Carousel>
       {/* <Button>Enter Channel</Button> */}

@@ -36,7 +36,7 @@ const LoungeId = () => {
     }
   }
   return <Layout>
-    <div className="bg-[#F9F2F2]">
+    <div className="bg-[#F9F2F2] dark:bg-[black]">
       {/* Header Section */}
       <header className="relative text-white">
         <div className="relative flex justify-beween h-[25rem] flex" style={{ overflow: 'hidden', background: 'rgb(0, 12, 234)' }}>
@@ -96,7 +96,7 @@ const LoungeId = () => {
       </header>
 
       {/* Grid Section */}
-      <section className="max-w-7xl mx-auto py-10 px-6 bg-[#F9F2F2]">
+      <section className="max-w-7xl mx-auto py-10 px-6 bg-[#F9F2F2] dark:bg-[black]">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           {[
             { name: "Live Score", icon: <LivesScoreIcon /> },

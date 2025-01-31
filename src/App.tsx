@@ -1,5 +1,6 @@
 // import React from 'react';
 // import logo from './logo.svg';
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import { lazy, Suspense } from 'react';
@@ -14,6 +15,7 @@ const Lounge = lazy(() => import('./pages/lounge'))
 function App() {
   return (
     <SportlazeProvider>
+      <GoogleOAuthProvider clientId='1068447635655-46m9unr93bpd6hgpsoar73kpkvrtot83.apps.googleusercontent.com'>
       <div className="App">
         <Routes>
           <Route
@@ -25,7 +27,7 @@ function App() {
           <Route
             path='/videos' element={<Suspense fallback={<div>Loading...</div>}><Protect redirectPath='auth'><div>Videos Route</div></ Protect></Suspense>} />
           <Route
-            path='/lounge/:lounge' element={<Suspense fallback={<div>Loading...</div>}><Protect redirectPath='auth'><LoungeId /></ Protect></Suspense>} />
+            path='/lounge/:lounge' element={<Suspense fallback={<div>Loading...</div>}><Protect redirectPath='auth'><LoungeId /></Protect></Suspense>} />
           <Route
             path='*' element={<Suspense fallback={<div>Loading...</div>}><div>Invalid Route</div></Suspense>} />
         </Routes>
@@ -42,6 +44,7 @@ function App() {
         </a>
       </header> */}
       </div>
+      </GoogleOAuthProvider>
     </SportlazeProvider>
   );
 }

@@ -31,22 +31,23 @@ const Lounge = () => {
 
     return <div style={{overflowX: 'hidden'}}>
         <Layout>
-            <div className="w-full h-[auto] bg-contain gradient-mask">
+        {/* (to top, black, #322f2fd9, #cdc9f13e),  gradient mask dark*/}  
+            <div className="w-full h-[auto] bg-contain gradient-mask dark:bg-[black]">
                 <div className="flex gap-4 pt-4 justify-center items-center flex-col">
                     <img src={logo} alt="white sportlaze logo" className="w-[auto] h-[5rem] mb-2" />
                     <div className="flex gap-4 rounded-xl items-center justify-between px-10 py-4 w-" style={{ border: '2px solid white' }}>
                         <div className="w-1rem[]"><LoungeIcon h={30} w={60} /></div>
-                        <h1 className="font-bold text-[1.5  rem] md:text-[1.8rem]">Lounge</h1>
+                        <h1 className="font-bold text-[1.5rem] md:text-[1.8rem]">Lounge</h1>
                     </div>
                     <div className="w-[100vw]">
                         <TopLounges />
                     </div>
                 </div>
             </div>
-            <div className="flex justify-center w-[100vw] min-h-[100vh - 15rem] items-center bg-white pb-10">
-                <Box className="p-2  border-0 border-primary ml-0 rounded-lg pr-[-4px] text-black max-w-[930px] sm:p-4 sm:mx-4 lg:mx-[10%] sm:border-2 w-full">
+            <div className="flex justify-center w-[100vw] min-h-[100vh - 15rem] items-center bg-white dark:bg-[black] pb-10">
+                <Box className="p-2  border-0 border-primary ml-0 rounded-lg pr-[-4px] text-black max-w-[930px] sm:p-4 sm:mx-4 lg:mx-[10%] sm:border-2 w-full dark:border-white">
                     <Box className="flex justify-between mb-3 px-0 sm:px-5">
-                        <Typography variant="h5" style={{ fontWeight: 'bold', color: '#463a85' }}>
+                        <Typography className="text-[#463a85] dark:text-white" variant="h5" style={{ fontWeight: 'bold' }}>
                             Lounges
                         </Typography>
                         {/* Search and Filters */}

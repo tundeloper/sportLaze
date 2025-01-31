@@ -48,24 +48,24 @@ const Landing = () => {
             <div className="w-[90%] mb-4">
                 <div className="flex gap-4 items-center mb-2 ">
                     <div className="flex gap-2 justify-between w-full">
-                        <div className="flex flex-col"><p className="font-bold">Evans Patrick</p> <p>@evansPatrick</p></div>
-                        <div className="flex gap-2 items-center"><p className="text-secondary font-bold">FOLLOW</p> <AddIcon /></div>
+                        <div className="flex flex-col"><p className="font-bold dark:text-white">Evans Patrick</p> <p className="dark:text-white">@evansPatrick</p></div>
+                        <div className="flex gap-2 items-center"><p className="text-secondary font-bold dark:text-white">FOLLOW</p> <AddIcon /></div>
                     </div>
                     <div>
                         {/* post */}
                     </div>
-                    <div><ExpandGray /></div>
+                    <div className="dark:bg-white"><ExpandGray /></div>
                 </div>
-                <p className="mb-2">🏆 Elevate your game with SportLaze!!!!! Connect, compete, and support your favourite team with a community that's as passionate as you are! 💪⚽️ <span className="font-bold">#SportLaze #GameOn</span></p>
+                <p className="mb-2 dark:text-white">🏆 Elevate your game with SportLaze!!!!! Connect, compete, and support your favourite team with a community that's as passionate as you are! 💪⚽️ <span className="font-bold">#SportLaze #GameOn</span></p>
                 <div className="w-full gradient rounded-[1.5rem] mb-2" style={{overflow: 'hidden', height: 'auto'}}>
                     {/* img */}
                     <img src={post} alt="post" className="w-full"/>
                 </div>
                 <div className="flex justify-between items-center w-full">
                     <div className="flex items-center justify-center gap-4">
-                        <div className="flex gap-[4px] items-center"><LikeIcon /> <p className="text-[13px]">15.3k</p></div>
-                        <div className="flex gap-[4px] items-center"><CommentIcon /> <p className="text-[13px]">15.3k</p></div>
-                        <div className="flex gap-[1px] items-center"><SendIcon /> <p className="text-[13px]">15.3k</p></div>
+                        <div className="flex gap-[4px] items-center"><LikeIcon /> <p className="text-[13px] dark:text-white">15.3k</p></div>
+                        <div className="flex gap-[4px] items-center"><CommentIcon /> <p className="text-[13px] dark:text-white">15.3k</p></div>
+                        <div className="flex gap-[1px] items-center"><SendIcon /> <p className="text-[13px] dark:text-white">15.3k</p></div>
                     </div>
                     {/* Bookmark */}
                     {/* <div><Bookmarkicon /></div> */}
@@ -74,30 +74,30 @@ const Landing = () => {
         </div>
 
         <div className="flex w-full gap-4">
-            <div className="w-[5-rem]">
-                <img src={user} alt="user" className="h-[5rem] w-[5rem]"/>
+            <div className="w-[2-rem] h-[2rem]">
+                <img src={user} alt="user" className="h-full w-full"/>
             </div>
             <div className="w-[90%] mb-4">
                 <div className="flex gap-4 items-center mb-2 ">
                     <div className="flex gap-2 justify-between w-full">
-                        <div className="flex flex-col"><p className="font-bold">Evans Patrick</p> <p>@evansPatrick</p></div>
-                        <div className="flex gap-2 items-center"><p className="text-secondary font-bold">FOLLOW</p> <AddIcon /></div>
+                        <div className="flex flex-col"><p className="font-bold dark:text-white">Evans Patrick</p> <p className="dark:text-white">@evansPatrick</p></div>
+                        <div className="flex gap-2 items-center"><p className="text-secondary font-bold dark:text-white">FOLLOW</p> <AddIcon /></div>
                     </div>
                     <div>
                         {/* post */}
                     </div>
                     <div><ExpandGray /></div>
                 </div>
-                <p className="mb-2">🏆 Elevate your game with SportLaze!!!!! Connect, compete, and support your favourite team with a community that's as passionate as you are! 💪⚽️ <span className="font-bold">#SportLaze #GameOn</span></p>
+                <p className="mb-2 dark:text-white">🏆 Elevate your game with SportLaze!!!!! Connect, compete, and support your favourite team with a community that's as passionate as you are! 💪⚽️ <span className="font-bold">#SportLaze #GameOn</span></p>
                 <div className="w-full gradient rounded-[1.5rem] mb-2" style={{overflow: 'hidden', height: 'auto'}}>
                     {/* img */}
                     <img src={post} alt="post" className="w-full"/>
                 </div>
                 <div className="flex justify-between items-center w-full">
                     <div className="flex gap-4">
-                        <div className="flex gap-[4px] items-center"><LikeIcon /> <p>15.3k</p></div>
-                        <div className="flex gap-[4px] items-center"><CommentIcon /> <p>15.3k</p></div>
-                        <div className="flex gap-[1px] items-center"><SendIcon /> <p>15.3k</p></div>
+                        <div className="flex gap-[4px] items-center"><LikeIcon /> <p className="dark:text-white">15.3k</p></div>
+                        <div className="flex gap-[4px] items-center"><CommentIcon /> <p className="dark:text-white">15.3k</p></div>
+                        <div className="flex gap-[1px] items-center"><SendIcon /> <p className="dark:text-white">15.3k</p></div>
                     </div>
                     {/* Bookmark */}
                     {/* <div><Bookmarkicon /></div> */}

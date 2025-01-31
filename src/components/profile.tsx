@@ -1,5 +1,5 @@
 import { Button } from "@mui/material"
-import React, { Dispatch, SetStateAction } from "react"
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
 import logo from '../assets/1.png'
 import UserIcon from "../assets/userIcon"
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
@@ -9,7 +9,26 @@ import { Link } from "react-router-dom"
 import LoungeIcon from "../assets/lounge"
 
 const Profile: React.FC<{ profile: boolean, setIsVisible: Dispatch<SetStateAction<boolean>> }> = ({ profile, setIsVisible }) => {
-    return <div className={`sliding-component gradient-bb relative pt-10 p-2 bg-[red] w-[20rem] ${profile ? 'no-profile' : 'profile'}`} style={{ position: 'fixed', left: '0', top: '0', zIndex: '3', borderTopRightRadius: '1rem', borderBottomRightRadius: '1rem' }}>
+    const getInitialTheme = () => {
+        if(localStorage.getItem("theme")) {
+            return localStorage.getItem("theme") === "dark"
+        }
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
+    }
+
+    const [darkMode, setDarkMode] = useState(getInitialTheme)
+
+    useEffect(() => {
+        if (darkMode) {
+            document.documentElement.classList.add("dark")
+            localStorage.setItem("theme", "dark")
+        } else {
+            document.documentElement.classList.remove("dark")
+            localStorage.setItem("theme", "light")
+        }
+    }, [darkMode])
+
+    return <div className={`sliding-component gradient-bb relative pt-10 p-2 bg-[red] relative w-[20rem] ${profile ? 'no-profile' : 'profile'}`} style={{ position: 'fixed', left: '0', top: '0', zIndex: '3', borderTopRightRadius: '1rem', borderBottomRightRadius: '1rem' }}>
         <Button onClick={() => setIsVisible(false)} style={{ position: 'absolute', top: '.5rem', right: '0', color: 'red' }}><ClearOutlinedIcon /></Button>
         <div className="border-b border-grey pb-10 mb-4">
             <div className="flex justify-center flex-col items-center mb-8">
@@ -30,6 +49,7 @@ const Profile: React.FC<{ profile: boolean, setIsVisible: Dispatch<SetStateActio
         <div className="flex justify-center mb-14">
             <Button sx={{ color: 'white', fontWeight: 'bold', textTransform: 'capitalize', display: 'flex', gap: '.5rem' }}><p>settings and support</p> <ArrowRightCircle /></Button>
         </div>
+        <div className="absolute bottom-4 cursor-pointer dark:text-[blue]" onClick={() => setDarkMode(!darkMode)}>dark mode</div>
     </div>
 }
 

@@ -3,12 +3,12 @@ import LoungeIcon from "../assets/lounge"
 import user from '../assets/evans avatar.png'
 
 const Lounge = () => {
-    return <div className="bg-white text-white mb-4 p"  style={{height: 'min-content', borderRadius: '1rem', overflow: 'hidden'}}>
+    return <div className="bg-white text-white mb-4 p dark:text-white dark:bg-[black]"  style={{height: 'min-content', borderRadius: '1rem', overflow: 'hidden'}}>
         <div className="flex justify-between items-center font-bold p-4 gradient-r mb-2">
             <div><p>My</p><p>Lounges</p></div>
             <LoungeIcon h={29} w={58} />
         </div>
-        <div className="text-black font-bold pb-4">
+        <div className="text-black dark:text-white dark:bg-[black] font-bold pb-4">
             <div className="flex justify-between items-center border-grey border-t border-b p-2">
             <div>
                 <p>Soccer</p>
@@ -57,7 +57,7 @@ const Lounge = () => {
                 </div>
             </div>
         </div>
-        <Link to='#' className="flex justify-center text-center text-secondary mb-4">Show more</Link>
+        <Link to='#' className="flex justify-center text-center text-secondary mb-4 dark:text-white">Show more</Link>
     </div>
 }
 

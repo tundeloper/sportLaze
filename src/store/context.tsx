@@ -1,4 +1,5 @@
-import React, { createContext, ReactNode } from 'react';
+import React, { createContext, ReactNode, useEffect } from 'react';
+import getInitialTheme from '../utils/initialTheme';
 
 interface ContextType {
     isAuthenticated: boolean;
@@ -17,9 +18,20 @@ export const SportlazeContext = createContext<ContextType | undefined>(undefined
 
 export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isloading, setIsLoading] = React.useState(false);
+    const [darkMode, setDarkMode] = React.useState(getInitialTheme)
     const [token, setTokekn] = React.useState<string | null>(null);
     const [message, setdisMessage] = React.useState<{message: string, error: boolean}>({message: '', error: false});
     const [opensnacks, setOpensnacks] = React.useState<boolean>(false);
+
+    useEffect(() => {
+            if (darkMode) {
+                document.documentElement.classList.add("dark")
+                localStorage.setItem("theme", "dark")
+            } else {
+                document.documentElement.classList.remove("dark")
+                localStorage.setItem("theme", "light")
+            }
+        }, [darkMode])
 
     const logout = () => {
         // setIsAuthenticated(false)
