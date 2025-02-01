@@ -4,6 +4,7 @@ import Carousel from "react-material-ui-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { Box, Typography } from "@mui/material";
 import PremierLeagueLogo from "../assets/premierLeagueLogo";
+import { useSportlaze } from "../hooks/useContext";
 
 const LiveScore : React.FC = () => {
 //   const responsive = {
@@ -20,6 +21,9 @@ const LiveScore : React.FC = () => {
 //       items: 1,
 //     },
 //   };
+
+const {darkMode} = useSportlaze()
+const fill = darkMode ? 'white' : '#3E0F51'
 
   const slides = [
     {
@@ -73,7 +77,7 @@ const LiveScore : React.FC = () => {
   ];
 
   return (
-    <Box className="bg-white overflow-hidden rounded-[1rem] shadow-md h-[23rem] max-w-sm mx-auto mb-4">
+    <Box className="bg-white overflow-hidden rounded-[1rem] shadow-md h-[23rem] dark:bg-[black] max-w-sm mx-auto mb-4">
       <Typography variant="h6" className="text-center font-bold text-white gradient p-[1.2rem]">
         LIVE SCORE
       </Typography>
@@ -98,7 +102,7 @@ const LiveScore : React.FC = () => {
             }}
         >
         {slides.map((slide, index) => (
-          <Box key={index} className="p-5 bg-white rounded-lg h-[100%]" >
+          <Box key={index} className="p-5 bg-white dark:bg-[black] rounded-lg h-[100%]" >
             {/* Team Logos */}
             <Box className="flex justify-between items-center">
               <Box className="flex flex-col items-center">
@@ -118,7 +122,7 @@ const LiveScore : React.FC = () => {
                 className="h-10 w-10"
               /> */}
               <div className="h-10 w-10">
-                <PremierLeagueLogo />
+                <PremierLeagueLogo fill={fill}/>
               </div>
 
               <Box className="flex flex-col items-center">
@@ -137,7 +141,7 @@ const LiveScore : React.FC = () => {
             <Box className="flex px-5 justify-between items-center mt-4">
               <Typography
                 variant="h4"
-                className="font-bold text-secondary shadow-lg w-[2rem] text-center rounded-lg"
+                className="font-bold text-secondary shadow-lg w-[2rem] text-center rounded-lg dark:text-white"
                 style={{fontWeight: 'bolder'}}
               >
                 {slide.team1.score}
@@ -145,20 +149,20 @@ const LiveScore : React.FC = () => {
               <Box className="text-center">
                 <Typography
                   variant="body2"
-                  className="text-purple-600 font-semibold"
+                  className="text-purple-600 font-semibold dark:text-white"
                 >
                   {slide.period}
                 </Typography>
                 <Typography
                   variant="h6"
-                  className="text-red-600 font-bold"
+                  className="text-red-600 font-bold dark:text-white"
                 >
                   {slide.time}
                 </Typography>
               </Box>
               <Typography
                 variant="h4"
-                className="font-bold text-secondary shadow-lg w-[2rem] text-center rounded-lg"
+                className="font-bold text-secondary shadow-lg w-[2rem] text-center rounded-lg dark:text-white"
                 style={{fontWeight: 'bolder'}}
               >
                 {slide.team2.score}
@@ -169,14 +173,14 @@ const LiveScore : React.FC = () => {
             <Box className="grid grid-cols-2 mt-4 text-center text-gray-600 text-sm">
               <Box>
                 {slide.team1.scorers.map((scorer, idx) => (
-                  <Typography key={idx} variant="body2" className="text-sm">
+                  <Typography style={{fontSize: '11px'}}  key={idx} variant="body2" className="text-sm dark:text-white">
                     {scorer}
                   </Typography>
                 ))}
               </Box>
               <Box>
                 {slide.team2.scorers.map((scorer, idx) => (
-                  <Typography key={idx} variant="body2">
+                  <Typography style={{fontSize: '11px'}} key={idx} variant="body2" className="text-sm dark:text-white">
                     {scorer}
                   </Typography>
                 ))}

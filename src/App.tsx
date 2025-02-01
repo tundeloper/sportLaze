@@ -19,15 +19,15 @@ function App() {
       <div className="App">
         <Routes>
           <Route
-            path='/' element={<Suspense fallback={<Loading />}><Protect redirectPath='auth'><Home /></Protect></Suspense>} />
+            path='/' element={<Suspense fallback={<Loading />}><Home /></Suspense>} />
           <Route
             path='/auth' element={<Suspense fallback={<div>Loading...</div>}><Welcome /></Suspense>} />
           <Route
-            path='/lounge' element={<Suspense fallback={<div>Loading...</div>}><Protect redirectPath='auth'><Lounge /></Protect></Suspense>} />
+            path='/lounge' element={<Suspense fallback={<div>Loading...</div>}><Lounge /></Suspense>} />
           <Route
             path='/videos' element={<Suspense fallback={<div>Loading...</div>}><Protect redirectPath='auth'><div>Videos Route</div></ Protect></Suspense>} />
           <Route
-            path='/lounge/:lounge' element={<Suspense fallback={<div>Loading...</div>}><Protect redirectPath='auth'><LoungeId /></Protect></Suspense>} />
+            path='/lounge/:lounge' element={<Suspense fallback={<div>Loading...</div>}><LoungeId /></Suspense>} />
           <Route
             path='*' element={<Suspense fallback={<div>Loading...</div>}><div>Invalid Route</div></Suspense>} />
         </Routes>

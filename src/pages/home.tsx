@@ -1,20 +1,18 @@
-import { useEffect } from "react"
-import { useNavigate } from "react-router-dom"
 import Trends from "../components/Trends"
 import Lounge from "../components/lounges"
 import Fixture from "../components/Fixture"
 import img from '../assets/logo gradient.svg'
+import whitelogo from '../assets/whitelogo1.png'
 import Landing from "../components/landing"
 import PostSlider from "../components/postSlide"
 import Layout from "../components/layout/layout"
 import Predictions from "../components/predictions"
 import LiveScore from "../components/livesscore"
+import { useSportlaze } from "../hooks/useContext"
 
 const Home = () => {
-    const navigate = useNavigate()
-    useEffect(() => {
-        // navigate('/auth')
-    }, [navigate])
+
+    const { darkMode } = useSportlaze()
 
     return <div className="w-screen relative bg-[#dbd2d2] h-screen dark:bg-[#4a4646]" style={{ overflowX: 'hidden' }}>
         <Layout>
@@ -24,7 +22,7 @@ const Home = () => {
                     <Lounge />
                 </div>
                 <div className="bg-white w-full h-[auto] p-4 sm: w-full dark:bg-[black] sm:rounded-[1rem]">
-                    <div className="flex justify-center mb-2"><img src={img} alt="gradient" /></div>
+                    <div className="flex justify-center mb-2"><img src={darkMode ? whitelogo : img} alt="sportlaze logo" className="h-[64px] w-[72px]" /></div>
                     <Landing />
                 </div>
                 <div className="w-[40%] hidden m-2 sm:block">

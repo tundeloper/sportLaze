@@ -1,11 +1,14 @@
 import { Link } from "react-router-dom"
 import TrendingIcon from "../assets/trendingicon"
 import ExpandButton from "../assets/expandButton"
+import { useSportlaze } from "../hooks/useContext"
 
 const Trends = () => {
+    const {darkMode} = useSportlaze()
+    const fill = darkMode ? 'white' : '#9A1B39'
     return <div className="bg-white p-4 mb-4 dark:bg-[black]" style={{ height: 'min-content', borderRadius: '1rem' }}>
         <div className="flex gap-2 items-center mb-4">
-            <TrendingIcon />
+            <TrendingIcon fill={fill} />
             <p className="font-bold text-xl dark:text-white">Trends for you</p>
         </div>
         <div className="flex flex-col gap-4">

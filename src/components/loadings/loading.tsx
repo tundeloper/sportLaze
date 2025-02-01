@@ -54,7 +54,7 @@ const Loading = () => {
         </div>
         <div className="text-black font-bold pb-4">
             {lounge.map((_, i) => {
-                return <div className="flex justify-between items-center border-grey border-t border-b p-2">
+                return <div key={i} className="flex justify-between items-center border-grey border-t border-b p-2">
                 <div>
                     <div className="w-[6rem] h-[1rem] bg-primary rounded-md mb-1 loading"></div>
                     <div className="w-[6rem] h-[.4rem] bg-primary rounded-md mb-1 loading"></div>

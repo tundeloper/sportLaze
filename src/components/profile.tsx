@@ -1,5 +1,5 @@
 import { Button } from "@mui/material"
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
+import React, { Dispatch, SetStateAction } from "react"
 import logo from '../assets/1.png'
 import UserIcon from "../assets/userIcon"
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
@@ -7,26 +7,12 @@ import ArrowRightCircle from "../assets/arrowRightCircle"
 import Bookmark from "../assets/bookmark"
 import { Link } from "react-router-dom"
 import LoungeIcon from "../assets/lounge"
+import { useSportlaze } from "../hooks/useContext";
+import Moon from "../assets/svgs/Moon_alt";
 
 const Profile: React.FC<{ profile: boolean, setIsVisible: Dispatch<SetStateAction<boolean>> }> = ({ profile, setIsVisible }) => {
-    const getInitialTheme = () => {
-        if(localStorage.getItem("theme")) {
-            return localStorage.getItem("theme") === "dark"
-        }
-        return window.matchMedia("(prefers-color-scheme: dark)").matches
-    }
 
-    const [darkMode, setDarkMode] = useState(getInitialTheme)
-
-    useEffect(() => {
-        if (darkMode) {
-            document.documentElement.classList.add("dark")
-            localStorage.setItem("theme", "dark")
-        } else {
-            document.documentElement.classList.remove("dark")
-            localStorage.setItem("theme", "light")
-        }
-    }, [darkMode])
+    const { darkMode, setDarkMode } = useSportlaze()
 
     return <div className={`sliding-component gradient-bb relative pt-10 p-2 bg-[red] relative w-[20rem] ${profile ? 'no-profile' : 'profile'}`} style={{ position: 'fixed', left: '0', top: '0', zIndex: '3', borderTopRightRadius: '1rem', borderBottomRightRadius: '1rem' }}>
         <Button onClick={() => setIsVisible(false)} style={{ position: 'absolute', top: '.5rem', right: '0', color: 'red' }}><ClearOutlinedIcon /></Button>
@@ -49,7 +35,7 @@ const Profile: React.FC<{ profile: boolean, setIsVisible: Dispatch<SetStateActio
         <div className="flex justify-center mb-14">
             <Button sx={{ color: 'white', fontWeight: 'bold', textTransform: 'capitalize', display: 'flex', gap: '.5rem' }}><p>settings and support</p> <ArrowRightCircle /></Button>
         </div>
-        <div className="absolute bottom-4 cursor-pointer dark:text-[blue]" onClick={() => setDarkMode(!darkMode)}>dark mode</div>
+        <Button className="absolute bottom-4 cursor-pointer dark:text-[blue]" onClick={() => setDarkMode(!darkMode)}><Moon /></Button>
     </div>
 }
 

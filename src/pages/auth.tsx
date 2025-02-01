@@ -10,15 +10,13 @@ import SignUp from "./signUp"
 import MUISnackbar from "../utils/snackBar"
 import Overlay from "../utils/overlay"
 import { useSportlaze } from "../hooks/useContext"
-// import axios from "axios"
-// import { CredentialResponse, GoogleLogin } from "@react-oauth/google"
 import GoogleLoginButton from "../utils/googleLoginBtn"
 
 const Login: React.FC = () => {
   const [signInIsVisible, setSignInIsVisible] = useState<boolean>(false)
   const [signUpIsVisible, setSignUpIsVisible] = useState<boolean>(false)
   // const navigate = useNavigate()
-  // const { login, loading, setLoading, setSnackIsOpen, setMessage } = useSportlaze()
+
   const { loading } = useSportlaze()
 
   const handleSignInClicked = () => {
@@ -36,51 +34,6 @@ const Login: React.FC = () => {
   }
 
   const overlay = (signInIsVisible || signUpIsVisible)
-
-  // const handleLoginSuccess = async (response: CredentialResponse) => {
-  //   console.log("Encoded JWT ID token:", response.credential);
-
-  //   try {
-  //     const { data } = await axios.post("https://lazeapi-2.onrender.com/google-signin", {
-  //       token: response.credential,
-  //     });
-
-  //     if (data.access_token) {
-  //       localStorage.setItem("access_token", data.access_token);
-  //       console.log(data.access_token)
-  //       alert("Login successful!");
-  //     } else {
-  //       alert("Login failed: " + data.detail);
-  //     }
-  //   } catch (error) {
-  //     console.error("Google Sign-In error:", error);
-  //     alert("An error occurred during login.");
-  //   }
-  // };
-
-  // const googleSignIn = async (response) => {
-  //   try {
-  //     const { data } = await axios.post("http://localhost:8000/google-signin/", {
-  //       token: response.credential,
-  //     });
-
-  //     if (data.access_token) {
-  //       localStorage.setItem("access_token", data.access_token);
-  //       alert("Login successful!");
-  //     } else {
-  //       alert("Login failed: " + data.detail);
-  //     }
-  //   } catch (error) {
-  //     console.error("Google Sign-In error:", error);
-  //     alert("An error occurred during login.");
-  //   } finally {
-  //     setLoading(false)
-  //     setSnackIsOpen(true)
-  //     setTimeout(() => {
-  //       setSnackIsOpen(false)
-  //     }, 5000)
-  //   }
-  // }
 
   return <div className="flex justify-between items-center h-screen bg-contain sm:flex-row" style={{ backgroundImage: `linear-gradient(rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.2)), url(${bg})`, justifyContent: 'space-around ', overflow: 'hidden' }}>
     {overlay && <div className="w-screen h-screen bg-[#c07a7a4d]" style={{ position: 'absolute' }} onClick={removeHandler} />}

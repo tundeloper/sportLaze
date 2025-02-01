@@ -5,12 +5,12 @@ import GoogleIcon from "../assets/svgs/googlesvg";
 const GoogleLoginButton = () => {
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-        console.log(tokenResponse)
       try {
+        console.log("Encoded JWT ID token:", tokenResponse.access_token);
         const { data } = await axios.post("https://lazeapi-2.onrender.com/google-signin/", {
           token: tokenResponse.access_token,
         });
-
+        // console.log(data, 'data')
         if (data.access_token) {
         //   localStorage.setItem("access_token", data.access_token);
           alert("Login successful!");

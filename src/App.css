@@ -118,6 +118,15 @@ body {
   background-repeat: no-repeat;
 }
 
+.gradient-mask-dark {
+  background-image:
+    linear-gradient(to top, black, #322f2fd9, #cdc9f13e),
+    url('./assets/Mask group.png');
+  background-size: cover;
+  /* background-position: center; */
+  background-repeat: no-repeat;
+}
+
 .loading {
   background: linear-gradient(90deg, rgb(146, 145, 145), rgb(206, 204, 204), rgb(206, 206, 206));
   background-size: 200% 100%;
