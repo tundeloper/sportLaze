@@ -45,6 +45,7 @@ const GoogleLoginButton = () => {
       }
     },
     onError: () => setMessage({ message: 'Invalid email or password', error: true }),
+    flow: "implicit",
   });
 
   return (
