@@ -16,8 +16,9 @@ const GoogleLoginButton = () => {
         const { data } = await axios.post("https://lazeapi-2.onrender.com/google-signin/", {
           token: tokenResponse.access_token,
         });
-        // console.log(data, 'data')
+        console.log(data, 'data')
         if (data.access_token) {
+          console.log("LogedIn")
           //   localStorage.setItem("access_token", data.access_token);
           login(data.access_token)
           navigate('/', { replace: true })
@@ -27,7 +28,7 @@ const GoogleLoginButton = () => {
         }
       } catch (error) {
         if (axios.isAxiosError(error)) {
-              // console.log(error.status)
+              console.log(error)
               if (error.message === "Network Error") {
                 setMessage({ message: error.message, error: true })
               } else {
