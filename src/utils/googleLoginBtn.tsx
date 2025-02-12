@@ -11,7 +11,7 @@ const GoogleLoginButton = () => {
 
   const loginHandler = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      console.log(tokenResponse)
+      console.log(tokenResponse.access_token)
       try {
         // console.log("Encoded JWT ID token:", tokenResponse.access_token);
         const { data } = await axios.post("https://lazeapi-2.onrender.com/google-signin/", {
