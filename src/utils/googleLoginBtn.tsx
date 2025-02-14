@@ -40,10 +40,10 @@ const GoogleLoginButton = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("Backend Response:", data);
 
         if (data.access_token) {
-          localStorage.setItem("access_token", data.access_token);
+          console.log('logged in', data)
+          // localStorage.setItem("access_token", data.access_token);
           alert("Login successful! Token stored.");
         } else {
           alert("Login failed: " + data.detail);
