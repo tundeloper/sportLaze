@@ -19,7 +19,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route
-            path='/' element={<Suspense fallback={<Loading />}><Home /></Suspense>} />
+            path='/' element={<Suspense fallback={<Loading />}><Protect redirectPath='auth'><Home /></Protect></Suspense>} />
           <Route
             path='/auth' element={<Suspense fallback={<div>Loading...</div>}><Welcome /></Suspense>} />
           <Route
