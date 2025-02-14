@@ -20,7 +20,7 @@ const GoogleLoginButton = () => {
       setGoogleLoaded(true);
       if ((window as any).google) {
         (window as any).google.accounts.id.initialize({
-          client_id: "YOUR_GOOGLE_CLIENT_ID_HERE", // 🔥 Replace with actual Client ID
+          client_id: "292887638276-kk8gmqfsjivcnjujhsiqiu5d62rkocqt.apps.googleusercontent.com",
           callback: handleCredentialResponse,
         });
       }
