@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import axios from "axios";
-import { replace, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSportlaze } from "../hooks/useContext";
 import GoogleIcon from "../assets/svgs/googlesvg";
 
-const GoogleLoginButton = () => {
+const GoogleLoginButton : React.FC<{title: string, rounded: string | number}> = ({title, rounded}) => {
   const [googleLoaded, setGoogleLoaded] = useState(false);
   const navigate = useNavigate()
   const { login, setMessage, setLoading, setSnackIsOpen } = useSportlaze()
@@ -85,9 +85,9 @@ const GoogleLoginButton = () => {
 
   return (
     <button className="w-full flex justify-center" onClick={loginHandler}>
-      <div className="flex items-center justify-center gap-2 bg-white border border-gray-300 shadow-md py-2 rounded-full font-bold text-black hover:bg-gray-100 transition duration-300 w-full max-w-[400px] cursor-pointer">
+      <div className={`flex items-center justify-center gap-2 bg-white border border-gray-300 shadow-md py-2 rounded-[${rounded}] font-bold text-black hover:bg-gray-100 transition duration-300 w-full max-w-[400px] cursor-pointer`}>
         <GoogleIcon />
-        <span className="font-bold">Sign up with Google</span>
+        <span className="font-bold">{title}</span>
       </div>
     </button>
   );

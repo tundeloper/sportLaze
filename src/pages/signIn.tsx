@@ -9,6 +9,7 @@ import { useSportlaze } from "../hooks/useContext"
 import { useNavigate } from "react-router-dom"
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { SignInSchema } from "../utils/validator"
+import GoogleLoginButton from "../utils/googleLoginBtn"
 
 
 const SignIn: React.FC<{ visible: boolean, setIsVisible: Dispatch<SetStateAction<boolean>> }> = ({ visible, setIsVisible }) => {
@@ -24,32 +25,6 @@ const SignIn: React.FC<{ visible: boolean, setIsVisible: Dispatch<SetStateAction
     return () => window.removeEventListener('keydown', handleKeydown)
   }, [visible, setIsVisible])
 
-  const googleSignIn = async () => {
-    try {
-      setLoading(true)
-      setSnackIsOpen(false)
-      const response = await axios.post("https://lazeapi-2.onrender.com/google-signin")
-      console.log(response.status)
-      if (response.data?.access_token) {
-        login(response.data?.access_token)
-        navigate('/', { replace: true })
-      } else {
-        throw new Error("Request failed");
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        // console.log(error.status)
-        setMessage({ message: error.message, error: true })
-      }
-    } finally {
-      setLoading(false)
-      setSnackIsOpen(true)
-      // setMessage({ message: 'Invalid email or password', error: true })
-      setTimeout(() => {
-        setSnackIsOpen(false)
-      }, 5000)
-    }
-  }
 
   // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   const { name, value } = e.target;
@@ -84,7 +59,7 @@ const SignIn: React.FC<{ visible: boolean, setIsVisible: Dispatch<SetStateAction
     </div>
     <div className="text-center">
       <div className="flex flex-col gap-3">
-        <div onClick={googleSignIn} className="bg-white flex-1 text-black py-2 rounded-[1rem] font-bold"><div className="flex justify-center items-center gap-2"><GoogleIcon /><p>Sign In with Google</p></div></div>
+        <GoogleLoginButton rounded={'1rem'} title="Sign In with Google" />
         <Link to='#' className="bg-white flex-1 text-black py-2 rounded-[1rem] font-bold"><div className="flex justify-center items-center gap-2"><AppleIcon /><p>Sign In with Apple</p></div></Link>
 
       </div>

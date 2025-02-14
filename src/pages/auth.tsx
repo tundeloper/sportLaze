@@ -46,7 +46,7 @@ const Login: React.FC = () => {
       <div className="flex gap-3 flex-col text-center">
 
         {/* <GoogleLogin onSuccess={handleLoginSuccess} onError={() => console.error("Login Failed")} /> */}
-        <GoogleLoginButton />
+        <GoogleLoginButton rounded={'2rem'} title="Sign up with Google"/>
         {/* <div onClick={googleSignIn} className="bg-white flex-1 text-black py-2 rounded-[2rem] cursor-pointer font-bold"><div className="flex justify-center items-center gap-2"><GoogleIcon /><p>Sign Up with Google</p></div></div> */}
         <Link to='#' className="bg-white flex-1 text-black py-2 rounded-[2rem] font-bold"><div className="flex justify-center items-center gap-2"><AppleIcon /><p>Sign Up with Apple</p></div></Link>
         <Button sx={{ color: 'white', background: '#9a1b39', borderRadius: '2rem', textTransform: 'capitalize', padding: '10px' }} onClick={handleSignUpClicked}>Create Account</Button>
