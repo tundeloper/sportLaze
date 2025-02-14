@@ -87,7 +87,7 @@ const GoogleLoginButton = () => {
     <div className="w-full flex justify-center">
       <div
         onClick={loginHandler}
-        className="flex items-center justify-center gap-2 bg-white border border-gray-300 shadow-md px-5 py-3 rounded-full font-bold text-black hover:bg-gray-100 transition duration-300 w-full max-w-[400px] cursor-pointer"
+        className="flex items-center justify-center gap-2 bg-white border border-gray-300 shadow-md py-2 rounded-full font-bold text-black hover:bg-gray-100 transition duration-300 w-full max-w-[400px] cursor-pointer"
       >
         <GoogleIcon />
         <span className="font-bold">Sign up with Google</span>
