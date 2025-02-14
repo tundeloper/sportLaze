@@ -27,7 +27,7 @@ const Landing = () => {
     //     {name: 'share', path: '/share', icon: <Share />},
     // ]
     const { darkMode } = useSportlaze()
-    const fill = darkMode ? 'white' : '#2D439B'
+    const fill = darkMode ? '#d3d3d3' : '#2D439B'
     return <div className="relative">
         <nav className="flex sticky top-0 z-[6] justify-between mb-2">
             <NavLink to={'/'} className={({ isActive }) => `px-8 py-4 border-b-2 ${isActive && !darkMode ? 'border-secondary' : ''}`}><HomeIcon fill={fill} /></NavLink>
