@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { replace, useNavigate } from "react-router-dom";
+import { useSportlaze } from "../hooks/useContext";
+import GoogleIcon from "../assets/svgs/googlesvg";
 
 const GoogleLoginButton = () => {
   const [googleLoaded, setGoogleLoaded] = useState(false);
+  const navigate = useNavigate()
+  const { login, setMessage, setLoading, setSnackIsOpen } = useSportlaze()
+
 
   useEffect(() => {
     // Load Google Identity Services SDK
@@ -13,7 +20,7 @@ const GoogleLoginButton = () => {
       setGoogleLoaded(true);
       if ((window as any).google) {
         (window as any).google.accounts.id.initialize({
-          client_id: "292887638276-kk8gmqfsjivcnjujhsiqiu5d62rkocqt.apps.googleusercontent.com", // 🔥 Replace with your actual Client ID
+          client_id: "YOUR_GOOGLE_CLIENT_ID_HERE", // 🔥 Replace with actual Client ID
           callback: handleCredentialResponse,
         });
       }
@@ -22,36 +29,47 @@ const GoogleLoginButton = () => {
   }, []);
 
   // 🔹 Handle Login Response
-  const handleCredentialResponse = (response: any) => {
-    console.log("Google JWT Token:", response.credential);
-
+  const handleCredentialResponse = async (response: any) => {
     if (!response.credential) {
       console.error("No credential received!");
       return;
     }
 
-    // 🔥 Send token to backend for verification
-    fetch("https://lazeapi-2.onrender.com/google-signin/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ token: response.credential }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
+    try {
+      setLoading(true)
+      setSnackIsOpen(true)
+      const { data } = await axios.post(
+        "https://lazeapi-2.onrender.com/google-signin/",
+        { token: response.credential },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-        if (data.access_token) {
-          console.log('logged in', data)
-          // localStorage.setItem("access_token", data.access_token);
-          alert("Login successful! Token stored.");
+      console.log("Backend Response:", data);
+
+      if (data.access_token) {
+        login(data.access_token)
+        navigate('/', { replace: true })
+      } else {
+        alert("Login failed: " + data.detail);
+      }
+      setLoading(false)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error)
+        if (error.message === "Network Error") {
+          setMessage({ message: error.message, error: true })
         } else {
-          alert("Login failed: " + data.detail);
+          setMessage({ message: "Error during Google Sign-In", error: true }) // An error occurred while signing in.
         }
-      })
-      .catch((err) => {
-        console.error("Error during Google Sign-In:", err);
-      });
+      }
+    } finally {
+      setLoading(false)
+      setSnackIsOpen(true)
+      setTimeout(() => {
+        setSnackIsOpen(false)
+      }, 5000)
+    }
+
   };
 
   // 🔹 Show Google Sign-In Prompt
@@ -62,7 +80,6 @@ const GoogleLoginButton = () => {
       console.error("Google API not ready.");
       return;
     }
-
     google.accounts.id.prompt();
   };
 
@@ -72,11 +89,7 @@ const GoogleLoginButton = () => {
         onClick={loginHandler}
         className="flex items-center justify-center gap-2 bg-white border border-gray-300 shadow-md px-5 py-3 rounded-full font-bold text-black hover:bg-gray-100 transition duration-300 w-full max-w-[400px] cursor-pointer"
       >
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
-          alt="Google Logo"
-          className="w-6 h-6"
-        />
+        <GoogleIcon />
         <span className="font-bold">Sign up with Google</span>
       </div>
     </div>
