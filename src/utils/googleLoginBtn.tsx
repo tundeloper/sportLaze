@@ -28,8 +28,10 @@ const GoogleLoginButton : React.FC<{title: string, rounded: string | number}> = 
     document.body.appendChild(script);
   }, []);
 
-  // 🔹 Handle Login Response
+  //  Handle Login Response
   const handleCredentialResponse = async (response: any) => {
+     console.log("Encoded JWT ID token:", response.credential);
+
     if (!response.credential) {
       console.error("No credential received!");
       return;
