@@ -9,7 +9,29 @@ const GoogleLoginButton : React.FC<{title: string, rounded: string | number}> = 
   const navigate = useNavigate()
   const { login, setMessage, setLoading, setSnackIsOpen } = useSportlaze()
 
+
+  useEffect(() => {
+    // Load Google Identity Services SDK
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      setGoogleLoaded(true);
+      if ((window as any).google) {
+        (window as any).google.accounts.id.initialize({
+          client_id: "292887638276-kk8gmqfsjivcnjujhsiqiu5d62rkocqt.apps.googleusercontent.com",
+          callback: handleCredentialResponse,
+        });
+      }
+    };
+    document.body.appendChild(script);
+  }, []);
+
+  // 🔹 Handle Login Response
   const handleCredentialResponse = async (response: any) => {
+    //  console.log("Encoded JWT ID token:", response.credential);
+
     if (!response.credential) {
       console.error("No credential received!");
       return;
