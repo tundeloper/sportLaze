@@ -10,7 +10,7 @@ import LoungeIcon from "../assets/lounge"
 import { useSportlaze } from "../hooks/useContext";
 import Moon from "../assets/svgs/Moon_alt";
 
-const Profile: React.FC<{ profile: boolean, setIsVisible: Dispatch<SetStateAction<boolean>> }> = ({ profile, setIsVisible }) => {
+const SideNav: React.FC<{ profile: boolean, setIsVisible: Dispatch<SetStateAction<boolean>> }> = ({ profile, setIsVisible }) => {
 
     const { darkMode, setDarkMode } = useSportlaze()
 
@@ -39,4 +39,4 @@ const Profile: React.FC<{ profile: boolean, setIsVisible: Dispatch<SetStateActio
     </div>
 }
 
-export default Profile
+export default SideNav

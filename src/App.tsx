@@ -8,6 +8,8 @@ import Loading from './components/loadings/loading';
 import Protect from './utils/ProtectedRoute';
 import SportlazeProvider from './store/context';
 import LoungeId from './pages/selectedLounge';
+import UserProfile from './pages/userProfile';
+import EditProfile from './pages/edit-profile';
 const Welcome = lazy(() => import('./pages/auth'))
 const Home = lazy(() => import('./pages/home'))
 const Lounge = lazy(() => import('./pages/lounge'))
@@ -19,9 +21,13 @@ function App() {
       <div className="App">
         <Routes>
           <Route
-            path='/' element={<Suspense fallback={<Loading />}><Protect redirectPath='auth'><Home /></Protect></Suspense>} />
+            path='/' element={<Suspense fallback={<Loading />}><Home /></Suspense>} />
           <Route
             path='/auth' element={<Suspense fallback={<div>Loading...</div>}><Welcome /></Suspense>} />
+            <Route
+            path='/user' element={<Suspense fallback={<div>Loading...</div>}><UserProfile /></Suspense>} />
+            <Route
+            path='/edit-Profile' element={<Suspense fallback={<div>Loading...</div>}><EditProfile /> </Suspense>} />
           <Route
             path='/lounge' element={<Suspense fallback={<div>Loading...</div>}><Protect redirectPath='auth'><Lounge /></Protect></Suspense>} />
           <Route

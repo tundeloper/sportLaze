@@ -1,7 +1,6 @@
 import { Button } from "@mui/material"
 import logo from '../assets/whitelogo1.png'
 import { Link } from "react-router-dom"
-import GoogleIcon from "../assets/svgs/googlesvg"
 import AppleIcon from "../assets/svgs/apple"
 import { Dispatch, SetStateAction, useEffect, } from "react"
 import axios from "axios"

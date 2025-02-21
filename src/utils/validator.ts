@@ -18,6 +18,14 @@ export const SignInSchema = Yup.object({
         .required("Password is required")
 });
 
+export const EditSchema = Yup.object({
+    name: Yup.string().required("name is required"),
+    bio: Yup.string(),
+    date_of_birth: Yup.string().required("Date of birth is required"),
+    website: Yup.string(),
+    location: Yup.string().required("location is required"),
+});
+
 // export const validateSelect = async ({dateOfBirth: string, country, favSport}) => {
     // try{
     //     if(dateOfBirth === '' || dateOfBirth === null ) throw Error('Please enter a valid date')

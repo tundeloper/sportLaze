@@ -5,14 +5,14 @@ import NotIcon from "../../assets/notifications"
 import SearchIcon from "../../assets/Search"
 import SideBarIcon from "../../assets/sideBarIcon"
 import UserIcon from "../../assets/userIcon"
-import Profile from "../profile"
+import SideNav from "../sideNav"
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [profile, setProfile] = useState<boolean>(false)
 
     return <div>
         <div className="flex sticky z-[100] top-0 justify-between items-center p-4 gradient sm:p-6">
-            <Profile profile={profile} setIsVisible={setProfile} />
+            <SideNav profile={profile} setIsVisible={setProfile} />
             <div className="flex items-center gap-6 sm:gap-12">
                 <div style={{ cursor: 'pointer' }} onClick={() => setProfile(true)}><SideBarIcon /></div>
                 <div className="relative">

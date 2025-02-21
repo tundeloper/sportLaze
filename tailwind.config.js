@@ -11,7 +11,8 @@ module.exports = {
         primary50: '#9a1b395e',
         secondary: '#463a85', // blue color
         secondary20: '#463a85a6',
-        grey: '#86888a'
+        grey: '#86888a',
+        darkw: '#d3d3d3'
       },
       fontFamily: {
         roboto: ["Roboto", "Playwrite HU", "serif"],

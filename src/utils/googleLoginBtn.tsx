@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSportlaze } from "../hooks/useContext";
@@ -9,26 +9,6 @@ const GoogleLoginButton : React.FC<{title: string, rounded: string | number}> = 
   const navigate = useNavigate()
   const { login, setMessage, setLoading, setSnackIsOpen } = useSportlaze()
 
-
-  useEffect(() => {
-    // Load Google Identity Services SDK
-    const script = document.createElement("script");
-    script.src = "https://accounts.google.com/gsi/client";
-    script.async = true;
-    script.defer = true;
-    script.onload = () => {
-      setGoogleLoaded(true);
-      if ((window as any).google) {
-        (window as any).google.accounts.id.initialize({
-          client_id: "292887638276-kk8gmqfsjivcnjujhsiqiu5d62rkocqt.apps.googleusercontent.com",
-          callback: handleCredentialResponse,
-        });
-      }
-    };
-    document.body.appendChild(script);
-  }, []);
-
-  // 🔹 Handle Login Response
   const handleCredentialResponse = async (response: any) => {
     if (!response.credential) {
       console.error("No credential received!");
@@ -37,7 +17,6 @@ const GoogleLoginButton : React.FC<{title: string, rounded: string | number}> = 
 
     try {
       setLoading(true)
-      setSnackIsOpen(true)
       const { data } = await axios.post(
         "https://lazeapi-2.onrender.com/google-signin/",
         { token: response.credential },
@@ -71,6 +50,27 @@ const GoogleLoginButton : React.FC<{title: string, rounded: string | number}> = 
     }
 
   };
+
+  useEffect(() => {
+    // Load Google Identity Services SDK
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      setGoogleLoaded(true);
+      if ((window as any).google) {
+        (window as any).google.accounts.id.initialize({
+          client_id: "292887638276-kk8gmqfsjivcnjujhsiqiu5d62rkocqt.apps.googleusercontent.com",
+          callback: handleCredentialResponse,
+        });
+      }
+    };
+    document.body.appendChild(script);
+  }, [handleCredentialResponse]);
+
+  // 🔹 Handle Login Response
+  
 
   // 🔹 Show Google Sign-In Prompt
   const loginHandler = () => {

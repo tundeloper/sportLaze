@@ -10,7 +10,9 @@ import post from '../assets/posted picture.png'
 import LikeIcon from "../assets/like"
 import SendIcon from "../assets/send"
 import CommentIcon from "../assets/comment"
-// import Bookmarkicon from "../assets/bookmarkIcon"
+import img from '../assets/logo gradient.svg'
+import whitelogo from '../assets/whitelogo1.png'
+import Bookmarkicon from "../assets/bookmarkIcon"
 import vid from '../assets/video icon.png'
 import whitevid from '../assets/white video icon.png'
 import { useSportlaze } from "../hooks/useContext"
@@ -29,6 +31,8 @@ const Landing = () => {
     const { darkMode } = useSportlaze()
     const fill = darkMode ? '#d3d3d3' : '#2D439B'
     return <div className="relative">
+        <div className="flex justify-center mb-2"><img src={darkMode ? whitelogo : img} alt="sportlaze logo" className="h-[64px] w-[72px]" /></div>
+
         <nav className="flex sticky top-0 z-[6] justify-between mb-2">
             <NavLink to={'/'} className={({ isActive }) => `px-8 py-4 border-b-2 ${isActive && !darkMode ? 'border-secondary' : ''}`}><HomeIcon fill={fill} /></NavLink>
             <NavLink to={'/videos'} className={({ isActive }) => `px-8 py-4 ${isActive && !darkMode ? 'border-secondary' : ''}`}><img src={darkMode ? whitevid : vid} alt="video icon" /></NavLink>
@@ -67,12 +71,12 @@ const Landing = () => {
                     </div>
                     <div className="flex justify-between items-center w-full">
                         <div className="flex items-center justify-center gap-4">
-                            <div className="flex gap-[4px] items-center"><LikeIcon fill={darkMode? 'white' : '#33363F'} /> <p className="text-[13px] dark:text-white">15.3k</p></div>
-                            <div className="flex gap-[4px] items-center"><CommentIcon fill={darkMode? 'white' : '#33363F'} /> <p className="text-[13px] dark:text-white">15.3k</p></div>
-                            <div className="flex gap-[1px] items-center"><SendIcon fill={darkMode? 'white': '#222222'} /> <p className="text-[13px] dark:text-white">15.3k</p></div>
+                            <div className="flex gap-[4px] items-center"><LikeIcon fill={darkMode ? 'white' : '#33363F'} /> <p className="text-[13px] dark:text-white">15.3k</p></div>
+                            <div className="flex gap-[4px] items-center"><CommentIcon fill={darkMode ? 'white' : '#33363F'} /> <p className="text-[13px] dark:text-white">15.3k</p></div>
+                            <div className="flex gap-[1px] items-center"><SendIcon fill={darkMode ? 'white' : '#222222'} /> <p className="text-[13px] dark:text-white">15.3k</p></div>
                         </div>
                         {/* Bookmark */}
-                        {/* <div><Bookmarkicon /></div> */}
+                        <div className="mr-2"><Bookmarkicon /></div>
                     </div>
                 </div>
             </div>
@@ -98,13 +102,13 @@ const Landing = () => {
                         <img src={post} alt="post" className="w-full" />
                     </div>
                     <div className="flex justify-between items-center w-full">
-                        <div className="flex gap-4">
-                        <div className="flex gap-[4px] items-center"><LikeIcon fill={darkMode? 'white' : '#33363F'} /> <p className="text-[13px] dark:text-white">15.3k</p></div>
-                            <div className="flex gap-[4px] items-center"><CommentIcon fill={darkMode? 'white' : '#33363F'} /> <p className="text-[13px] dark:text-white">15.3k</p></div>
-                            <div className="flex gap-[1px] items-center"><SendIcon fill={darkMode? 'white': '#222222'} /> <p className="text-[13px] dark:text-white">15.3k</p></div>
+                        <div className="flex gap-4 ml-0 md-ml-2">
+                            <div className="flex gap-[4px] items-center"><LikeIcon fill={darkMode ? 'white' : '#33363F'} /> <p className="text-[13px] dark:text-white">15.3k</p></div>
+                            <div className="flex gap-[4px] items-center"><CommentIcon fill={darkMode ? 'white' : '#33363F'} /> <p className="text-[13px] dark:text-white">15.3k</p></div>
+                            <div className="flex gap-[1px] items-center"><SendIcon fill={darkMode ? 'white' : '#222222'} /> <p className="text-[13px] dark:text-white">15.3k</p></div>
                         </div>
                         {/* Bookmark */}
-                        {/* <div><Bookmarkicon /></div> */}
+                        <div className="mr-0 md: mr-2"><Bookmarkicon /></div>
                     </div>
                 </div>
             </div>
