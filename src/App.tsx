@@ -21,9 +21,9 @@ function App() {
       <div className="App">
         <Routes>
           <Route
-            path='/' element={<Suspense fallback={<Loading />}><Home /></Suspense>} />
+            path='/' element={<Suspense fallback={<Loading />}><Protect redirectPath='auth'><Home /></Protect></Suspense>} />
           <Route
-            path='/auth' element={<Suspense fallback={<div>Loading...</div>}><Protect redirectPath='auth'><Welcome /></Protect></Suspense>} />
+            path='/auth' element={<Suspense fallback={<div>Loading...</div>}><Welcome /></Suspense>} />
             <Route
             path='/user' element={<Suspense fallback={<div>Loading...</div>}><Protect redirectPath='auth'><UserProfile /></Protect></Suspense>} />
             <Route
