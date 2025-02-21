@@ -5,7 +5,7 @@ import postImage from "../../assets/posted picture.png";
 
 const UserPost: React.FC = () => {
     return (
-        <div className="bg-white p-4 rounded-lg w-full dark:bg-black ">
+        <div className="bg-white p-0 pt-1 mb-2 rounded-lg w-full dark:bg-black md:p-4">
             {/* Shared Label */}
             <div className="flex items-center text-gray-500 text-sm mb-2">
                 <SendIcon fontSize="small" className="mr-1" />

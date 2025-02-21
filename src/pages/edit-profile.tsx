@@ -14,7 +14,7 @@ const EditProfile = () => {
 
 
     return <UserProfile>
-        <div className="flex bg-gradient-to-b from-[#463a85] to-[#9a1b39] p-[-16px] w-full h-[12rem] relative">
+        <div className="flex bg-gradient-to-b from-[#463a85] to-[#9a1b39] p-[-16px] w-full h-[10rem] relative">
             <div className="absolute"></div>
 
             <div className="flex justify-center items-center absolute right-[2rem] bottom-[-2rem] h-[6rem] w-[6rem] border rounded-[100%]">
@@ -26,10 +26,11 @@ const EditProfile = () => {
             initialValues={{ name: "", bio: "", date_of_birth: "", website: "", location: "" }}
             validationSchema={EditSchema}
             onSubmit={async (values, { setSubmitting }) => {
+                console.log(values)
                 try {
                     setLoading(true)
                     setSnackIsOpen(false)
-                    const response = await axios.post("https://lazeapi-2.onrender.com/signin/", values)
+                    const response = await axios.post("https://lazeapi-2.onrender.com/path/", values)
                     console.log(response.status)
                     if (response.data?.access_token) {
                         login(response.data?.access_token)
@@ -87,7 +88,7 @@ const EditProfile = () => {
                         <label htmlFor="location" className="font-bold">Location*</label>
                         <ErrorMessage name="location" component="div" className="text-[red] text-[12px] mb-[-.5rem]" />
                     </div>
-                    <Field className={`w-full h-[40px] p-3 mb-[.5rem] bg-[transparent] outline-none  border-b ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'}`} placeholder="" id="location" name="lacation" type="location" />
+                    <Field className={`w-full h-[40px] p-3 mb-[.5rem] bg-[transparent] outline-none  border-b ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'}`} placeholder="" id="location" name="location" type="text" />
                     {/* <Link to="#" style={{ textDecoration: 'underline' }}><p>Forgot Password?</p></Link> */}
                     <Button sx={{ color: 'white', background: '#9a1b39', borderRadius: '2rem', textTransform: 'capitalize', padding: '10px', margin: '0 5rem 0 5rem' }} type="submit" >Save</Button>
                 </Form>

@@ -18,7 +18,7 @@ const Profile = () => {
       : "flex-1 py-2 dark:text-darkw";
 
   return <UserProfile>
-    <div className="flex bg-gradient-to-b from-[#463a85] to-[#9a1b39] p-[-16px] w-full h-[12rem] relative">
+    <div className="flex bg-gradient-to-b from-[#463a85] to-[#9a1b39] p-[-16px] w-full h-[10rem] relative">
       <div className="absolute"></div>
       <Link to="/edit-profile" className="absolute top-4 right-[2rem] border !text-sm py-1 px-3 rounded-2xl !text-white !no-underline cursor-pointer">
         Edit Profile
@@ -62,7 +62,7 @@ const Profile = () => {
           Saved
         </button>
       </nav>
-      <section className="p-4">
+      <section className="p-1 mt-3 md:p-4">
         {activeTab === "posts" && (
           <>
             <UserPost />
