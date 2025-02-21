@@ -23,11 +23,11 @@ function App() {
           <Route
             path='/' element={<Suspense fallback={<Loading />}><Home /></Suspense>} />
           <Route
-            path='/auth' element={<Suspense fallback={<div>Loading...</div>}><Welcome /></Suspense>} />
+            path='/auth' element={<Suspense fallback={<div>Loading...</div>}><Protect redirectPath='auth'><Welcome /></Protect></Suspense>} />
             <Route
-            path='/user' element={<Suspense fallback={<div>Loading...</div>}><UserProfile /></Suspense>} />
+            path='/user' element={<Suspense fallback={<div>Loading...</div>}><Protect redirectPath='auth'><UserProfile /></Protect></Suspense>} />
             <Route
-            path='/edit-Profile' element={<Suspense fallback={<div>Loading...</div>}><EditProfile /> </Suspense>} />
+            path='/edit-Profile' element={<Suspense fallback={<div>Loading...</div>}><Protect redirectPath='auth'><EditProfile /></Protect></Suspense>} />
           <Route
             path='/lounge' element={<Suspense fallback={<div>Loading...</div>}><Protect redirectPath='auth'><Lounge /></Protect></Suspense>} />
           <Route

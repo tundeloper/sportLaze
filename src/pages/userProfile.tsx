@@ -64,13 +64,13 @@ const Profile = () => {
       </nav>
       <section className="p-1 mt-3 md:p-4">
         {activeTab === "posts" && (
-          <>
+          <div className="min-h-[10rem]">
             <UserPost />
             <UserPost />
-          </>
+          </div>
         )}
         {activeTab === "replies" && (
-          <div>
+          <div className="min-h-[10rem]">
             <p className="text-gray-500 text-sm">Replies</p>
             <div className="mt-2">
               <p className="text-gray-700">This is where the replies content will be shown.</p>
@@ -78,7 +78,7 @@ const Profile = () => {
           </div>
         )}
         {activeTab === "lounges" && (
-          <div>
+          <div className="min-h-[10rem]">
             <p className="text-gray-500 text-sm">Lounges</p>
             <div className="mt-2">
               <p className="text-gray-700">This is where the lounges content will be shown.</p>
@@ -86,7 +86,7 @@ const Profile = () => {
           </div>
         )}
         {activeTab === "saved" && (
-          <div>
+          <div className="min-h-[10rem]">
             <p className="text-gray-500 text-sm">Saved</p>
             <div className="mt-2">
               <p className="text-gray-700">This is where the saved content will be shown.</p>

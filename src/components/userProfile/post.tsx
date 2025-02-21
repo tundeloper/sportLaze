@@ -32,8 +32,8 @@ const UserPost: React.FC = () => {
                     >
                         FOLLOW
                     </Button>
-                    <IconButton size="small">
-                        <MoreVertIcon />
+                    <IconButton size="small" className="bg-white">
+                        <MoreVertIcon className="text-secondary" />
                     </IconButton>
                 </div>
             </div>
