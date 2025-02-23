@@ -22,7 +22,7 @@ const UserProfile : React.FC<{children: ReactNode}> = ({children}) => {
                     <Trends />
                     <Lounge />
                 </div>
-                <div className="bg-white w-full h-[auto] sm: w-full dark:bg-[black]">
+                <div className="bg-white w-full h-[auto] sm: dark:bg-[black]">
                     {children}
                 </div>
                 <div className="w-[40%] hidden m-2 sm:block">

@@ -4,7 +4,7 @@ import user from "../assets/user/man-studio.png";
 import { useSportlaze } from "../hooks/useContext";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { EditSchema } from "../utils/validator";
 
 
@@ -61,36 +61,36 @@ const EditProfile = () => {
                 <Form className="flex flex-col gap-2 mt-10 p-2 px-4">
                     {/* name */}
                     <div className="flex justify-between gap-4">
-                        <label htmlFor="name" className="font-bold">Name*</label>
+                        <label htmlFor="name" className="font-bold dark:text-darkw">Name*</label>
                         <ErrorMessage name="name" component="div" className="text-[red] text-[12px] mb-[-.5rem]" />
                     </div>
-                    <Field className={`w-full h-[40px] p-3 mb-[.5rem] bg-[transparent] outline-none  border-b ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'}`} placeholder="" id="name" name="name" type="name" />
+                    <Field className={`w-full h-[40px] p-3 mb-[.5rem] bg-[transparent] outline-none  border-b ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'} dark:text-darkw`} placeholder="" id="name" name="name" type="name" />
                     {/* bio */}
                     <div className="flex justify-between gap-4">
-                        <label htmlFor="bio" className="font-bold">Bio</label>
+                        <label htmlFor="bio" className="font-bold dark:text-darkw">Bio</label>
                         <ErrorMessage name="bio" component="div" className="text-[red] text-[12px] mb-[-.5rem]" />
                     </div>
-                    <Field className={`w-full h-[40px] p-3 mb-[.5rem] bg-[transparent] outline-none  border-b ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'}`} placeholder="" id="bio" name="password" type="text" />
+                    <Field className={`w-full h-[40px] p-3 mb-[.5rem] bg-[transparent] outline-none  border-b ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'} dark:text-darkw`} placeholder="" id="bio" name="password" type="text" />
                     {/* date of birth */}
                     <div className="flex justify-between gap-4">
-                        <label htmlFor="bio" className="font-bold">Date of Birth*</label>
+                        <label htmlFor="bio" className="font-bold dark:text-darkw">Date of Birth*</label>
                         <ErrorMessage name="date_of_birth" component="div" className="text-[red] text-[12px] mb-[-.5rem]" />
                     </div>
-                    <Field className={`w-full h-[40px] p-3 mb-[.5rem] bg-[transparent] outline-none  border-b ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'}`} placeholder="" id="date_of_birth" name="date_of_birth" type="text" />
+                    <Field className={`w-full h-[40px] p-3 mb-[.5rem] bg-[transparent] outline-none  border-b ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'} dark:text-darkw`} placeholder="" id="date_of_birth" name="date_of_birth" type="text" />
                     {/* website */}
                     <div className="flex justify-between gap-4">
-                        <label htmlFor="website" className="font-bold">Website</label>
+                        <label htmlFor="website" className="font-bold dark:text-darkw">Website</label>
                         <ErrorMessage name="bio" component="div" className="text-[red] text-[12px] mb-[-.5rem]" />
                     </div>
-                    <Field className={`w-full h-[40px] p-3 mb-[.5rem] bg-[transparent] outline-none  border-b ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'}`} placeholder="" id="website" name="website" type="text" />
+                    <Field className={`w-full h-[40px] p-3 mb-[.5rem] bg-[transparent] outline-none  border-b ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'} dark:text-darkw`} placeholder="" id="website" name="website" type="text" />
                     {/* Location */}
                     <div className="flex justify-between gap-4">
-                        <label htmlFor="location" className="font-bold">Location*</label>
+                        <label htmlFor="location" className="font-bold dark:text-darkw">Location*</label>
                         <ErrorMessage name="location" component="div" className="text-[red] text-[12px] mb-[-.5rem]" />
                     </div>
-                    <Field className={`w-full h-[40px] p-3 mb-[.5rem] bg-[transparent] outline-none  border-b ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'}`} placeholder="" id="location" name="location" type="text" />
+                    <Field className={`w-full h-[40px] p-3 mb-[.5rem] bg-[transparent] outline-none  border-b ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'} dark:text-darkw`} placeholder="" id="location" name="location" type="text" />
                     {/* <Link to="#" style={{ textDecoration: 'underline' }}><p>Forgot Password?</p></Link> */}
-                    <Button sx={{ color: 'white', background: '#9a1b39', borderRadius: '2rem', textTransform: 'capitalize', padding: '10px', margin: '0 5rem 0 5rem' }} type="submit" >Save</Button>
+                    <Button sx={{ color: 'white', background: '#9a1b39', borderRadius: '2rem', textTransform: 'capitalize', padding: '10px', margin: '0 5rem 0 5rem', marginTop: '2rem' }} type="submit" >Save</Button>
                 </Form>
             )}
         </Formik>

@@ -37,7 +37,7 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({ children 
     }, [darkMode])
 
     const logout = () => {
-        // setIsAuthenticated(false)
+        setTokekn(null)
     };
 
     const login = (token: string) => {

@@ -12,7 +12,7 @@ import Moon from "../assets/svgs/Moon_alt";
 
 const SideNav: React.FC<{ profile: boolean, setIsVisible: Dispatch<SetStateAction<boolean>> }> = ({ profile, setIsVisible }) => {
 
-    const { darkMode, setDarkMode } = useSportlaze()
+    const { darkMode, setDarkMode, logout } = useSportlaze()
 
     return <div className={`sliding-component gradient-bb relative pt-10 p-2 bg-[red] relative w-[20rem] ${profile ? 'no-profile' : 'profile'}`} style={{ position: 'fixed', left: '0', top: '0', zIndex: '3', borderTopRightRadius: '1rem', borderBottomRightRadius: '1rem' }}>
         <Button onClick={() => setIsVisible(false)} style={{ position: 'absolute', top: '.5rem', right: '0', color: 'red' }}><ClearOutlinedIcon /></Button>
@@ -30,6 +30,7 @@ const SideNav: React.FC<{ profile: boolean, setIsVisible: Dispatch<SetStateActio
         <div className="flex flex-col justify-center gap-4 pl-10 mb-10 mt-8">
             <Link to={"/user"} className="flex items center gap-4"> <UserIcon /> <p>Profile</p></Link>
             <Link to={"/lounge"} className="flex items center gap-4"> <LoungeIcon h={25} w={27} /> <p>Lounge</p></Link>
+            <Link to={"/bookmark"} className="flex items center gap-4"> <Bookmark /> <p>Bookmarks</p></Link>
             <Link to={"/bookmark"} className="flex items center gap-4"> <Bookmark /> <p>Bookmarks</p></Link>
         </div>
         <div className="flex justify-center mb-14">

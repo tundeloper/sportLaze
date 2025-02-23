@@ -91,7 +91,6 @@ const GoogleLoginButton : React.FC<{title: string, rounded: string | number}> = 
     document.body.appendChild(script);
   }, [handleCredentialResponse]);
 
-  // 🔹 Handle Login Response
   
 
   // 🔹 Show Google Sign-In Prompt
