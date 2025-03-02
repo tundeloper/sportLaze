@@ -1,15 +1,15 @@
-import React, { useContext, useState } from "react"
+import React, { useState } from "react"
 import { Button, IconButton, Typography } from "@mui/material"
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import CountriesDropDown from "../components/contrydropdown"
-import FavSport from "../components/FavSport"
+import CountriesDropDown from "../components/auth/contrydropdown"
+import FavSport from "../components/auth/FavSport"
 // import FavTeam from "../components/FavTeam"
-import DOB from "../components/DOB"
+import DOB from "../components/auth/DOB"
 import { SingleValue } from "react-select"
 import axios from "axios"
-import { SportlazeContext } from "../store/context";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import validationSchema from "../utils/validator";
+import { useSportlaze } from "../hooks/useContext";
 
 // import MUISnackbar from "../utils/snackBar";
 
@@ -29,93 +29,56 @@ const SignUp: React.FC<{ visible: boolean }> = ({ visible }) => {
     const [userData, setUserData] = useState<formprps>({ name: '', email: '', dateOfBirth: '2014-12-14', country: { label: '', value: '' }, favSport: { label: '', value: '' }, FavSportTeam: { label: '', value: '' } })
     const [showPassword, setShowPassword] = useState(false);
 
-    const ctx = useContext(SportlazeContext)
-
-    // useEffect(() => {console.log(ctx?.errorMesssage + 'jjjj')}, [ctx])
+  const { login, setLoading, setSnackIsOpen, setMessage } = useSportlaze()
 
     const togglePasswordVisibility = () => {
         setShowPassword((prev) => !prev);
     };
 
-    // const userCredentials = {
-    //     name: userData.name,
-    //     email: userData.email,
-    //     date_of_birth: userData.dateOfBirth,
-    //     country: userData.country?.value,
-    //     favorite_sport: userData.favSport?.value,
-    //     favorite_team: userData.FavSportTeam?.value,
-    //     password: userData.password
-    //     '123u3uu'
-    // }
-
-    // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const { name, value } = e.target;
-    //     setUserData((prev) => ({
-    //         ...prev,
-    //         [name]: value,
-    //     }));
-    // };
-
-    // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    //     e.preventDefault()
-    //     console.log(userCredentials)
-    //     try {
-    //         ctx?.setLoading(true)
-    //         ctx?.setSnackIsOpen(false)
-    //         const response = await axios.post("https://lazeapi-2.onrender.com/signup/", userCredentials)
-    //         console.log(response.status)
-    //         if (response.status === 200) {
-    //             ctx?.setMessage({ message: response.data.message, error: false });
-    //         } else {
-    //             throw new Error("Request failed");
-    //         }
-    //     } catch (error) {
-    //         if (axios.isAxiosError(error)) {
-    //             // console.log(error.status)
-    //             ctx?.setMessage({ message: error.message, error: true })
-    //         }
-    //     } finally {
-    //         ctx?.setLoading(false)
-    //         ctx?.setSnackIsOpen(true)
-    //         setTimeout(() => {
-    //             ctx?.setSnackIsOpen(false)
-    //         }, 5000)
-    //     }
-    // }
-    // date: '', country: '', favSport: '', favTeam: '' 
 
     return <div className={`flex hidden flex-col justify-center items-center py-[2rem] px-[.8rem] text-black rounded-[1rem] bg-[white] w-full scale ${visible ? 'reset-position' : 'scale-down'} sm:w-[26rem] sm:py-[2.5rem] sm:px-[3rem]`} style={{ position: "absolute", left: '0', marginTop: '-3rem' }}>
         <Formik
             initialValues={{ email: "", password: "", name: "", favorite_team: "", }}
             validationSchema={validationSchema}
             onSubmit={async (values, { setSubmitting }) => {
-                console.log("Form Submitted", values);
                 const credential = {...values, date_of_birth: userData.dateOfBirth, country: userData.country?.value, favorite_sport: userData.favSport?.value}
                 try {
-                    ctx?.setLoading(true)
-                    ctx?.setSnackIsOpen(false)
-                    const response = await axios.post("https://lazeapi-2.onrender.com/signup/", credential)
+                    setLoading(true)
+                    setSnackIsOpen(false)
+                    const response = await axios.post(`https://lazeapi-v1.onrender.com/v1/auth/signup`, 
+                        {
+                            username: credential.name,
+                            email: credential.email,
+                            date_of_birth: credential.date_of_birth,
+                            country: credential.country,
+                            favorite_sport: credential.favorite_sport,
+                            favorite_team: credential.favorite_team,
+                            password: credential.password
+                            }
+                    )
                     console.log(response)
                     if (response.status === 200) {
-                        ctx?.setMessage({ message: response.data.message, error: false });
+                        setMessage({ message: "successfuly", error: false });
+                        login(response.data?.access_token)
                     } else {
                         throw new Error("Request failed");
                     }
                 } catch (error) {
+                    console.log(error)
                     if (axios.isAxiosError(error)) {
-                        console.log(error)
+                        console.log(error.response?.data.detail[1])
                         if (error.message === "Network Error") {
-                            ctx?.setMessage({ message: error.message, error: true })
+                            setMessage({ message: error.message, error: true })
                           } else {
-                            ctx?.setMessage({message: error.response?.data.detail, error: true })
+                            console.log(error.response?.data.detail[1].msg)
+                            setMessage({message: error.response?.data.detail, error: true })
                           }
-                        // ctx?.setMessage({ message: error.response?.data.detail, error: true })
                     }
                 } finally {
-                    ctx?.setLoading(false)
-                    ctx?.setSnackIsOpen(true)
+                    setLoading(false)
+                    setSnackIsOpen(true)
                     setTimeout(() => {
-                        ctx?.setSnackIsOpen(false)
+                        setSnackIsOpen(false)
                     }, 5000)
                 }
                 setSubmitting(false);
@@ -125,9 +88,9 @@ const SignUp: React.FC<{ visible: boolean }> = ({ visible }) => {
                 <Form>
                     <ErrorMessage name="name" component="div" className="text-[red] text-[10px]" />
                     <Field
-                        type="name"
+                        type="text"
                         name="name"
-                        className={`w-full h-[40px] pl-3 mb-[.5rem] outline-none border-2 ${errors.email && touched.email ? "border-[rgb(190, 63, 13)]" : ""} border-[rgb(181, 179, 187)] rounded`} placeholder="Name"
+                        className={`w-full h-[40px] pl-3 mb-[.5rem] outline-none border-2 ${errors.email && touched.email ? "border-[rgb(190, 63, 13)]" : ""} border-[rgb(181, 179, 187)] rounded`} placeholder="Username"
                     />
                     <ErrorMessage name="email" component="div" className="text-[red] text-[10px]" />
                     <Field className={`w-full h-[40px] pl-3 mb-[.5rem] rounded border-2 ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[rgb(181, 179, 187)] rounded'} rounded outline-none`} placeholder="Email" name="email" />
@@ -156,7 +119,6 @@ const SignUp: React.FC<{ visible: boolean }> = ({ visible }) => {
                             name="favorite_team"
                             className={`w-full h-[40px] pl-3 mb-[.5rem] outline-none border-2 ${errors.favorite_team && touched.favorite_team ? "border-[rgb(190, 63, 13)]" : ""} border-[rgb(181, 179, 187)] rounded`} placeholder="Favourite team"
                         />
-                        {/* <FavTeam setUserData={setUserData} userData={userData} /> */}
                     </div>
 
                     <div className="flex justify-center w-full">

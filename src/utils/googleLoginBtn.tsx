@@ -40,7 +40,7 @@ const GoogleLoginButton : React.FC<{title: string, rounded: string | number}> = 
     try {
       setLoading(true)
       const { data } = await axios.post(
-        "https://lazeapi-2.onrender.com/google-signin/",
+        "https://lazeapi-v1.onrender.com/v1/auth/google",
         { token: response.credential },
         { headers: { "Content-Type": "application/json" } }
       );

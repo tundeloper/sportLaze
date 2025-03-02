@@ -1,121 +1,184 @@
-import { Button } from "@mui/material"
-import logo from '../assets/whitelogo1.png'
-import { Link } from "react-router-dom"
-import AppleIcon from "../assets/svgs/apple"
-import { Dispatch, SetStateAction, useEffect, } from "react"
-import axios from "axios"
-import { useSportlaze } from "../hooks/useContext"
-import { useNavigate } from "react-router-dom"
+import { Button } from "@mui/material";
+import logo from "../assets/whitelogo1.png";
+import { Link } from "react-router-dom";
+import AppleIcon from "../assets/svgs/apple";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import axios from "axios";
+import { useSportlaze } from "../hooks/useContext";
+import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { SignInSchema } from "../utils/validator"
-import GoogleLoginButton from "../utils/googleLoginBtn"
+import { SignInSchema } from "../utils/validator";
+import GoogleLoginButton from "../utils/googleLoginBtn";
 
-
-const SignIn: React.FC<{ visible: boolean, setIsVisible: Dispatch<SetStateAction<boolean>> }> = ({ visible, setIsVisible }) => {
-
-  const { login, setLoading, setSnackIsOpen, setMessage } = useSportlaze()
-  const navigate = useNavigate()
+const SignIn: React.FC<{
+  visible: boolean;
+  setIsVisible: Dispatch<SetStateAction<boolean>>;
+}> = ({ visible, setIsVisible }) => {
+  const { login, setLoading, setSnackIsOpen, setMessage, setInitUser } =
+    useSportlaze();
+  const navigate = useNavigate();
   //hadle esc keypress
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && visible) setIsVisible(false)
-    }
-    window.addEventListener('keydown', handleKeydown)
-    return () => window.removeEventListener('keydown', handleKeydown)
-  }, [visible, setIsVisible])
+      if (e.key === "Escape" && visible) setIsVisible(false);
+    };
+    window.addEventListener("keydown", handleKeydown);
+    return () => window.removeEventListener("keydown", handleKeydown);
+  }, [visible, setIsVisible]);
 
-
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { name, value } = e.target;
-  //   setUserData((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
-
-  // const submitHandler = async () => {
-  //   try {
-  //     const response = await axios.post("https://lazeapi-2.onrender.com/signin/", { email: userData.email, password: userData.password })
-  //     if (response.data?.access_token) {
-  //       login(response.data?.access_token)
-  //       console.log(response.data, token)
-  //       console.log(token)
-  //       navigate('/', { replace: true })
-  //     }
-  //     console.log(response.data)
-  //   } catch (error) {
-  //     if (axios.isAxiosError(error)) {
-  //       console.log(error.status)
-  //       console.log(error.message)
-  //     }
-  //   }
-  // }
-
-  return <div className={`flex flex-col justify-between relative rounded-[1rem] w-full bg-[#463a85] py-[1rem] px-[1rem] w-[23rem] sliding-component ${visible ? 'slide-in' : 'slide-out'} sm:w-[26rem] sm:py-[2.5rem] sm:px-[3rem]`} style={{ position: "absolute", left: 0, marginTop: '-3.5rem' }}>
-    <div className="flex justify-center gap-4 mt-4 mb-4">
-      <p className="font-bold text-xl">Sign In to</p>
-      <img src={logo} alt="sportlaze logo" className="w-[3rem] h-[3rem]" />
-    </div>
-    <div className="text-center">
-      <div className="flex flex-col gap-3">
-        <GoogleLoginButton rounded={'1rem'} title="Sign In with Google" />
-        <Link to='#' className="bg-white flex-1 text-black py-2 rounded-[1rem] font-bold"><div className="flex justify-center items-center gap-2"><AppleIcon /><p>Sign In with Apple</p></div></Link>
-
+  return (
+    <div
+      className={`flex flex-col justify-between relative rounded-[1rem] w-full bg-[#463a85] py-[1rem] px-[1rem] w-[23rem] sliding-component ${
+        visible ? "slide-in" : "slide-out"
+      } sm:w-[26rem] sm:py-[2.5rem] sm:px-[3rem]`}
+      style={{ position: "absolute", left: 0, marginTop: "-3.5rem" }}
+    >
+      <div className="flex justify-center gap-4 mt-4 mb-4">
+        <p className="font-bold text-xl">Sign In to</p>
+        <img src={logo} alt="sportlaze logo" className="w-[3rem] h-[3rem]" />
       </div>
-      <div className="flex justify-between items-center gap-10 my-8">
-        <div className="flex-1 h-[.1px] bg-white" />
-        Sign In with
-        <div className="flex-1 h-[.1px] bg-white" />
-      </div>
-      <Formik
-        initialValues={{ email: "", password: "", }}
-        validationSchema={SignInSchema}
-        onSubmit={async (values, { setSubmitting }) => {
-          try {
-            setLoading(true)
-            setSnackIsOpen(false)
-            const response = await axios.post("https://lazeapi-2.onrender.com/signin/", values)
-            console.log(response.status)
-            if (response.data?.access_token) {
-              login(response.data?.access_token)
-              navigate('/', { replace: true })
-            } else {
-              throw new Error("Request failed");
-            }
-          } catch (error) {
-            if (axios.isAxiosError(error)) {
-              // console.log(error.status)
-              if (error.message === "Network Error") {
-                setMessage({ message: error.message, error: true })
+      <div className="text-center">
+        <div className="flex flex-col gap-3">
+          <GoogleLoginButton rounded={"1rem"} title="Sign In with Google" />
+          <Link
+            to="#"
+            className="bg-white flex-1 text-black py-2 rounded-[1rem] font-bold"
+          >
+            <div className="flex justify-center items-center gap-2">
+              <AppleIcon />
+              <p>Sign In with Apple</p>
+            </div>
+          </Link>
+        </div>
+        <div className="flex justify-between items-center gap-10 my-8">
+          <div className="flex-1 h-[.1px] bg-white" />
+          Sign In with
+          <div className="flex-1 h-[.1px] bg-white" />
+        </div>
+        <Formik
+          initialValues={{ username: "", password: "" }}
+          validationSchema={SignInSchema}
+          onSubmit={async (values, { setSubmitting }) => {
+            try {
+              const formData = new URLSearchParams();
+              formData.append("username", values.username);
+              formData.append("password", values.password);
+              setLoading(true);
+              setSnackIsOpen(false);
+              const response = await axios.post(
+                "https://lazeapi-v1.onrender.com/v1/auth/token",
+                formData
+              );
+              const { data } = response;
+              if (data.access_token) {
+                login(data?.access_token);
+                setInitUser({
+                  access_token: data.access_token,
+                  token_type: "bearer",
+                  email: data?.user?.email,
+                  username: data?.user?.username,
+                  id: data?.user?.id,
+                });
+                navigate("/", { replace: true });
               } else {
-                setMessage({message: error.response?.data.detail, error: true })
+                throw new Error("Request failed");
               }
+            } catch (error) {
+              if (axios.isAxiosError(error)) {
+                console.log(error);
+                if (error.message === "Network Error") {
+                  setMessage({ message: error.message, error: true });
+                } else {
+                  setMessage({
+                    message: error.response?.data.detail,
+                    error: true,
+                  });
+                }
+              }
+            } finally {
+              setLoading(false);
+              setSnackIsOpen(true);
+              // setMessage({ message: 'Invalid email or password', error: true })
+              setTimeout(() => {
+                setSnackIsOpen(false);
+              }, 5000);
             }
-          } finally {
-            setLoading(false)
-            setSnackIsOpen(true)
-            // setMessage({ message: 'Invalid email or password', error: true })
-            setTimeout(() => {
-              setSnackIsOpen(false)
-            }, 5000)
-          }
-        }}
-      >
-        {({ isSubmitting, errors, touched }) => (
-          <Form className="flex flex-col gap-2">
-            <ErrorMessage name="email" component="div" className="text-[red] text-[12px] mb-[-.5rem]" />
-            <Field className={`w-full h-[40px] p-3 text-center mb-[.5rem] bg-[transparent] outline-none rounded border ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'}`} placeholder="Email, Username or Phone" name="email" style={{ borderRadius: '3rem' }} />
-            <ErrorMessage name="password" component="div" className="text-[red] text-[12px] mb-[-.5rem]" />
-            <Field className={`w-full h-[40px] p-3 text-center mb-[.5rem] bg-[transparent] outline-none rounded border ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'}`} placeholder="Password" name="password" style={{ borderRadius: '3rem' }} type="password" />
-            <Link to="#" style={{ textDecoration: 'underline' }}><p>Forgot Password?</p></Link>
-            <Button sx={{ color: 'white', background: '#9a1b39', borderRadius: '2rem', textTransform: 'capitalize', padding: '10px', margin: '0 5rem 0 5rem' }} type="submit" disabled={isSubmitting}>Sign In</Button>
-          </Form>
-        )}
-      </Formik>
+          }}
+        >
+          {({ isSubmitting, errors, touched }) => (
+            <Form className="flex flex-col gap-2">
+              <ErrorMessage
+                name="username"
+                component="div"
+                className="text-[red] text-[12px] mb-[-.5rem]"
+              />
+              <Field
+                className={`w-full h-[40px] p-3 text-center mb-[.5rem] bg-[transparent] outline-none rounded border ${
+                  errors && touched
+                    ? "border-[rgb(190, 63, 13)]"
+                    : "border-[white]"
+                }`}
+                placeholder="Email, Username or Phone"
+                name="username"
+                type="text"
+                style={{ borderRadius: "3rem" }}
+              />
+              <ErrorMessage
+                name="password"
+                component="div"
+                className="text-[red] text-[12px] mb-[-.5rem]"
+              />
+              <Field
+                className={`w-full h-[40px] p-3 text-center mb-[.5rem] bg-[transparent] outline-none rounded border ${
+                  errors && touched
+                    ? "border-[rgb(190, 63, 13)]"
+                    : "border-[white]"
+                }`}
+                placeholder="Password"
+                name="password"
+                style={{ borderRadius: "3rem" }}
+                type="password"
+              />
+              <Link to="#" style={{ textDecoration: "underline" }}>
+                <p>Forgot Password?</p>
+              </Link>
+              <Button
+                sx={{
+                  color: "white",
+                  background: "#9a1b39",
+                  borderRadius: "2rem",
+                  textTransform: "capitalize",
+                  padding: "10px",
+                  margin: "0 5rem 0 5rem",
+                }}
+                type="submit"
+                disabled={isSubmitting}
+              >
+                Sign In
+              </Button>
+            </Form>
+          )}
+        </Formik>
+      </div>
+
+      <p className="text-center mb-2 mt-4">
+        Don't have an account?{" "}
+        <Button
+          className="font-bold"
+          style={{
+            textDecoration: "underline",
+            textTransform: "capitalize",
+            color: "white",
+          }}
+          onClick={() => {
+            setIsVisible(false);
+          }}
+        >
+          Sign Up
+        </Button>
+      </p>
     </div>
+  );
+};
 
-    <p className="text-center mb-2 mt-4">Don't have an account? <Link to='#' className="font-bold" style={{ textDecoration: 'underline' }}>Sign Up</Link></p>
-  </div>
-}
-
-export default SignIn
+export default SignIn;

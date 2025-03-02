@@ -5,7 +5,7 @@ import { useSportlaze } from '../hooks/useContext';
 
 const Protect: React.FC<{ children: React.ReactNode, redirectPath: string }> = ({ children, redirectPath }) => {
   const { isAuthenticated } = useSportlaze();
-  console.log(isAuthenticated)
+  // console.log(isAuthenticated)
 
 
   if (!isAuthenticated) {
