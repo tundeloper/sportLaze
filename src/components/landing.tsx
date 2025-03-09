@@ -87,7 +87,7 @@ const getFeed = async (accessToken: string) => {
 
   return (
     <div className="relative">
-      <Button className="absolute top-[20rem] bg-[red] z-50">
+      <Button className="fixed top-[25rem] bg-[red] z-50">
         <EditButton />
       </Button>
       <div className="flex justify-center mb-2">

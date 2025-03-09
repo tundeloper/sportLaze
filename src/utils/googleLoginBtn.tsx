@@ -7,7 +7,7 @@ import GoogleIcon from "../assets/svgs/googlesvg";
 const GoogleLoginButton : React.FC<{title: string, rounded: string | number}> = ({title, rounded}) => {
   const [googleLoaded, setGoogleLoaded] = useState(false);
   const navigate = useNavigate()
-  const { login, setMessage, setLoading, setSnackIsOpen } = useSportlaze()
+  const { login, setMessage, setLoading, setSnackIsOpen, setInitUser } = useSportlaze()
 
 
   useEffect(() => {
@@ -45,10 +45,15 @@ const GoogleLoginButton : React.FC<{title: string, rounded: string | number}> = 
         { headers: { "Content-Type": "application/json" } }
       );
 
-      console.log("Backend Response:", data);
-
       if (data.access_token) {
         login(data.access_token)
+        setInitUser({
+          access_token: data.access_token,
+          token_type: "bearer",
+          email: data?.user?.email,
+          username: data?.user?.username,
+          id: data?.user?.id,
+        });
         navigate('/', { replace: true })
       } else {
         alert("Login failed: " + data.detail);

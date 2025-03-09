@@ -59,7 +59,6 @@ const SignUp: React.FC<{ visible: boolean }> = ({ visible }) => {
                             password: credential.password
                             }
                     )
-                    console.log(response)
                     if (response.status === 200) {
                         setMessage({ message: "successfuly", error: false });
                         login(response.data?.access_token)
@@ -67,7 +66,6 @@ const SignUp: React.FC<{ visible: boolean }> = ({ visible }) => {
                         throw new Error("Request failed");
                     }
                 } catch (error) {
-                    console.log(error)
                     if (axios.isAxiosError(error)) {
                         console.log(error.response?.data.detail[1])
                         if (error.message === "Network Error") {
