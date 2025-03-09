@@ -80,6 +80,7 @@ const getFeed = async (accessToken: string) => {
   };
 
   useEffect(() => {
+    console.log(initailUser.access_token)
     fetchFeed();
   }, []);
 
