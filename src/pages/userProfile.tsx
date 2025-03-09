@@ -32,7 +32,7 @@ const Profile = () => {
     </div>
     <div className="px-2 py-2 dark:text-darkw">
       <div>
-        <p className="font-semibold text-lg">SportLaze Community</p>
+        <p className="font-semibold text-lg">{user.username}</p>
         <p className="text-gray-500 text-xs">@{user.username}</p>
       </div>
       <div className="">

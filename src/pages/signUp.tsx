@@ -10,6 +10,7 @@ import axios from "axios"
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import validationSchema from "../utils/validator";
 import { useSportlaze } from "../hooks/useContext";
+import baseUrl from "../utils/baseUrl";
 
 // import MUISnackbar from "../utils/snackBar";
 
@@ -31,6 +32,8 @@ const SignUp: React.FC<{ visible: boolean }> = ({ visible }) => {
 
   const { login, setLoading, setSnackIsOpen, setMessage } = useSportlaze()
 
+  const url = baseUrl()
+
     const togglePasswordVisibility = () => {
         setShowPassword((prev) => !prev);
     };
@@ -45,7 +48,7 @@ const SignUp: React.FC<{ visible: boolean }> = ({ visible }) => {
                 try {
                     setLoading(true)
                     setSnackIsOpen(false)
-                    const response = await axios.post(`https://lazeapi-v1.onrender.com/v1/auth/signup`, 
+                    const response = await axios.post(`${url}/auth/signup`, 
                         {
                             username: credential.name,
                             email: credential.email,

@@ -10,6 +10,7 @@ import Predictions from "../components/predictions";
 import LiveScore from "../components/livesscore";
 import { useSportlaze } from "../hooks/useContext";
 import { useEffect, useState } from "react";
+import baseUrl from "../utils/baseUrl";
 
 const Home = () => {
   const [profile, setProfile] = useState<any>(null);
@@ -17,10 +18,12 @@ const Home = () => {
   const [error, setError] = useState<string | null>(null);
   const { initailUser, setUser } = useSportlaze();
 
+  const url = baseUrl()
+
   const getProfile = async (accessToken: string) => {
     try {
       const response = await fetch(
-        `https://lazeapi-v1.onrender.com/v1/auth/profile`,
+        `${url}/auth/profile`,
         {
           method: "GET",
           headers: {
@@ -35,7 +38,6 @@ const Home = () => {
       }
 
       const data = await response.json();
-      console.log(data, "data");
       return data;
     } catch (error) {
       console.error("Error fetching profile:", error);
@@ -56,7 +58,6 @@ const Home = () => {
     if (initailUser.access_token.length > 0 && initailUser.access_token) {
       getProfile(initailUser.access_token)
         .then((data) => {
-          console.log(data);
           setUser({
             username: data.username,
             name: '', // no name in the response
@@ -97,7 +98,7 @@ const Home = () => {
             <Trends />
             <Lounge />
           </div>
-          <div className="bg-white w-full h-[auto] p-4 sm: w-full dark:bg-[black] sm:rounded-[1rem]">
+          <div className="bg-white h-[auto] p-4 sm: w-full dark:bg-[black] sm:rounded-[1rem]">
             {/* <div className="flex justify-center mb-2"><img src={darkMode ? whitelogo : img} alt="sportlaze logo" className="h-[64px] w-[72px]" /></div> */}
             <Landing />
           </div>

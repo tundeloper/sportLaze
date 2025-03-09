@@ -4,6 +4,7 @@ import { Send as SendIcon, MoreVert as MoreVertIcon } from "@mui/icons-material"
 import postImage from "../../assets/posted picture.png";
 
 const UserPost: React.FC = () => {
+    
     return (
         <div className="bg-white p-0 pt-1 mb-2 rounded-lg w-full dark:bg-black md:p-4">
             {/* Shared Label */}

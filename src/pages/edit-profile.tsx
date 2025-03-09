@@ -1,24 +1,24 @@
 import { Avatar, Button } from "@mui/material"
 import UserProfile from "../components/userProfile/profile"
-import user from "../assets/user/man-studio.png";
+import avat from "../assets/user/man-studio.png";
 import { useSportlaze } from "../hooks/useContext";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { EditSchema } from "../utils/validator";
-
+import baseUrl from "../utils/baseUrl";
 
 const EditProfile = () => {
-    const { login, setLoading, setSnackIsOpen, setMessage } = useSportlaze()
+    const { login, setLoading, setSnackIsOpen, user, setMessage } = useSportlaze()
     const navigate = useNavigate()
-
+    const url = baseUrl()
 
     return <UserProfile>
         <div className="flex bg-gradient-to-b from-[#463a85] to-[#9a1b39] p-[-16px] w-full h-[10rem] relative">
             <div className="absolute"></div>
 
             <div className="flex justify-center items-center absolute right-[2rem] bottom-[-2rem] h-[6rem] w-[6rem] border rounded-[100%]">
-                <Avatar src={user} sx={{ width: 93, height: 93 }} />
+                <Avatar src={avat} sx={{ width: 93, height: 93 }} />
                 {/* <Avatar src="https://avatars.githubusercontent.com/u/67442529?v=4" sx={{ width: 93, height: 93 }} /> */}
             </div>
         </div>
@@ -30,8 +30,15 @@ const EditProfile = () => {
                 try {
                     setLoading(true)
                     setSnackIsOpen(false)
-                    const response = await axios.post("https://lazeapi-2.onrender.com/path/", values)
-                    console.log(response.status)
+                    const response = await axios.put(`${url}/auth/${user.username}`, {
+                        username: values.name,
+                        "email": "user@example.com",
+                        "date_of_birth": "2019-08-24",
+                        "country": "string",
+                        "favorite_sport": "string",
+                        "favorite_team": "string"
+                      })
+                    console.log(response)
                     if (response.data?.access_token) {
                         login(response.data?.access_token)
                         navigate('/', { replace: true })
@@ -70,7 +77,7 @@ const EditProfile = () => {
                         <label htmlFor="bio" className="font-bold dark:text-darkw">Bio</label>
                         <ErrorMessage name="bio" component="div" className="text-[red] text-[12px] mb-[-.5rem]" />
                     </div>
-                    <Field className={`w-full h-[40px] p-3 mb-[.5rem] bg-[transparent] outline-none  border-b ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'} dark:text-darkw`} placeholder="" id="bio" name="password" type="text" />
+                    <Field className={`w-full h-[40px] p-3 mb-[.5rem] bg-[transparent] outline-none  border-b ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'} dark:text-darkw`} placeholder="" id="bio" name="bio" type="text" />
                     {/* date of birth */}
                     <div className="flex justify-between gap-4">
                         <label htmlFor="bio" className="font-bold dark:text-darkw">Date of Birth*</label>

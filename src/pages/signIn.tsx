@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { SignInSchema } from "../utils/validator";
 import GoogleLoginButton from "../utils/googleLoginBtn";
+import baseUrl from "../utils/baseUrl";
 
 const SignIn: React.FC<{
   visible: boolean;
@@ -25,6 +26,8 @@ const SignIn: React.FC<{
     window.addEventListener("keydown", handleKeydown);
     return () => window.removeEventListener("keydown", handleKeydown);
   }, [visible, setIsVisible]);
+
+  const url = baseUrl()
 
   return (
     <div
@@ -66,7 +69,7 @@ const SignIn: React.FC<{
               setLoading(true);
               setSnackIsOpen(false);
               const response = await axios.post(
-                "https://lazeapi-v1.onrender.com/v1/auth/token",
+                `${url}/auth/token`,
                 formData
               );
               const { data } = response;

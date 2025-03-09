@@ -15,12 +15,12 @@ const SideNav: React.FC<{ profile: boolean, setIsVisible: Dispatch<SetStateActio
 
     const { darkMode, setDarkMode, logout, user } = useSportlaze()
 
-    return <div className={`sliding-component gradient-bb relative pt-10 p-2 bg-[red] relative w-[20rem] ${profile ? 'no-profile' : 'profile'}`} style={{ position: 'fixed', left: '0', top: '0', zIndex: '3', borderTopRightRadius: '1rem', borderBottomRightRadius: '1rem' }}>
+    return <div className={`sliding-component gradient-bb relative pt-10 p-2 bg-[red] w-[20rem] ${profile ? 'no-profile' : 'profile'}`} style={{ position: 'fixed', left: '0', top: '0', zIndex: '3', borderTopRightRadius: '1rem', borderBottomRightRadius: '1rem' }}>
         <Button onClick={() => setIsVisible(false)} style={{ position: 'absolute', top: '.5rem', right: '0', color: 'red' }}><ClearOutlinedIcon /></Button>
         <div className="border-b border-grey pb-10 mb-4">
             <div className="flex justify-center flex-col items-center mb-8">
                 <img src={logo} alt="current user" className="h-14 w-14 rounded-[100%]" />
-                <p className="font-bold text-xl">Johnson doe</p>
+                <p className="font-bold text-xl">{user.username}</p>
                 <p>@{user.username}</p>
             </div>
             <div className="flex justify-around">
