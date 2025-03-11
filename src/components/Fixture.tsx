@@ -1,8 +1,42 @@
 import { Button } from "@mui/material"
 import PremierLeagueLogo from "../assets/premierLeagueLogo"
 import FixtureMatch from "./fixtureMatch"
+import { useEffect, useState } from "react"
+import axios from "axios"
+import baseUrl from "../utils/baseUrl"
+import { useSportlaze } from "../hooks/useContext"
 
 const Fixture = () => {
+        const [liveScores, setLiveScores] = useState<any[]>([]);
+        const [loading, setLoading] = useState<boolean>(false);
+        const [error, setError] = useState<string>("");
+        const url =  baseUrl()
+        const {initailUser} = useSportlaze()
+
+        // ${localStorage.getItem("accessToken")}
+    
+        const fetchLiveScores = async () => {
+            setLoading(true);
+            setError("");
+            try {
+                const response = await axios.get(`${url}/livescore`, {
+                    headers: {
+                        Authorization: `Bearer ${initailUser.access_token}`,
+                    },
+                });
+                console.log(response.data)
+                setLiveScores(response.data);
+            } catch (err) {
+                setError("Failed to fetch live scores");
+            } finally {
+                setLoading(false);
+            }
+        };
+    
+        useEffect(() => {
+            fetchLiveScores();
+        }, []);
+
     return <div className="bg-gradient-to-b from-[#f1f1f1] via-[#f1f1f1] to-[rgba(71,58,133,0.45)] text-white mb-4 h-[50rem] dark:from-[black] dark:via-[black] dark:to-[black]" style={{ height: 'min-content', borderRadius: '1rem', overflow: 'hidden' }}>
         <div className="flex justify-center items-center font-bold p-4 pb-12 gradient-r mb-2">
             <p className="text-center">WEEKLY FIXTURE</p>

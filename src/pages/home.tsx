@@ -11,27 +11,26 @@ import LiveScore from "../components/livesscore";
 import { useSportlaze } from "../hooks/useContext";
 import { useEffect, useState } from "react";
 import baseUrl from "../utils/baseUrl";
+import { useNavigate } from "react-router-dom";
+import Loading from "../components/loadings/loading";
 
 const Home = () => {
-  const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const { initailUser, setUser } = useSportlaze();
 
-  const url = baseUrl()
+  const navigate = useNavigate();
+  const url = baseUrl();
 
   const getProfile = async (accessToken: string) => {
     try {
-      const response = await fetch(
-        `${url}/auth/profile`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await fetch(`${url}/auth/profile`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
       if (!response.ok) {
         throw new Error("Failed to fetch profile");
@@ -46,21 +45,24 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    // if (!token) {
-    //     console.error("No access token found");
-    //     setLoading(false);
-    //     return;
-    // }
     // check if user is authenticated by checking local storage
-    // if there is no token, logout and redirect to login page
+    // if there is no token or token expires, logout and redirect to auth page
+    const token = localStorage.getItem("access_token"); // Get token from storage
 
-    if (initailUser.access_token.length > 0 && initailUser.access_token) {
-      getProfile(initailUser.access_token)
+    if (!token) {
+      console.error("No access token found");
+      setLoading(false);
+      navigate("/auth", { replace: true });
+      return;
+    }
+    
+
+    if (token.length > 0 && token) {
+      getProfile(token)
         .then((data) => {
           setUser({
             username: data.username,
-            name: '', // no name in the response
+            name: "", // no name in the response
             email: data.email,
             date_of_birth: data.date_of_birth,
             followers: data.followers_count,
@@ -83,6 +85,8 @@ const Home = () => {
   }, []);
 
   // const { darkMode } = useSportlaze()
+
+  if (loading) return <Loading />
 
   return (
     <div

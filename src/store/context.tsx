@@ -23,27 +23,46 @@ interface ContextType {
   darkMode: boolean;
   setDarkMode: Dispatch<SetStateAction<boolean>>;
   user: User;
-  setUser: Dispatch<SetStateAction<User>>,
+  setUser: Dispatch<SetStateAction<User>>;
   initailUser: InitialUser;
-  setInitUser: Dispatch<SetStateAction<InitialUser>>
+  setInitUser: Dispatch<SetStateAction<InitialUser>>;
 }
 
-export const SportlazeContext = createContext<ContextType | undefined>(
-  undefined
-);
+export const SportlazeContext = createContext<ContextType | undefined>(undefined);
 
-export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
-  const [isloading, setIsLoading] = React.useState(false);
-  const [darkMode, setDarkMode] = React.useState(getInitialTheme);
-  const [token, setTokekn] = React.useState<string | null>(null);
-  const [message, setdisMessage] = React.useState<{
-    message: string;
-    error: boolean;
-  }>({ message: "", error: false });
-  const [opensnacks, setOpensnacks] = React.useState<boolean>(false);
+const TOKEN_EXPIRY_HOURS = 24; // Token expires in 24 hours
 
+export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [isloading, setIsLoading] = useState(false);
+  const [darkMode, setDarkMode] = useState(getInitialTheme);
+  const [token, setToken] = useState<string | null>(() => {
+    const storedToken = localStorage.getItem("access_token");
+    const storedExpiry = localStorage.getItem("token_expiry");
+
+    if (storedToken && storedExpiry) {
+      const expiryTime = parseInt(storedExpiry, 10);
+      const currentTime = Date.now();
+
+      if (currentTime > expiryTime) {
+        // Token expired, remove it
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("token_expiry");
+        return null;
+      }
+      return storedToken;
+    }
+    return null;
+  });
+
+  const [message, setDisMessage] = useState<{ message: string; error: boolean }>({
+    message: "",
+    error: false,
+  });
+  const [opensnacks, setOpensnacks] = useState<boolean>(false);
+  const [user, setUser] = useState<User>(initialUserval);
+  const [initUser, setInitUser] = useState<InitialUser>(initialUser);
+
+  // Sync theme mode with local storage
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
@@ -54,31 +73,49 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [darkMode]);
 
-  const logout = () => {
-    setTokekn(null);
+  // Save token with expiry time
+  const login = (token: string) => {
+    const expiryTime = Date.now()+ TOKEN_EXPIRY_HOURS * 60 *  60 * 1000; // 24 hours
+    setToken(token);
+    localStorage.setItem("access_token", token);
+    localStorage.setItem("token_expiry", expiryTime.toString());
   };
 
-  const login = (token: string) => {
-    setTokekn(token);
+  // Remove token and expiry on logout
+  const logout = () => {
+    setToken(null);
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("token_expiry");
   };
+
+  // Check if token is expired on app load
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const storedExpiry = localStorage.getItem("token_expiry");
+      if (storedExpiry) {
+        const expiryTime = parseInt(storedExpiry, 10);
+        if (Date.now() > expiryTime) {
+          logout(); // Token expired, log user out
+        }
+      }
+    }, 1000 * 60); // Check every minute
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
 
   const setLoading = (payload: boolean) => {
     setIsLoading(payload);
   };
 
   const setMessage = (payload: { message: string; error: boolean }) => {
-    setdisMessage(payload);
+    setDisMessage(payload);
   };
-  // const value = { isAuthenticated: !!token, tokenHandler, login, token, logout }
-
-  const [user, setUser] = useState<User>(initialUserval);
-  const [initUser, setInitUser] = useState<InitialUser>(initialUser);
 
   return (
     <SportlazeContext.Provider
       value={{
         isAuthenticated: !!token,
-        user: user,
+        user,
         setUser,
         initailUser: initUser,
         setInitUser,
@@ -88,11 +125,11 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({
         token,
         logout,
         loading: isloading,
-        setLoading: setLoading,
+        setLoading,
         disMesssage: message,
-        setMessage: setMessage,
+        setMessage,
         snacksisOpen: opensnacks,
-        setSnackIsOpen: (open: boolean) => setOpensnacks(open),
+        setSnackIsOpen: setOpensnacks,
       }}
     >
       {children}
