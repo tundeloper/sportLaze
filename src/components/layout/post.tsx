@@ -1,4 +1,4 @@
-import { Avatar, Button, TextareaAutosize } from "@mui/material";
+import { Avatar, Button, TextareaAutosize, ClickAwayListener } from "@mui/material";
 import { useState } from "react";
 import avat from "../../assets/user/man-studio.png";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
@@ -27,7 +27,7 @@ export default function PostInput() {
       formData.append(`media_${index}`, item.file);
     });
 
-    console.log(formData)
+    console.log(formData);
 
     try {
       const response = await fetch("/api/posts", {
@@ -62,21 +62,23 @@ export default function PostInput() {
 
   const handleEmojiClick = (emojiObject: { emoji: string }) => {
     setText((prev) => prev + emojiObject.emoji);
-    setShowEmojiPicker(false);
   };
 
   return (
     <div className="w-full p-4 border rounded-lg shadow-md mb-2 bg-white relative dark:bg-black">
-      <div className="flex items-center gap-2 mb-2">
-      <Avatar src={avat} sx={{ width: 50, height: 50 }} />
+      <div className="flex items-start gap-2 mb-2">
+        <Avatar src={avat} sx={{ width: 50, height: 50 }} />
         <TextareaAutosize
           placeholder="What is happening?"
-          className="flex-1 border-none focus:ring-0 dark:bg-black dark:text-white"
+          className="flex-1 border border-gray-300 focus:ring-0 dark:bg-black dark:text-white p-2 rounded-md"
           value={text}
-          minLength={20}
           onChange={(e) => setText(e.target.value)}
+          minRows={3}
+          maxRows={4} // Ensures it becomes scrollable after a certain height
+          style={{ resize: "none", overflow: "auto" }}
         />
       </div>
+
       <div className="flex gap-2 flex-wrap mt-2">
         {media.map((item, index) => (
           <div key={index} className="relative w-20 h-20">
@@ -99,6 +101,7 @@ export default function PostInput() {
           </div>
         ))}
       </div>
+
       <div className="flex justify-between items-center mt-2">
         <div className="flex gap-3 text-gray-500">
           <label>
@@ -120,10 +123,19 @@ export default function PostInput() {
               onChange={handleMediaUpload}
             />
           </label>
-          <EmojiEmotionsIcon
-            className="cursor-pointer"
-            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-          />
+          <ClickAwayListener onClickAway={() => setShowEmojiPicker(false)}>
+            <div className="relative">
+              <EmojiEmotionsIcon
+                className="cursor-pointer"
+                onClick={() => setShowEmojiPicker((prev) => !prev)}
+              />
+              {showEmojiPicker && (
+                <div className="absolute z-10 mt-2 bg-white shadow-md p-2 rounded-md">
+                  <EmojiPicker onEmojiClick={handleEmojiClick} />
+                </div>
+              )}
+            </div>
+          </ClickAwayListener>
           <CalendarMonthIcon className="cursor-pointer" />
         </div>
         <Button
@@ -136,11 +148,6 @@ export default function PostInput() {
           Post
         </Button>
       </div>
-      {showEmojiPicker && (
-        <div className="absolute z-10">
-          <EmojiPicker onEmojiClick={handleEmojiClick} />
-        </div>
-      )}
     </div>
   );
 }
