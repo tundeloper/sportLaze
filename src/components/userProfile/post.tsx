@@ -15,7 +15,7 @@ const UserPost: React.FC<{feed: feedType}> = ({feed}) => {
   const { darkMode } = useSportlaze();
 
   return (
-    <div className="bg-white p-0 pt-1 mb-2 rounded-lg w-full dark:bg-black md:p-4">
+    <div className="bg-white p-0 pt-1 rounded-lg w-full dark:bg-black md:p-4">
       {/* Shared Label */}
       {/* check if it persoal post or other feed 
       if it's personal post indicate if it's share indicate it as well  */}
@@ -78,7 +78,7 @@ const UserPost: React.FC<{feed: feedType}> = ({feed}) => {
             <p className="text-[13px] dark:text-white">15.3k</p>
           </div>
           <div className="flex gap-[1px] items-center">
-            <SendIcon fill={darkMode ? "white" : "#222222"} />{" "}
+            <SendIcon fill={darkMode ? "white" : "#222222"} />
             <p className="text-[13px] dark:text-white">15.3k</p>
           </div>
         </div>

@@ -19,7 +19,7 @@ const SideNav: React.FC<{
   setIsVisible: Dispatch<SetStateAction<boolean>>;
 }> = ({ profile, setIsVisible }) => {
   const { darkMode, setDarkMode, logout, user } = useSportlaze();
-  const [dropBar, setDropBar] = useState<boolean>(false)
+  const [dropBar, setDropBar] = useState<boolean>(false);
 
   return (
     <div
@@ -34,9 +34,9 @@ const SideNav: React.FC<{
         borderTopRightRadius: "1rem",
         borderBottomRightRadius: "1rem",
       }}
-      onClick={() => setDropBar(!dropBar)}
+      onClick={() => setDropBar(false)}
     >
-        {dropBar && <DropBar />}
+      {dropBar && <DropBar />}
       <Button
         onClick={() => setIsVisible(false)}
         style={{ position: "absolute", top: ".5rem", right: "0", color: "red" }}
@@ -120,12 +120,12 @@ const SideNav: React.FC<{
           <img src={verifyicon} alt="verify_icon" /> <p>Get Verified</p>
         </NavLink>
       </div>
-      
+
       <div className="flex mb-2 mt-0 text-white ml-8 pr-8">
         <Button
           variant="text"
-          sx={{ textTransform: "capitalize", color: "white", }}
-          className="gap-4 text-white pl-[-2.3rem] text-left hover:bg-secondary transition pr-8"
+          sx={{ textTransform: "capitalize", color: "white" }}
+          className="gap-4 text-white pl-[-2.3rem] text-left hover:bg-secondary transition pr-8 z-20"
           onClick={() => setDropBar(!dropBar)}
         >
           <img src={moreIcon} alt="more-icon" />
@@ -137,7 +137,12 @@ const SideNav: React.FC<{
         <Button
           variant="contained"
           color="primary"
-          sx={{ textTransform: "capitalize", background: 'white', color: '#463a85', borderRadius: '3rem' }}
+          sx={{
+            textTransform: "capitalize",
+            background: "white",
+            color: "#463a85",
+            borderRadius: "3rem",
+          }}
           className="gap-4 pl-[-2.3rem] text-left  py-4 w-full transition pr-8 rounded-[100%]"
           onClick={() => {}}
         >
@@ -158,12 +163,16 @@ const SideNav: React.FC<{
           <p>settings and support</p> <ArrowRightCircle />
         </Button>
       </div>
-      <Button
-        className="absolute bottom-[.1rem] cursor-pointer bg-primary"
-        onClick={() => setDarkMode(!darkMode)}
-      >
-        <Moon />
-      </Button>
+
+      {/* toggle darkmode */}
+      <div>
+        <Button
+          className="absolute bottom-[.1rem] cursor-pointer bg-primary"
+          onClick={() => setDarkMode(!darkMode)}
+        >
+          <Moon />
+        </Button>
+      </div>
     </div>
   );
 };

@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import baseUrl from "../utils/baseUrl";
 import UserPost from "./userProfile/post";
+import PostInput from "./layout/post";
 // import ArrowUp from "../assets/arrowUp"
 // import logo fom '../'
 // import Bookmark from "../assets/bookmark"
@@ -93,9 +94,9 @@ const Landing = () => {
 
   return (
     <div className="relative">
-      <Button color="primary" className="fixed top-[25rem] bg-[red] z-50">
+      {/* <Button color="primary" className="fixed top-[25rem] bg-[red] z-50">
         <EditButton />
-      </Button>
+      </Button> */}
       <div className="flex justify-center mb-2">
         <img
           src={darkMode ? whitelogo : img}
@@ -104,7 +105,7 @@ const Landing = () => {
         />
       </div>
 
-      <nav className="flex sticky top-0 z-[6] justify-between mb-2">
+      <nav className="flex sticky top-0 z-[6] justify-between">
         <NavLink
           to={"/"}
           className={({ isActive }) =>
@@ -148,6 +149,8 @@ const Landing = () => {
         <div className="flex justify-center items-center h-[2rem]">
           {/* <div className="flex bg-secondary py-2 px-4 items-center gap-1 rounded-[1rem]"><p className="gap-2 text-white text-[10px]">New Post</p><p><ArrowUp /></p></div> */}
         </div>
+
+        <PostInput />
 
         {/* posts */}
         {/* {feed.length > 0 ? <p className="text-red-700">{feed[1].content}</p> : ''} */}
