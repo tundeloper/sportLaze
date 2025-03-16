@@ -17,7 +17,8 @@ import DropBar from "./drop-bart";
 const SideNav: React.FC<{
   profile: boolean;
   setIsVisible: Dispatch<SetStateAction<boolean>>;
-}> = ({ profile, setIsVisible }) => {
+  setPostOverlay: Dispatch<SetStateAction<boolean>>;
+}> = ({ profile, setIsVisible, setPostOverlay }) => {
   const { darkMode, setDarkMode, user } = useSportlaze();
   const [dropBar, setDropBar] = useState<boolean>(false);
 
@@ -147,6 +148,7 @@ const SideNav: React.FC<{
           <Button
             variant="contained"
             color="primary"
+            
             sx={{
               textTransform: "capitalize",
               background: "white",
@@ -154,9 +156,9 @@ const SideNav: React.FC<{
               borderRadius: "3rem",
             }}
             className="gap-4 pl-[-2.3rem] text-left  py-4 w-full transition pr-8 rounded-[100%]"
-            onClick={() => {}}
+            onClick={() => setPostOverlay(true)}
           >
-            <span className="text-secondary">Post</span>
+            <div className="text-secondary">Post</div>
           </Button>
         </div>
         <div className="flex justify-center mt-4">

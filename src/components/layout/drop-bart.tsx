@@ -9,7 +9,7 @@ const DropBar = () => {
   const { logout } = useSportlaze();
 
   return (
-    <div className="absolute top-[20rem] w-full bg-primary ml-[-.5rem] py-4 flex gap-2 flex-col justify-center">
+    <div className="absolute top-[19rem] w-full bg-primary ml-[-.5rem] py-4 flex gap-2 flex-col justify-center">
       <NavLink
         to={"/promotion"}
         className={({ isActive }) =>
@@ -31,15 +31,14 @@ const DropBar = () => {
         <img src={monetIcon} alt="home-icon" /> <p>Monetization</p>
       </NavLink>
 
-      <div className="pl-8">
-        <Button
-          className="flex gap-4"
-          sx={{ textTransform: "capitalize" }}
+      <div className="pl-10 mt-2">
+        <div
+          className="flex gap-4 cursor-pointer"
           onClick={() => {logout()}}
         >
           <img src={logouticon} alt="home-icon" />{" "}
           <p className="text-white">Logout</p>
-        </Button>
+        </div>
       </div>
     </div>
   );

@@ -89,7 +89,7 @@ const {setMessage, setSnackIsOpen} = useSportlaze()
         <Avatar src={avat} sx={{ width: 50, height: 50 }} />
         <TextareaAutosize
           placeholder="What is happening?"
-          className="flex-1 border border-gray-300 focus:ring-0 dark:bg-black dark:text-white p-2 rounded-md"
+          className="flex-1 border border-gray-300 text-secondary focus:ring-0 dark:bg-black dark:text-white p-2 rounded-md"
           value={text}
           onChange={(e) => setText(e.target.value)}
           minRows={3}
