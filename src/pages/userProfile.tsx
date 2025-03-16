@@ -1,4 +1,4 @@
-import { Avatar, Button } from "@mui/material";
+import { Avatar, Button, CircularProgress } from "@mui/material";
 // import { LocationOn, CalendarToday, Link, CheckCircle } from "@mui/icons-material";
 import UserProfile from "../components/userProfile/profile";
 import userimg from "../assets/user/man-studio.png";
@@ -6,15 +6,50 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserPost from "../components/userProfile/post";
 import { useSportlaze } from "../hooks/useContext";
+import axios from "axios";
+import baseUrl from "../utils/baseUrl";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState<
     "posts" | "replies" | "lounges" | "saved"
   >("posts");
   const { user } = useSportlaze();
+
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const url = baseUrl();
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const fetchPosts = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        throw new Error("No access token found");
+      }
+
+      const response = await axios.get(`${url}/posts/user`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setPosts(response.data);
+    } catch (err: any) {
+      setError(err.response?.data?.message || "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const tabClass = (tab: string) =>
     activeTab === tab
@@ -111,18 +146,16 @@ const Profile = () => {
         <section className="p-1 mt-3 md:p-4">
           {activeTab === "posts" && (
             <div className="min-h-[10rem]">
-              <UserPost
-                feed={{
-                  author_id: 21,
-                  content: "string",
-                  created_at: "string",
-                  hashtags: "string",
-                  id: 2,
-                  likes_count: 2,
-                }}
-              />
+              {loading && <div className="flex justify-center pt-6"><CircularProgress size={30} /></div>}
+              {error && <p className="text-red-500">{error}</p>}
+              {posts.map((post: any) => (
+                <UserPost feed={post} />
+              ))}
+              
             </div>
           )}
+
+          {/* replies */}
           {activeTab === "replies" && (
             <div className="min-h-[10rem]">
               <p className="text-gray-500 text-sm">Replies</p>
@@ -133,6 +166,8 @@ const Profile = () => {
               </div>
             </div>
           )}
+          
+          {/* lounges */}
           {activeTab === "lounges" && (
             <div className="min-h-[10rem]">
               <p className="text-gray-500 text-sm">Lounges</p>

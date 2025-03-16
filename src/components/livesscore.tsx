@@ -1,12 +1,74 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Carousel from "react-material-ui-carousel";
 // import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { Box, Typography } from "@mui/material";
 import PremierLeagueLogo from "../assets/premierLeagueLogo";
 import { useSportlaze } from "../hooks/useContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+export interface liveType {
+    away_logo: string;
+    away_score: number;
+    away_team: string;
+    date: string;
+    elapsed: number;
+    home_logo: string;
+    home_score: number;
+    home_team: string;
+    id: string;
+    league_country: string;
+    league_id: number;
+    league_logo: string;
+    league_name: string;
+    score_fulltime: { home: null | number; away: null | number };
+    score_halftime: { home: null | number; away: null | number };
+    status: string;
+    venue: { id: number; name: string; city: string };
+  }
 
 const LiveScore : React.FC = () => {
+  const [slides, setSlides] = useState<liveType[]>([])
+  const [loading, setLoading] = useState<Boolean>(false)
+  const navigate = useNavigate()
+
+
+  const fetchLiveScores = async () => {
+    const token = localStorage.getItem("access_token"); // Get token from storage
+
+    if (!token) {
+      console.error("No access token found");
+      setLoading(false);
+      navigate("/auth", { replace: true });
+      return;
+    }
+    setLoading(true);
+    // setError("");
+    try {
+      const response = await axios.get(
+        `https://lazeapi-v1.onrender.com/v1/livescores/live`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+      setSlides(response.data.matches);
+    } catch (err) {
+      // setError("Failed to fetch live scores");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchLiveScores();
+  }, []);
+
+
 //   const responsive = {
 //     desktop: {
 //       breakpoint: { max: 3000, min: 1024 },
@@ -25,56 +87,56 @@ const LiveScore : React.FC = () => {
 const {darkMode} = useSportlaze()
 const fill = darkMode ? 'white' : '#3E0F51'
 
-  const slides = [
-    {
-      team1: {
-        name: "West Ham",
-        logo: "https://upload.wikimedia.org/wikipedia/en/c/c2/West_Ham_United_FC_logo.svg",
-        score: 2,
-        scorers: ["Mohammed Kudus, 28'", "Michail Antonio, 85'"],
-      },
-      team2: {
-        name: "Wolves",
-        logo: "https://upload.wikimedia.org/wikipedia/en/f/fc/Wolverhampton_Wanderers.svg",
-        score: 2,
-        scorers: ["Mohammed Kudus, 28'", "Michail Antonio, 85'"],
-      },
-      time: "88:58",
-      period: "2nd Half",
-    },
-    {
-      team1: {
-        name: "Liverpool",
-        logo: "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg",
-        score: 1,
-        scorers: ["Salah, 45+'"],
-      },
-      team2: {
-        name: "Manchester City",
-        logo: "https://upload.wikimedia.org/wikipedia/en/thumb/f/fd/Brighton_%26_Hove_Albion_logo.svg/800px-Brighton_%26_Hove_Albion_logo.svg.png",
-        score: 3,
-        scorers: ["Haaland, 12'", "De Bruyne, 60'", "Foden, 78'"],
-      },
-      time: "76:23",
-      period: "2nd Half",
-    },
-    {
-      team1: {
-        name: "Chelsea",
-        logo: "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg",
-        score: 0,
-        scorers: [],
-      },
-      team2: {
-        name: "Arsenal",
-        logo: "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg",
-        score: 2,
-        scorers: ["Odegaard, 15'", "Saka, 63'"],
-      },
-      time: "90:00",
-      period: "Full Time",
-    },
-  ];
+  // const slides = [
+  //   {
+  //     team1: {
+  //       name: "West Ham",
+  //       logo: "https://upload.wikimedia.org/wikipedia/en/c/c2/West_Ham_United_FC_logo.svg",
+  //       score: 2,
+  //       scorers: ["Mohammed Kudus, 28'", "Michail Antonio, 85'"],
+  //     },
+  //     team2: {
+  //       name: "Wolves",
+  //       logo: "https://upload.wikimedia.org/wikipedia/en/f/fc/Wolverhampton_Wanderers.svg",
+  //       score: 2,
+  //       scorers: ["Mohammed Kudus, 28'", "Michail Antonio, 85'"],
+  //     },
+  //     time: "88:58",
+  //     period: "2nd Half",
+  //   },
+  //   {
+  //     team1: {
+  //       name: "Liverpool",
+  //       logo: "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg",
+  //       score: 1,
+  //       scorers: ["Salah, 45+'"],
+  //     },
+  //     team2: {
+  //       name: "Manchester City",
+  //       logo: "https://upload.wikimedia.org/wikipedia/en/thumb/f/fd/Brighton_%26_Hove_Albion_logo.svg/800px-Brighton_%26_Hove_Albion_logo.svg.png",
+  //       score: 3,
+  //       scorers: ["Haaland, 12'", "De Bruyne, 60'", "Foden, 78'"],
+  //     },
+  //     time: "76:23",
+  //     period: "2nd Half",
+  //   },
+  //   {
+  //     team1: {
+  //       name: "Chelsea",
+  //       logo: "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg",
+  //       score: 0,
+  //       scorers: [],
+  //     },
+  //     team2: {
+  //       name: "Arsenal",
+  //       logo: "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg",
+  //       score: 2,
+  //       scorers: ["Odegaard, 15'", "Saka, 63'"],
+  //     },
+  //     time: "90:00",
+  //     period: "Full Time",
+  //   },
+  // ];
 
   return (
     <Box className="bg-white overflow-hidden rounded-[1rem] shadow-md h-[23rem] dark:bg-[black] max-w-sm mx-auto mb-4">
@@ -92,11 +154,11 @@ const fill = darkMode ? 'white' : '#3E0F51'
         containerClass="carousel-container"
       > */}
       <Carousel
-            indicators={true} // Enable pagination dots
+            indicators={false} // Hide pagination dots
             navButtonsAlwaysVisible={false}
             animation="slide"
-            autoPlay={false} 
-            duration={500}
+            autoPlay
+            duration={200}
             activeIndicatorIconButtonProps={{
                 style: { color: '#463a85'}
             }}
@@ -107,8 +169,8 @@ const fill = darkMode ? 'white' : '#3E0F51'
             <Box className="flex justify-between items-center">
               <Box className="flex flex-col items-center">
                 <img
-                  src={slide.team1.logo}
-                  alt={`${slide.team1.name} Logo`}
+                  src={slide.home_logo}
+                  alt={`${slide.home_team} Logo`}
                   className="h-16 w-16 rounded-full"
                 />
                 <Typography variant="body2" className="text-gray-600 mt-1">
@@ -122,13 +184,18 @@ const fill = darkMode ? 'white' : '#3E0F51'
                 className="h-10 w-10"
               /> */}
               <div className="h-10 w-10">
-                <PremierLeagueLogo fill={fill}/>
+                {/* <PremierLeagueLogo fill={fill}/> */}
+                <img
+                  src={slide.league_logo}
+                  alt={`${slide.league_name} Logo`}
+                  className="h-10 w-10 rounded-full"
+                />
               </div>
 
               <Box className="flex flex-col items-center">
                 <img
-                  src={slide.team2.logo}
-                  alt={`${slide.team2.name} Logo`}
+                  src={slide.away_logo}
+                  alt={`${slide.away_team} Logo`}
                   className="h-16 w-16 rounded-full"
                 />
                 <Typography variant="body2" className="text-gray-600 mt-1">
@@ -144,20 +211,21 @@ const fill = darkMode ? 'white' : '#3E0F51'
                 className="font-bold text-secondary shadow-lg w-[2rem] text-center rounded-lg dark:text-white"
                 style={{fontWeight: 'bolder'}}
               >
-                {slide.team1.score}
+                {slide.home_score}
               </Typography>
               <Box className="text-center">
                 <Typography
                   variant="body2"
                   className="text-purple-600 font-semibold dark:text-white"
                 >
-                  {slide.period}
+                  {/* period */}
+                  {slide.status} 
                 </Typography>
                 <Typography
                   variant="h6"
                   className="text-red-600 font-bold dark:text-white"
                 >
-                  {slide.time}
+                  {slide.elapsed}
                 </Typography>
               </Box>
               <Typography
@@ -165,21 +233,21 @@ const fill = darkMode ? 'white' : '#3E0F51'
                 className="font-bold text-secondary shadow-lg w-[2rem] text-center rounded-lg dark:text-white"
                 style={{fontWeight: 'bolder'}}
               >
-                {slide.team2.score}
+                {slide.away_score}
               </Typography>
             </Box>
 
             {/* Scorers */}
             <Box className="grid grid-cols-2 mt-4 text-center text-gray-600 text-sm">
               <Box>
-                {slide.team1.scorers.map((scorer, idx) => (
+                {[].map((scorer, idx) => (
                   <Typography style={{fontSize: '11px'}}  key={idx} variant="body2" className="text-sm dark:text-white">
                     {scorer}
                   </Typography>
                 ))}
               </Box>
               <Box>
-                {slide.team2.scorers.map((scorer, idx) => (
+                {[].map((scorer, idx) => (
                   <Typography style={{fontSize: '11px'}} key={idx} variant="body2" className="text-sm dark:text-white">
                     {scorer}
                   </Typography>

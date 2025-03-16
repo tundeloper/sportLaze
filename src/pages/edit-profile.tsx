@@ -7,6 +7,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { EditSchema } from "../utils/validator";
 import baseUrl from "../utils/baseUrl";
+import { useEffect } from "react";
 
 const EditProfile = () => {
     const { login, setLoading, setSnackIsOpen, user, setMessage } = useSportlaze()
@@ -32,11 +33,19 @@ const EditProfile = () => {
                     setSnackIsOpen(false)
                     const response = await axios.put(`${url}/auth/${user.username}`, {
                         username: values.name,
-                        "email": "user@example.com",
+                        "email": user.email,
                         "date_of_birth": "2019-08-24",
-                        "country": "string",
-                        "favorite_sport": "string",
-                        "favorite_team": "string"
+                        "country": "Nigeria",
+                        "favorite_sport": "Soccer",
+                        "favorite_team": "Real Madrid",
+                        "location": "Lagos",
+                        "bio": "I am a software developer, web and mobile EngineerS",
+                        // "website": "https://www.sportlaze.com"
+                      }, {
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: `Bearer ${'token'}`,
+                        },
                       })
                     console.log(response)
                     if (response.data?.access_token) {

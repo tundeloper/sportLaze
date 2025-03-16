@@ -9,7 +9,7 @@ const DropBar = () => {
   const { logout } = useSportlaze();
 
   return (
-    <div className="absolute top-[16rem] w-full bg-primary ml-[-.5rem] py-4 flex gap-2 flex-col justify-center">
+    <div className="absolute top-[20rem] w-full bg-primary ml-[-.5rem] py-4 flex gap-2 flex-col justify-center">
       <NavLink
         to={"/promotion"}
         className={({ isActive }) =>

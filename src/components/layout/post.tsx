@@ -7,6 +7,9 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import VideoCameraBackIcon from "@mui/icons-material/VideoCameraBack";
 import CloseIcon from "@mui/icons-material/Close";
 import EmojiPicker from "emoji-picker-react";
+import axios from "axios";
+import baseUrl from "../../utils/baseUrl";
+import { useSportlaze } from "../../hooks/useContext";
 
 interface MediaFile {
   file: File;
@@ -17,6 +20,9 @@ export default function PostInput() {
   const [text, setText] = useState<string>("");
   const [media, setMedia] = useState<MediaFile[]>([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
+
+const API_URL = baseUrl();
+const {setMessage, setSnackIsOpen} = useSportlaze()
 
   const handlePost = async () => {
     if (!text.trim() && media.length === 0) return;
@@ -30,21 +36,34 @@ export default function PostInput() {
     console.log(formData);
 
     try {
-      const response = await fetch("/api/posts", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        alert("Post submitted!");
-        setText("");
-        setMedia([]);
-      } else {
-        alert("Failed to submit post.");
+      setSnackIsOpen(true)
+      const token = localStorage.getItem("access_token");
+      const res = await axios.post(
+          `${API_URL}/posts`,
+          { content: text },
+          {
+              headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+              },
+          }
+      );
+      console.log(res)
+      if(res.status === 200){
+        setText('')
+        setMessage({message: 'Post created successfully', error: false})
       }
-    } catch (error) {
-      console.error("Error submitting post:", error);
-    }
+      // setResponse(JSON.stringify(res.data, null, 2));
+      // setError("");
+  } catch (err: any) {
+    console.log(err)
+      setMessage({message: err?.data?.message || "Something went wrong", error: true});
+      // setResponse("");
+  } finally {
+    setTimeout(() => {
+      setSnackIsOpen(false);
+    }, 5000);
+  }
   };
 
   const handleMediaUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,8 +149,22 @@ export default function PostInput() {
                 onClick={() => setShowEmojiPicker((prev) => !prev)}
               />
               {showEmojiPicker && (
-                <div className="absolute z-10 mt-2 bg-white shadow-md p-2 rounded-md">
-                  <EmojiPicker onEmojiClick={handleEmojiClick} />
+                <div
+                  className="absolute z-10 bg-white dark:bg-gray-800 shadow-lg p-2 rounded-md"
+                  style={{
+                    top: "40px", // Position below icon
+                    left: "0",
+                    minWidth: "250px",
+                    maxWidth: "300px",
+                    maxHeight: "300px",
+                    overflowY: "auto",
+                  }}
+                >
+                  <EmojiPicker
+                    onEmojiClick={handleEmojiClick}
+                    width="100%"
+                    height="100%"
+                  />
                 </div>
               )}
             </div>

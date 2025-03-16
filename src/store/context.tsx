@@ -30,7 +30,7 @@ interface ContextType {
 
 export const SportlazeContext = createContext<ContextType | undefined>(undefined);
 
-const TOKEN_EXPIRY_HOURS = 24; // Token expires in 24 hours
+const TOKEN_EXPIRY_HOURS = 12; // Token expires in 12 hours
 
 export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isloading, setIsLoading] = useState(false);
@@ -75,7 +75,7 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({ children 
 
   // Save token with expiry time
   const login = (token: string) => {
-    const expiryTime = Date.now()+ TOKEN_EXPIRY_HOURS * 60 *  60 * 1000; // 24 hours
+    const expiryTime = Date.now() + TOKEN_EXPIRY_HOURS * 60 *  60 * 1000; // 24 hours
     setToken(token);
     localStorage.setItem("access_token", token);
     localStorage.setItem("token_expiry", expiryTime.toString());

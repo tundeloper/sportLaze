@@ -16,13 +16,14 @@ import Bookmarkicon from "../assets/bookmarkIcon";
 import vid from "../assets/video icon.png";
 import whitevid from "../assets/white video icon.png";
 import { useSportlaze } from "../hooks/useContext";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import EditButton from "../assets/svgs/EditButton";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import baseUrl from "../utils/baseUrl";
 import UserPost from "./userProfile/post";
 import PostInput from "./layout/post";
+import { Console } from "console";
 // import ArrowUp from "../assets/arrowUp"
 // import logo fom '../'
 // import Bookmark from "../assets/bookmark"
@@ -81,7 +82,7 @@ const Landing = () => {
     }
 
     const data = await getFeed(token);
-    console.log(data);
+    console.log(data)
     if (data) setFeed(data);
     setLoading(false);
   };
@@ -90,7 +91,6 @@ const Landing = () => {
     fetchFeed();
   }, []);
 
-  // if(loading) return <div>Loading...</div>
 
   return (
     <div className="relative">
@@ -154,6 +154,7 @@ const Landing = () => {
 
         {/* posts */}
         {/* {feed.length > 0 ? <p className="text-red-700">{feed[1].content}</p> : ''} */}
+        {loading && <div className="flex items-center justify-center mb-[2rem]"><CircularProgress size={30} /></div>}
         {feed.map((item) => (
           <UserPost feed={item} />
         ))}

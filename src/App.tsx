@@ -39,7 +39,7 @@ function App() {
               }
             />
             <Route
-              path="/user"
+              path="/:user"
               element={
                 <Suspense fallback={<div>Loading...</div>}>
                   <Protect redirectPath="auth">
