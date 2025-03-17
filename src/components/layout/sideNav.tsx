@@ -61,16 +61,16 @@ const SideNav: React.FC<{
               alt="current user"
               className="h-14 w-14 rounded-[100%]"
             />
-            <p className="font-bold text-xl">{user.username}</p>
-            <p>@{user.username}</p>
+            <p className="font-bold text-xl">@{user.username ? user.username : '_'}</p>
+            <p>@{user.username ? user.username : '_'}</p>
           </div>
           <div className="flex justify-around">
             <div className="flex flex-col items-center">
               <p className="text">Following</p>{" "}
-              <p className="font-bold">{user.following}</p>
+              <p className="font-bold">@{user.following ? user.following : '_'}</p>
             </div>
             <div className="flex flex-col items-center">
-              <p>Followers</p> <p className="font-bold">{user.followers}</p>
+              <p>Followers</p> <p className="font-bold">@{user.followers ? user.followers : '_'}</p>
             </div>
           </div>
         </div>

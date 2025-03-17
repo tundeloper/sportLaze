@@ -174,7 +174,7 @@ const fill = darkMode ? 'white' : '#3E0F51'
                   className="h-16 w-16 rounded-full"
                 />
                 <Typography variant="body2" className="text-gray-600 mt-1">
-                  {/* {slide.team1.name} */}
+                  {slide.home_team}
                 </Typography>
               </Box>
 
@@ -199,7 +199,7 @@ const fill = darkMode ? 'white' : '#3E0F51'
                   className="h-16 w-16 rounded-full"
                 />
                 <Typography variant="body2" className="text-gray-600 mt-1">
-                  {/* {slide.team2.name} */}
+                  {slide.away_team}
                 </Typography>
               </Box>
             </Box>
