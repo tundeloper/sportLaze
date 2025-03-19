@@ -42,7 +42,7 @@ const Home = () => {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error("Error fetching profile:", error);
+      console.log("Error fetching profile:", error);
       return null;
     }
   };
