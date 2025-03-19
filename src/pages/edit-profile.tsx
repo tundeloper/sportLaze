@@ -32,14 +32,14 @@ const EditProfile = () => {
                     setLoading(true)
                     setSnackIsOpen(false)
                     const response = await axios.put(`${url}/auth/${user.username}`, {
-                        username: values.name,
-                        "email": user.email,
-                        "date_of_birth": "2019-08-24",
-                        "country": "Nigeria",
-                        "favorite_sport": "Soccer",
-                        "favorite_team": "Real Madrid",
-                        "location": "Lagos",
-                        "bio": "I am a software developer, web and mobile EngineerS",
+                        username: values,
+                        email: user.email,
+                        date_of_birth: "2019-08-24",
+                        country: "Nigeria",
+                        favorite_sport: values,
+                        favorite_team: "Real Madrid",
+                        location: "Lagos",
+                        // "bio": "I am a software developer, web and mobile EngineerS",
                         // "website": "https://www.sportlaze.com"
                       }, {
                         headers: {

@@ -78,12 +78,12 @@ const Profile = () => {
         </div>
         <div className="">
           <div className="flex gap-[3rem] mt-2 dark:text-darkw">
-            <p>
+            <Link to='/following'>
               Following <span className="ml-3 font-bold">{user.following}</span>
-            </p>
-            <p>
-              Followers <span className="ml-3 font-bold">{user.followers}</span>
-            </p>
+            </Link>
+            <Link to='/followers'>
+              Followers <span  className="ml-3 font-bold">{user.followers}</span>
+            </Link>
           </div>
           <p className="mt-2">{user.bio}</p>
         </div>

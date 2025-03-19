@@ -26,14 +26,17 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         {postOverlay && (
           <div
             className="bg-[#4e5257a8] h-[100vh] w-[100vw] flex justify-center items-center absolute -z-[100] top-0 left-0 "
-            onClick={() => {
+            onClick={(e) => {
               setPostOverlay(false);
               setProfile(false);
+              e.stopPropagation()
             }}
           >
-            <button className="min-h-[20rem] min-w-[35rem]" onClick={() => {setPostOverlay(true)}}>
+            <div className="min-h-[20rem] min-w-[35rem]" onClick={(e) => {
+              e.stopPropagation()
+              }}>
               <PostInput />
-            </button>
+            </div>
           </div>
         )}
 

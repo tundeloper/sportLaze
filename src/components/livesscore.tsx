@@ -173,7 +173,7 @@ const fill = darkMode ? 'white' : '#3E0F51'
                   alt={`${slide.home_team} Logo`}
                   className="h-16 w-16 rounded-full"
                 />
-                <Typography variant="body2" className="text-gray-600 mt-1">
+                <Typography variant="body2" className="text-gray-600 mt-1 text-center data:text-white">
                   {slide.home_team}
                 </Typography>
               </Box>
@@ -198,7 +198,7 @@ const fill = darkMode ? 'white' : '#3E0F51'
                   alt={`${slide.away_team} Logo`}
                   className="h-16 w-16 rounded-full"
                 />
-                <Typography variant="body2" className="text-gray-600 mt-1">
+                <Typography variant="body2" className="text-gray-600 mt-1 text-center data:text-white">
                   {slide.away_team}
                 </Typography>
               </Box>
@@ -216,14 +216,14 @@ const fill = darkMode ? 'white' : '#3E0F51'
               <Box className="text-center">
                 <Typography
                   variant="body2"
-                  className="text-purple-600 font-semibold dark:text-white"
+                  className="text-purple-600 font-semibol"
                 >
                   {/* period */}
                   {slide.status} 
                 </Typography>
                 <Typography
                   variant="h6"
-                  className="text-red-600 font-bold dark:text-white"
+                  className="text-red-600 font-bold"
                 >
                   {slide.elapsed}
                 </Typography>

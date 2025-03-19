@@ -5,8 +5,9 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import { lazy, Suspense } from "react";
 import Loading from "./components/loadings/loading";
+import { useContext } from "react";
 import Protect from "./utils/ProtectedRoute";
-import SportlazeProvider from "./store/context";
+import SportlazeProvider, { SportlazeContext } from "./store/context";
 import LoungeId from "./pages/selectedLounge";
 import UserProfile from "./pages/userProfile";
 import EditProfile from "./pages/edit-profile";
@@ -15,6 +16,7 @@ const Home = lazy(() => import("./pages/home"));
 const Lounge = lazy(() => import("./pages/lounge"));
 
 function App() {
+  const ctx = useContext(SportlazeContext);
   return (
     <SportlazeProvider>
       <GoogleOAuthProvider clientId="292887638276-kk8gmqfsjivcnjujhsiqiu5d62rkocqt.apps.googleusercontent.com">

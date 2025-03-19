@@ -156,7 +156,7 @@ const Landing = () => {
         {/* {feed.length > 0 ? <p className="text-red-700">{feed[1].content}</p> : ''} */}
         {loading && <div className="flex items-center justify-center mb-[2rem]"><CircularProgress size={30} /></div>}
         {feed.map((item) => (
-          <UserPost feed={item} />
+          <UserPost feed={item}  key={item.id}/>
         ))}
 
         <div className="flex w-full gap-4">

@@ -4,11 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { useSportlaze } from "../hooks/useContext";
 import GoogleIcon from "../assets/svgs/googlesvg";
 
-const GoogleLoginButton : React.FC<{title: string, rounded: string | number}> = ({title, rounded}) => {
+const GoogleLoginButton: React.FC<{
+  title: string;
+  rounded: string | number;
+}> = ({ title, rounded }) => {
   const [googleLoaded, setGoogleLoaded] = useState(false);
-  const navigate = useNavigate()
-  const { login, setMessage, setLoading, setSnackIsOpen, setInitUser } = useSportlaze()
-
+  const navigate = useNavigate();
+  const { login, setMessage, setLoading, setSnackIsOpen, setInitUser } =
+    useSportlaze();
 
   useEffect(() => {
     // Load Google Identity Services SDK
@@ -20,7 +23,8 @@ const GoogleLoginButton : React.FC<{title: string, rounded: string | number}> = 
       setGoogleLoaded(true);
       if ((window as any).google) {
         (window as any).google.accounts.id.initialize({
-          client_id: "292887638276-kk8gmqfsjivcnjujhsiqiu5d62rkocqt.apps.googleusercontent.com",
+          client_id:
+            "292887638276-kk8gmqfsjivcnjujhsiqiu5d62rkocqt.apps.googleusercontent.com",
           callback: handleCredentialResponse,
         });
       }
@@ -28,7 +32,7 @@ const GoogleLoginButton : React.FC<{title: string, rounded: string | number}> = 
     document.body.appendChild(script);
   }, []);
 
-  // 🔹 Handle Login Response
+  // Handle Login Response
   const handleCredentialResponse = async (response: any) => {
     //  console.log("Encoded JWT ID token:", response.credential);
 
@@ -38,44 +42,45 @@ const GoogleLoginButton : React.FC<{title: string, rounded: string | number}> = 
     }
 
     try {
-      setLoading(true)
+      setLoading(true);
       const { data } = await axios.post(
         "https://lazeapi-v1.onrender.com/v1/auth/google",
         { token: response.credential },
         { headers: { "Content-Type": "application/json" } }
       );
 
+      console.log('sign in with google', data)
+
       if (data.access_token) {
-        login(data.access_token)
+        login(data.access_token);
         setInitUser({
           access_token: data.access_token,
-          token_type: "bearer",
+          token_type: "Bearer",
           email: data?.user?.email,
           username: data?.user?.username,
           id: data?.user?.id,
         });
-        navigate('/', { replace: true })
+        navigate("/", { replace: true });
       } else {
         alert("Login failed: " + data.detail);
       }
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log(error)
+        console.log(error);
         if (error.message === "Network Error") {
-          setMessage({ message: error.message, error: true })
+          setMessage({ message: error.message, error: true });
         } else {
-          setMessage({ message: "Error during Google Sign-In", error: true }) // An error occurred while signing in.
+          setMessage({ message: "Error during Google Sign-In", error: true }); // An error occurred while signing in.
         }
       }
     } finally {
-      setLoading(false)
-      setSnackIsOpen(true)
+      setLoading(false);
+      setSnackIsOpen(true);
       setTimeout(() => {
-        setSnackIsOpen(false)
-      }, 5000)
+        setSnackIsOpen(false);
+      }, 5000);
     }
-
   };
 
   useEffect(() => {
@@ -88,15 +93,14 @@ const GoogleLoginButton : React.FC<{title: string, rounded: string | number}> = 
       setGoogleLoaded(true);
       if ((window as any).google) {
         (window as any).google.accounts.id.initialize({
-          client_id: "292887638276-kk8gmqfsjivcnjujhsiqiu5d62rkocqt.apps.googleusercontent.com",
+          client_id:
+            "292887638276-kk8gmqfsjivcnjujhsiqiu5d62rkocqt.apps.googleusercontent.com",
           callback: handleCredentialResponse,
         });
       }
     };
     document.body.appendChild(script);
   }, [handleCredentialResponse]);
-
-  
 
   // 🔹 Show Google Sign-In Prompt
   const loginHandler = () => {
@@ -111,7 +115,9 @@ const GoogleLoginButton : React.FC<{title: string, rounded: string | number}> = 
 
   return (
     <button className="w-full flex justify-center" onClick={loginHandler}>
-      <div className={`flex items-center justify-center gap-2 bg-white border border-gray-300 shadow-md py-2 rounded-[${rounded}] font-bold text-black hover:bg-gray-100 transition duration-300 w-full max-w-[400px] cursor-pointer`}>
+      <div
+        className={`flex items-center justify-center gap-2 bg-white border border-gray-300 shadow-md py-2 rounded-[${rounded}] font-bold text-black hover:bg-gray-100 transition duration-300 w-full max-w-[400px] cursor-pointer`}
+      >
         <GoogleIcon />
         <span className="font-bold">{title}</span>
       </div>
@@ -120,7 +126,6 @@ const GoogleLoginButton : React.FC<{title: string, rounded: string | number}> = 
 };
 
 export default GoogleLoginButton;
-
 
 // import { useEffect } from "react";
 
@@ -179,8 +184,6 @@ export default GoogleLoginButton;
 // };
 
 // export default GoogleLoginButton ;
-
-
 
 // import { useGoogleLogin } from "@react-oauth/google";
 // import axios from "axios";

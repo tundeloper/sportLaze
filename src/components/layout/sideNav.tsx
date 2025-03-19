@@ -67,10 +67,10 @@ const SideNav: React.FC<{
           <div className="flex justify-around">
             <div className="flex flex-col items-center">
               <p className="text">Following</p>{" "}
-              <p className="font-bold">@{user.following ? user.following : '_'}</p>
+              <p className="font-bold">{Number(user.following) >= 0 ? user.following : '_'}</p>
             </div>
             <div className="flex flex-col items-center">
-              <p>Followers</p> <p className="font-bold">@{user.followers ? user.followers : '_'}</p>
+              <p>Followers</p> <p className="font-bold">{Number(user.followers) >= 0 ? user.followers : '_'}</p>
             </div>
           </div>
         </div>

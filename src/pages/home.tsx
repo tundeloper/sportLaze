@@ -23,6 +23,7 @@ const Home = () => {
   const url = baseUrl();
 
   const getProfile = async (accessToken: string) => {
+    console.log(accessToken)
     try {
       const response = await fetch(`${url}/auth/profile`, {
         method: "GET",
@@ -31,6 +32,8 @@ const Home = () => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
+
+       console.log(response)
 
       if (!response.ok) {
         throw new Error("Failed to fetch profile");
