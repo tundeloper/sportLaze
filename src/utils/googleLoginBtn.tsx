@@ -49,9 +49,9 @@ const GoogleLoginButton: React.FC<{
         { headers: { "Content-Type": "application/json" } }
       );
 
-      console.log('sign in with google', data)
-
+      
       if (data.access_token) {
+        console.log('sign in with google ', data)
         login(data.access_token);
         setInitUser({
           access_token: data.access_token,
