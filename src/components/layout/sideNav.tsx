@@ -87,7 +87,7 @@ const SideNav: React.FC<{
             <img src={homeIcon} alt="home-icon" /> <p>Home</p>
           </NavLink>
           <NavLink
-            to={"/user"}
+            to={`/user/${user.username}`}
             className={({ isActive }) =>
               `flex items center gap-4 rounded-md pl-10 py-3 hover:bg-secondary ${
                 isActive && "border-r-[.3rem] border-white"

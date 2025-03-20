@@ -41,7 +41,7 @@ function App() {
               }
             />
             <Route
-              path="/:user"
+              path={`/user/${ctx?.user?.username}`}
               element={
                 <Suspense fallback={<div>Loading...</div>}>
                   <Protect redirectPath="auth">

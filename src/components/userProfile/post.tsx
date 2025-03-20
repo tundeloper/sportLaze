@@ -1,9 +1,9 @@
 import React from "react";
 import { Avatar, Button, IconButton } from "@mui/material";
 import {
-  Send as SendIcon,
   MoreVert as MoreVertIcon,
 } from "@mui/icons-material";
+import SendIcon from '../../assets/send';
 import postImage from "../../assets/posted picture.png";
 import CommentIcon from "../../assets/comment";
 import LikeIcon from "../../assets/like";
@@ -79,7 +79,7 @@ const UserPost: React.FC<{feed: feedType}> = ({feed}) => {
             <p className="text-[13px] dark:text-white">0</p>
           </div>
           <div className="flex gap-[1px] items-center">
-            <SendIcon fill={darkMode ? "white" : "#222222"} />
+          <SendIcon fill={darkMode ? "white" : "#222222"} />
             <p className="text-[13px] dark:text-white">0</p>
           </div>
         </div>

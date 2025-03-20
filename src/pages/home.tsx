@@ -42,7 +42,6 @@ const Home = () => {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.log("Error fetching profile:", error);
       return null;
     }
   };
@@ -76,7 +75,7 @@ const Home = () => {
             formatted_member_since: data.formatted_member_since,
             location: data.location,
             id: data.id as string,
-            bio: null,
+            bio: data.bio,
           });
           setLoading(false);
         })
