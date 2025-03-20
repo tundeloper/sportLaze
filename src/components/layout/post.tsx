@@ -10,6 +10,7 @@ import EmojiPicker from "emoji-picker-react";
 import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
 import { useSportlaze } from "../../hooks/useContext";
+import { Link } from "react-router-dom";
 
 interface MediaFile {
   file: File;
@@ -22,7 +23,7 @@ export default function PostInput() {
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
 
 const API_URL = baseUrl();
-const {setMessage, setSnackIsOpen} = useSportlaze()
+const {setMessage, setSnackIsOpen, user} = useSportlaze()
 
   const handlePost = async () => {
     if (!text.trim() && media.length === 0) return;
@@ -86,7 +87,7 @@ const {setMessage, setSnackIsOpen} = useSportlaze()
   return (
     <div className="w-full p-4 border rounded-lg shadow-md mb-2 bg-white relative dark:bg-black">
       <div className="flex items-start gap-2 mb-2">
-        <Avatar src={avat} sx={{ width: 50, height: 50 }} />
+        <Link to={`/user/${user.username}`}><Avatar src={avat} sx={{ width: 50, height: 50 }} /></Link>
         <TextareaAutosize
           placeholder="What is happening?"
           className="flex-1 border border-gray-300 text-secondary focus:ring-0 dark:bg-black dark:text-white p-2 rounded-md"

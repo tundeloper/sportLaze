@@ -11,6 +11,10 @@ import SportlazeProvider, { SportlazeContext } from "./store/context";
 import LoungeId from "./pages/selectedLounge";
 import UserProfile from "./pages/userProfile";
 import EditProfile from "./pages/edit-profile";
+import Follower from "./pages/follower";
+import Following from "./pages/following";
+import { Verified } from "@mui/icons-material";
+import FollowVerified from "./pages/verifiedFollow";
 const Welcome = lazy(() => import("./pages/auth"));
 const Home = lazy(() => import("./pages/home"));
 const Lounge = lazy(() => import("./pages/lounge"));
@@ -41,7 +45,37 @@ function App() {
               }
             />
             <Route
-              path={`/user/${ctx?.user?.username}`}
+              path="/followers"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Protect redirectPath="auth">
+                    <Follower />
+                  </Protect>
+                </Suspense>
+              }
+            />
+            <Route
+              path="/following"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Protect redirectPath="auth">
+                    <Following />
+                  </Protect>
+                </Suspense>
+              }
+            />
+            <Route
+              path="/verified-followers"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Protect redirectPath="auth">
+                    <FollowVerified />
+                  </Protect>
+                </Suspense>
+              }
+            />
+            <Route
+              path={`/user/:username`}
               element={
                 <Suspense fallback={<div>Loading...</div>}>
                   <Protect redirectPath="auth">

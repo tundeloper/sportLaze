@@ -1,11 +1,10 @@
-import { Button, ClickAwayListener } from "@mui/material";
+import { Avatar, Button, ClickAwayListener } from "@mui/material";
 import React, { Dispatch, SetStateAction, useState } from "react";
-import logo from "../../assets/1.png";
 import UserIcon from "../../assets/userIcon";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import ArrowRightCircle from "../../assets/arrowRightCircle";
 import Bookmark from "../../assets/bookmark";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import LoungeIcon from "../../assets/lounge";
 import { useSportlaze } from "../../hooks/useContext";
 import Moon from "../../assets/svgs/Moon_alt";
@@ -13,6 +12,7 @@ import moreIcon from "../../assets/svgs/More icon.svg";
 import homeIcon from "../../assets/svgs/home icon.svg";
 import verifyicon from "../../assets/svgs/verify icon.svg";
 import DropBar from "./drop-bart";
+import avat from "../../assets/user/man-studio.png"
 
 const SideNav: React.FC<{
   profile: boolean;
@@ -25,7 +25,7 @@ const SideNav: React.FC<{
   return (
     <ClickAwayListener onClickAway={() => setDropBar(false)}>
       <div
-        className={`sliding-component gradient-bb relative pt-10 p-2 bg-[red] h-[100vh] w-[20rem] ${
+        className={`sliding-component gradient-bb relative pt-8 p-2 bg-[red] h-[100vh] w-[20rem] ${
           profile ? "no-profile" : "profile"
         }`}
         style={{
@@ -56,22 +56,18 @@ const SideNav: React.FC<{
         </Button>
         <div className="border-b border-grey pb-4 mb-3">
           <div className="flex justify-center flex-col items-center mb-4">
-            <img
-              src={logo}
-              alt="current user"
-              className="h-14 w-14 rounded-[100%]"
-            />
+            <Avatar src={avat} sx={{ width: 70, height: 70 }}/>
             <p className="font-bold text-xl">@{user.username ? user.username : '_'}</p>
             <p>@{user.username ? user.username : '_'}</p>
           </div>
           <div className="flex justify-around">
-            <div className="flex flex-col items-center">
-              <p className="text">Following</p>{" "}
+            <Link to={'/following'} className="flex flex-col items-center">
+              <p className="text">Following</p>
               <p className="font-bold">{Number(user.following) >= 0 ? user.following : '_'}</p>
-            </div>
-            <div className="flex flex-col items-center">
+            </Link>
+            <Link to={'/followers'} className="flex flex-col items-center">
               <p>Followers</p> <p className="font-bold">{Number(user.followers) >= 0 ? user.followers : '_'}</p>
-            </div>
+            </Link>
           </div>
         </div>
         <div className="flex flex-col justify-center mb-2 mt-4">
