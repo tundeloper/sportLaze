@@ -57,7 +57,7 @@ const SideNav: React.FC<{
         <div className="border-b border-grey pb-4 mb-3">
           <div className="flex justify-center flex-col items-center mb-4">
             <Avatar src={avat} sx={{ width: 70, height: 70 }}/>
-            <p className="font-bold text-xl">@{user.username ? user.username : '_'}</p>
+            <p className="font-bold text-xl">{user.name ? user.name : '_'}</p>
             <p>@{user.username ? user.username : '_'}</p>
           </div>
           <div className="flex justify-around">
