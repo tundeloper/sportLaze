@@ -62,6 +62,7 @@ const Home = () => {
     if (token.length > 0 && token) {
       getProfile(token)
         .then((data) => {
+          console.log(data, 'user profile')
           setUser({
             username: data.username,
             name: "", // no name in the response
