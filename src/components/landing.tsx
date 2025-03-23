@@ -16,21 +16,18 @@ import Bookmarkicon from "../assets/bookmarkIcon";
 import vid from "../assets/video icon.png";
 import whitevid from "../assets/white video icon.png";
 import { useSportlaze } from "../hooks/useContext";
-import { Button, CircularProgress } from "@mui/material";
-import EditButton from "../assets/svgs/EditButton";
+import { CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import baseUrl from "../utils/baseUrl";
 import UserPost from "./userProfile/post";
 import PostInput from "./layout/post";
-import { Console } from "console";
-// import ArrowUp from "../assets/arrowUp"
-// import logo fom '../'
-// import Bookmark from "../assets/bookmark"
-// import ArrowUp from "../assets/arrowUp"
 
 export interface feedType {
   author_id: number;
+  name: "string";
+  username: "string";
+  profile_picture: "string";
   content: string;
   created_at: string;
   hashtags: string;
@@ -40,9 +37,8 @@ export interface feedType {
 
 const Landing = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [feed, setFeed] = useState<feedType[]>([]);
   const navigate = useNavigate();
-  const { darkMode } = useSportlaze();
+  const { darkMode, setPosts, posts } = useSportlaze();
   const fill = darkMode ? "#d3d3d3" : "#2D439B";
 
   const API_URL = baseUrl();
@@ -55,7 +51,6 @@ const Landing = () => {
         },
       });
 
-      console.log("Feed Data:", response.data); // Log the response
       return response.data; // Return feed data
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -82,15 +77,14 @@ const Landing = () => {
     }
 
     const data = await getFeed(token);
-    console.log(data)
-    if (data) setFeed(data);
+    console.log(data);
+    if (data) setPosts(data);
     setLoading(false);
   };
 
   useEffect(() => {
     fetchFeed();
   }, []);
-
 
   return (
     <div className="relative">
@@ -140,9 +134,6 @@ const Landing = () => {
         >
           <Share fill={fill} />
         </NavLink>
-        {/* {navs.map(link => {
-                return <NavLink key={link.name} to={link.path} className={({isActive}) => `p-4 ${isActive ? 'text-[red] border-b border-secondary' : 'text-[blue]'}`}>{link.icon}</NavLink>
-            })} */}
       </nav>
       <div>
         {/* new posts */}
@@ -154,9 +145,13 @@ const Landing = () => {
 
         {/* posts */}
         {/* {feed.length > 0 ? <p className="text-red-700">{feed[1].content}</p> : ''} */}
-        {loading && <div className="flex items-center justify-center mb-[2rem]"><CircularProgress size={30} /></div>}
-        {feed.map((item) => (
-          <UserPost feed={item}  key={item.id}/>
+        {loading && (
+          <div className="flex items-center justify-center mb-[2rem]">
+            <CircularProgress size={30} />
+          </div>
+        )}
+        {posts.map((item) => (
+          <UserPost feed={item} key={item.id} />
         ))}
 
         <div className="flex w-full gap-4">

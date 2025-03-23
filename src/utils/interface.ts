@@ -1,18 +1,19 @@
+import { Dispatch, SetStateAction } from "react";
+
 export interface User {
   username: string | null;
   name: string | null;
   email: string | null;
   followers: number | null;
   following: number | null;
-  date_of_birth: string | null,
-  favorite_sport: string |null,
-  favorite_team: string | null,
-  formatted_join_date: string | null,
-  formatted_member_since: string | null,
-  location: string | null,
-  id: string | null,
-  bio: string | null,
-  posts?: { content?: string; image?: [] }[];
+  date_of_birth: string | null;
+  favorite_sport: string | null;
+  favorite_team: string | null;
+  formatted_join_date: string | null;
+  formatted_member_since: string | null;
+  location: string | null;
+  id: string | null;
+  bio: string | null;
 }
 
 export const initialUserval = {
@@ -46,3 +47,41 @@ export const initialUser = {
   username: "",
   id: "",
 };
+
+export interface Post {
+  author_id: number;
+  content: string;
+  name: string;
+  username: string;
+  profile_picture: string;
+  created_at: string;
+  hashtags: string;
+  id: number;
+  likes_count: number;
+}
+
+export interface MediaFile {
+  file: File;
+  preview: string;
+}
+
+export interface ContextType {
+  isAuthenticated: boolean;
+  loading: boolean;
+  snacksisOpen: boolean;
+  setSnackIsOpen: (isOpen: boolean) => void;
+  disMesssage: { message: string; error: boolean };
+  setMessage: (payload: { message: string; error: boolean }) => void;
+  setLoading: (payload: boolean) => void;
+  token?: null | string;
+  logout: () => void;
+  login: (token: string) => void;
+  darkMode: boolean;
+  setDarkMode: Dispatch<SetStateAction<boolean>>;
+  user: User;
+  setUser: Dispatch<SetStateAction<User>>;
+  initailUser: InitialUser;
+  setInitUser: Dispatch<SetStateAction<InitialUser>>;
+  posts: Post[];
+  setPosts: Dispatch<SetStateAction<Post[]>>;
+}

@@ -1,18 +1,76 @@
 import React from "react";
-import { Avatar, Button, IconButton } from "@mui/material";
-import {
-  MoreVert as MoreVertIcon,
-} from "@mui/icons-material";
-import SendIcon from '../../assets/send';
-import postImage from "../../assets/posted picture.png";
+import { Avatar, Button, IconButton, Popover } from "@mui/material";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
+import SendIcon from "../../assets/send";
+// import postImage from "../../assets/poste/d picture.png";
 import CommentIcon from "../../assets/comment";
 import LikeIcon from "../../assets/like";
 import Bookmarkicon from "../../assets/bookmarkIcon";
 import { useSportlaze } from "../../hooks/useContext";
-import { feedType } from "../landing";
+import { Post } from "../../utils/interface";
+import axios from "axios";
+import baseUrl from "../../utils/baseUrl";
 
-const UserPost: React.FC<{feed: feedType}> = ({feed}) => {
-  const { darkMode } = useSportlaze();
+const UserPost: React.FC<{ feed: Post }> = ({ feed }) => {
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+    null
+  );
+  const { darkMode, setMessage, setSnackIsOpen} = useSportlaze();
+  const open = Boolean(anchorEl);
+  const url = baseUrl()
+  const token = localStorage.getItem("access_token")
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const deletePost = async () => {
+    try {
+      setSnackIsOpen(true)
+      const response = await axios.delete(`${url}/posts/${feed.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      if(response.status === 200){
+        setMessage({message: "Post deleted successfully", error: false})
+      }
+      
+    } catch (error) {
+      console.error(error)
+    } finally{
+      setTimeout(() => {
+        setMessage({message: "", error: false})
+        setSnackIsOpen(false)
+      }, 5000);
+    }
+  };
+
+  const followUser = async () => {
+    try {
+      const response = await axios.post(`${url}/profile/follow/${feed.username}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      if(response.status === 200){
+        setMessage({message: "User followed successfully", error: false})
+      }
+      
+    } catch (error) {
+      console.error(error)
+    } finally{
+      setTimeout(() => {
+        setMessage({message: "", error: false})
+        setSnackIsOpen(false)
+      }, 5000);
+    }
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const id = open ? "simple-popover" : undefined;
 
   return (
     <div className="bg-white p-0 pt-1 rounded-lg w-full dark:bg-black md:p-4">
@@ -34,18 +92,53 @@ const UserPost: React.FC<{feed: feedType}> = ({feed}) => {
             className="w-12 h-12"
           />
           <div>
-            <p className="font-semibold text-sm">SportLaze Community</p>
-            <p className="text-gray-500 text-xs">@sportlaze</p>
+            <p className="font-semibold text-sm">{feed.name}</p>
+            <p className="text-gray-500 text-xs">@{feed.username}</p>
           </div>
         </div>
         <div className="flex items-center space-x-2">
           <Button
             variant="text"
             className="text-blue-500 font-semibold capitalize"
+            onClick={followUser}
           >
             FOLLOW
           </Button>
-          <IconButton size="small" className="bg-white">
+          <Popover
+            id={id}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "center",
+            }}
+            transformOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            sx={{
+              "& .MuiPaper-root": {
+                backgroundColor: `${darkMode ? "white" : "black"}`,
+                border: "1px solid #33363F",
+                width: "300px",
+              },
+              "& .MuiTypography-root": {
+                color: `${darkMode ? "black" : "white"}`,
+              },
+            }}
+          >
+            <div className="flex flex-col p-2">
+              <Button>Bookmark Post</Button>
+              <Button onClick={deletePost} sx={{color: 'red'}}>Delete Post</Button>
+            </div>
+          </Popover>
+          <IconButton
+            aria-describedby={id}
+            size="small"
+            className="bg-white"
+            onClick={handleClick}
+          >
             <MoreVertIcon className="text-secondary" />
           </IconButton>
         </div>
@@ -79,7 +172,7 @@ const UserPost: React.FC<{feed: feedType}> = ({feed}) => {
             <p className="text-[13px] dark:text-white">0</p>
           </div>
           <div className="flex gap-[1px] items-center">
-          <SendIcon fill={darkMode ? "white" : "#222222"} />
+            <SendIcon fill={darkMode ? "white" : "#222222"} />
             <p className="text-[13px] dark:text-white">0</p>
           </div>
         </div>

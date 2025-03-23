@@ -15,6 +15,7 @@ import Follower from "./pages/follower";
 import Following from "./pages/following";
 import { Verified } from "@mui/icons-material";
 import FollowVerified from "./pages/verifiedFollow";
+import { GetSinglePost } from "./pages/getPost";
 const Welcome = lazy(() => import("./pages/auth"));
 const Home = lazy(() => import("./pages/home"));
 const Lounge = lazy(() => import("./pages/lounge"));
@@ -80,6 +81,16 @@ function App() {
                 <Suspense fallback={<div>Loading...</div>}>
                   <Protect redirectPath="auth">
                     <UserProfile />
+                  </Protect>
+                </Suspense>
+              }
+            />
+            <Route
+              path={`/posts/:id`}
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Protect redirectPath="auth">
+                    <GetSinglePost />
                   </Protect>
                 </Suspense>
               }

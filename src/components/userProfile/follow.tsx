@@ -12,9 +12,9 @@ export default function Follow ({follow}: {follow?: User}) {
         {/* User Info */}
         <div className="flex-1">
           <div className="flex flex-col space-x-2">
-            <span className="font-semibold text-gray-900 dark:text-white">{follow?.name || "Debby Rose Gaglin"}</span>
+            <span className="font-semibold text-gray-900 dark:text-white">{follow?.name}</span>
             <div className="flex items-center space-x-2">
-            <span className="text-gray-500">@{follow?.username || "debbyRose"}</span>
+            <span className="text-gray-500">@{follow?.username}</span>
             <span className="bg-secondary20 text-xs px-2 py-0.5 rounded-lg text-gray-300">
               Follows you
             </span>

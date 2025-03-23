@@ -1,32 +1,11 @@
 import React, {
   createContext,
-  Dispatch,
   ReactNode,
-  SetStateAction,
   useEffect,
   useState,
 } from "react";
 import getInitialTheme from "../utils/initialTheme";
-import { initialUser, InitialUser, initialUserval, User } from "../utils/interface";
-
-interface ContextType {
-  isAuthenticated: boolean;
-  loading: boolean;
-  snacksisOpen: boolean;
-  setSnackIsOpen: (isOpen: boolean) => void;
-  disMesssage: { message: string; error: boolean };
-  setMessage: (payload: { message: string; error: boolean }) => void;
-  setLoading: (payload: boolean) => void;
-  token?: null | string;
-  logout: () => void;
-  login: (token: string) => void;
-  darkMode: boolean;
-  setDarkMode: Dispatch<SetStateAction<boolean>>;
-  user: User;
-  setUser: Dispatch<SetStateAction<User>>;
-  initailUser: InitialUser;
-  setInitUser: Dispatch<SetStateAction<InitialUser>>;
-}
+import { ContextType, initialUser, InitialUser, initialUserval, Post, User } from "../utils/interface";
 
 export const SportlazeContext = createContext<ContextType | undefined>(undefined);
 
@@ -36,6 +15,7 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({ children 
   const [isloading, setIsLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(getInitialTheme);
   const [token, setToken] = useState<string | null>(() => {
+
     const storedToken = localStorage.getItem("access_token");
     const storedExpiry = localStorage.getItem("token_expiry");
 
@@ -61,6 +41,7 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({ children 
   const [opensnacks, setOpensnacks] = useState<boolean>(false);
   const [user, setUser] = useState<User>(initialUserval);
   const [initUser, setInitUser] = useState<InitialUser>(initialUser);
+  const [posts, setPosts] = useState<Post[]>([]);
 
   // Sync theme mode with local storage
   useEffect(() => {
@@ -75,7 +56,7 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({ children 
 
   // Save token with expiry time
   const login = (token: string) => {
-    const expiryTime = Date.now() + 1 * 60 *  60 * 1000; // 24 hours
+    const expiryTime = Date.now() + 1 * 60 *  60 * 1000; // 1 hours
     setToken(token);
     localStorage.setItem("access_token", token);
     localStorage.setItem("token_expiry", expiryTime.toString());
@@ -114,6 +95,8 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({ children 
   return (
     <SportlazeContext.Provider
       value={{
+        posts: posts,
+        setPosts,
         isAuthenticated: !!token,
         user,
         setUser,
