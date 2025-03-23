@@ -65,7 +65,7 @@ const Home = () => {
           console.log(data, 'user profile')
           setUser({
             username: data.username,
-            name: "", // no name in the response
+            name: data.username, // no name in the response
             email: data.email,
             date_of_birth: data.date_of_birth,
             followers: data.followers_count,
