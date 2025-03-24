@@ -129,7 +129,8 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({
         return null;
       }
     };
-
+    getProfile(`${localStorage.getItem("access_token")}`)
+   
     return () => clearInterval(interval); // Cleanup on unmount
   }, []);
 
