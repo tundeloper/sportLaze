@@ -17,7 +17,7 @@ import Loading from "../components/loadings/loading";
 const Home = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const { initailUser, setUser } = useSportlaze();
+  const { setUser } = useSportlaze();
 
   const navigate = useNavigate();
   const url = baseUrl();
@@ -40,6 +40,21 @@ const Home = () => {
       }
 
       const data = await response.json();
+      setUser({
+        username: data.username,
+        name: data.username, 
+        email: data.email,
+        date_of_birth: data.date_of_birth,
+        followers: data.followers_count,
+        following: data.following_count,
+        favorite_sport: data.favorite_sport,
+        favorite_team: data.favorite_team,
+        formatted_join_date: data.formatted_join_date,
+        formatted_member_since: data.formatted_member_since,
+        location: data.location,
+        id: data.id as string,
+        bio: data.bio,
+      });
       return data;
     } catch (error) {
       return null;
@@ -63,21 +78,6 @@ const Home = () => {
       getProfile(token)
         .then((data) => {
           console.log(data, 'user profile')
-          setUser({
-            username: data.username,
-            name: data.username, // no name in the response
-            email: data.email,
-            date_of_birth: data.date_of_birth,
-            followers: data.followers_count,
-            following: data.following_count,
-            favorite_sport: data.favorite_sport,
-            favorite_team: data.favorite_team,
-            formatted_join_date: data.formatted_join_date,
-            formatted_member_since: data.formatted_member_since,
-            location: data.location,
-            id: data.id as string,
-            bio: data.bio,
-          });
           setLoading(false);
         })
         .catch((error) => {

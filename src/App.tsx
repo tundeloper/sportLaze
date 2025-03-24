@@ -16,6 +16,7 @@ import Following from "./pages/following";
 import { Verified } from "@mui/icons-material";
 import FollowVerified from "./pages/verifiedFollow";
 import { GetSinglePost } from "./pages/getPost";
+import TrendingChannelsPage from "./components/trendingChanel";
 const Welcome = lazy(() => import("./pages/auth"));
 const Home = lazy(() => import("./pages/home"));
 const Lounge = lazy(() => import("./pages/lounge"));
@@ -101,6 +102,16 @@ function App() {
                 <Suspense fallback={<div>Loading...</div>}>
                   <Protect redirectPath="auth">
                     <EditProfile />
+                  </Protect>
+                </Suspense>
+              }
+            />
+             <Route
+              path="/trending-channels"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Protect redirectPath="auth">
+                    <TrendingChannelsPage />
                   </Protect>
                 </Suspense>
               }

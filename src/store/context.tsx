@@ -1,21 +1,28 @@
-import React, {
-  createContext,
-  ReactNode,
-  useEffect,
-  useState,
-} from "react";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
 import getInitialTheme from "../utils/initialTheme";
-import { ContextType, initialUser, InitialUser, initialUserval, Post, User } from "../utils/interface";
+import {
+  ContextType,
+  initialUser,
+  InitialUser,
+  initialUserval,
+  Post,
+  User,
+} from "../utils/interface";
+import baseUrl from "../utils/baseUrl";
 
-export const SportlazeContext = createContext<ContextType | undefined>(undefined);
+export const SportlazeContext = createContext<ContextType | undefined>(
+  undefined
+);
 
 const TOKEN_EXPIRY_HOURS = 12; // Token expires in 12 hours
+const url = baseUrl();
 
-export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [isloading, setIsLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(getInitialTheme);
   const [token, setToken] = useState<string | null>(() => {
-
     const storedToken = localStorage.getItem("access_token");
     const storedExpiry = localStorage.getItem("token_expiry");
 
@@ -34,7 +41,10 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({ children 
     return null;
   });
 
-  const [message, setDisMessage] = useState<{ message: string; error: boolean }>({
+  const [message, setDisMessage] = useState<{
+    message: string;
+    error: boolean;
+  }>({
     message: "",
     error: false,
   });
@@ -56,7 +66,7 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({ children 
 
   // Save token with expiry time
   const login = (token: string) => {
-    const expiryTime = Date.now() + 1 * 60 *  60 * 1000; // 1 hours
+    const expiryTime = Date.now() + 1 * 60 * 60 * 1000; // 1 hours
     setToken(token);
     localStorage.setItem("access_token", token);
     localStorage.setItem("token_expiry", expiryTime.toString());
@@ -80,6 +90,45 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({ children 
         }
       }
     }, 1000 * 60); // Check every minute
+
+    const getProfile = async (accessToken: string) => {
+      console.log(accessToken);
+      try {
+        const response = await fetch(`${url}/auth/profile`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        console.log(response);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch profile");
+        }
+
+        const data = await response.json();
+        setUser({
+          username: data.username,
+          name: data.username, // no name in the response
+          email: data.email,
+          date_of_birth: data.date_of_birth,
+          followers: data.followers_count,
+          following: data.following_count,
+          favorite_sport: data.favorite_sport,
+          favorite_team: data.favorite_team,
+          formatted_join_date: data.formatted_join_date,
+          formatted_member_since: data.formatted_member_since,
+          location: data.location,
+          id: data.id as string,
+          bio: data.bio,
+        });
+        return data;
+      } catch (error) {
+        return null;
+      }
+    };
 
     return () => clearInterval(interval); // Cleanup on unmount
   }, []);
