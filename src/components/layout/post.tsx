@@ -1,4 +1,9 @@
-import { Avatar, Button, TextareaAutosize, ClickAwayListener } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  TextareaAutosize,
+  ClickAwayListener,
+} from "@mui/material";
 import { useState } from "react";
 import avat from "../../assets/user/man-studio.png";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
@@ -22,8 +27,8 @@ export default function PostInput() {
   const [media, setMedia] = useState<MediaFile[]>([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
 
-const API_URL = baseUrl();
-const {setMessage, setSnackIsOpen, user} = useSportlaze()
+  const API_URL = baseUrl();
+  const { setMessage, setSnackIsOpen, user } = useSportlaze();
 
   const handlePost = async () => {
     if (!text.trim() && media.length === 0) return;
@@ -37,34 +42,40 @@ const {setMessage, setSnackIsOpen, user} = useSportlaze()
     console.log(formData);
 
     try {
-      setSnackIsOpen(true)
+      setSnackIsOpen(false);
       const token = localStorage.getItem("access_token");
       const res = await axios.post(
-          `${API_URL}/posts`,
-          { content: text },
-          {
-              headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
-              },
-          }
+        `${API_URL}/posts`,
+        { content: text },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      console.log(res)
-      if(res.status === 200){
-        setText('')
-        setMessage({message: 'Post created successfully', error: false})
+      console.log(res);
+      if (res.status === 200) {
+        setText("");
+        setSnackIsOpen(true);
+        setMessage({ message: "Post created successfully", error: false });
       }
       // setResponse(JSON.stringify(res.data, null, 2));
       // setError("");
-  } catch (err: any) {
-    console.log(err)
-      setMessage({message: err?.data?.message || "Something went wrong", error: true});
-      // setResponse("");
-  } finally {
-    setTimeout(() => {
-      setSnackIsOpen(false);
-    }, 5000);
-  }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.message === "Network Error") {
+          setMessage({ message: "Your network seems to be down", error: true });
+        } else {
+          setMessage({ message: error.response?.data.detail, error: true });
+        }
+      }
+    } finally {
+      setTimeout(() => {
+        setSnackIsOpen(false);
+        setMessage({ message: "", error: false });
+      }, 5000);
+    }
   };
 
   const handleMediaUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,7 +98,9 @@ const {setMessage, setSnackIsOpen, user} = useSportlaze()
   return (
     <div className="w-full p-4 border rounded-lg shadow-md mb-2 bg-white relative dark:bg-black">
       <div className="flex items-start gap-2 mb-2">
-        <Link to={`/user/${user.username}`}><Avatar src={avat} sx={{ width: 50, height: 50 }} /></Link>
+        <Link to={`/user/${user.username}`}>
+          <Avatar src={avat} sx={{ width: 50, height: 50 }} />
+        </Link>
         <TextareaAutosize
           placeholder="What is happening?"
           className="flex-1 border border-gray-300 text-secondary focus:ring-0 dark:bg-black dark:text-white p-2 rounded-md"

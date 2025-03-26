@@ -11,6 +11,7 @@ import { useEffect } from "react";
 
 const EditProfile = () => {
     const { login, setLoading, setSnackIsOpen, user, setMessage } = useSportlaze()
+    const token = localStorage.getItem('access_token')
     const navigate = useNavigate()
     const url = baseUrl()
 
@@ -31,25 +32,29 @@ const EditProfile = () => {
                 try {
                     setLoading(true)
                     setSnackIsOpen(false)
-                    const response = await axios.put(`${url}/auth/${user.username}`, {
-                        username: values,
-                        email: user.email,
-                        date_of_birth: "2019-08-24",
-                        country: "Nigeria",
-                        favorite_sport: values,
-                        favorite_team: "Real Madrid",
-                        location: "Lagos",
-                        // "bio": "I am a software developer, web and mobile EngineerS",
-                        // "website": "https://www.sportlaze.com"
-                      }, {
+                    const response = await fetch(`https://lazeapi-v1.onrender.com/v1/auth/${'tuns'}`, {
+                        method: "PUT",
+                        body: JSON.stringify({
+                            username: user.username,
+                            name: values.name,
+                            email: user.email,
+                            date_of_birth: "2019-08-24",
+                            country: "Nigeria",
+                            favorite_sport: values,
+                            favorite_team: "Real Madrid",
+                            location: "Lagos",
+                            "bio": "I am a software developer, web and mobile EngineerS",
+                            "website": "https://www.sportlaze.com"
+                          }),
                         headers: {
                           "Content-Type": "application/json",
-                          Authorization: `Bearer ${'token'}`,
+                          Authorization: `Bearer ${token}`,
                         },
-                      })
-                    console.log(response)
-                    if (response.data?.access_token) {
-                        login(response.data?.access_token)
+                      });
+                    const data = await response.json();
+                    
+                    if (data.access_token) {
+                        login(data.access_token)
                         navigate('/', { replace: true })
                     } else {
                         throw new Error("Request failed");

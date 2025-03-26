@@ -111,7 +111,7 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({
         const data = await response.json();
         setUser({
           username: data.username,
-          name: data.username, // no name in the response
+          name: data.name, // no name in the response
           email: data.email,
           date_of_birth: data.date_of_birth,
           followers: data.followers_count,
@@ -129,7 +129,9 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({
         return null;
       }
     };
-    getProfile(`${localStorage.getItem("access_token")}`)
+    getProfile(`${localStorage.getItem("access_token")}`).finally(() =>
+      setLoading(false)
+    );
    
     return () => clearInterval(interval); // Cleanup on unmount
   }, []);

@@ -11,16 +11,15 @@ import UserPost from "../components/userProfile/post";
 import { useSportlaze } from "../hooks/useContext";
 import axios from "axios";
 import baseUrl from "../utils/baseUrl";
+import { Post } from "../utils/interface";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState<
     "posts" | "replies" | "lounges" | "saved"
   >("posts");
-  const { user } = useSportlaze();
-
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const { user, setMessage, loading, setLoading, disMesssage } = useSportlaze();
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [error, setError] = useState<string>('');
 
   const url = baseUrl();
 
@@ -30,7 +29,6 @@ const Profile = () => {
 
   const fetchPosts = async () => {
     setLoading(true);
-    setError(null);
     try {
       const token = localStorage.getItem("access_token");
       if (!token) {
@@ -44,8 +42,14 @@ const Profile = () => {
       });
 
       setPosts(response.data);
-    } catch (err: any) {
-      setError(err.response?.data?.message || "An error occurred");
+    } catch (error: any) {
+      if (axios.isAxiosError(error)) {
+        if (error.message === "Network Error") {
+          setError("Your network seems to be down");
+        } else {
+          setError(error.response?.data.detail);
+        }
+      }
     } finally {
       setLoading(false);
     }
@@ -59,7 +63,7 @@ const Profile = () => {
   return (
     <UserProfile>
       <div className="flex bg-gradient-to-b from-[#463a85] to-[#9a1b39] p-[-16px] w-full h-[10rem] relative">
-        <div className="absolute"></div>
+        <div className="absolute" id="camera"></div>
         <Link
           to="/edit-profile"
           className="absolute top-4 right-[2rem] border !text-sm py-1 px-3 rounded-2xl !text-white !no-underline cursor-pointer"
@@ -73,7 +77,7 @@ const Profile = () => {
       </div>
       <div className="px-2 py-2 dark:text-darkw">
         <div>
-          <p className="font-semibold text-lg">{user.username}</p>
+          <p className="font-semibold text-lg">{user.name}</p>
           <p className="text-gray-500 text-xs">@{user.username}</p>
         </div>
         <div className="">
@@ -146,10 +150,11 @@ const Profile = () => {
         <section className="p-1 mt-3 md:p-4">
           {activeTab === "posts" && (
             <div className="min-h-[10rem]">
-              {loading && <div className="flex justify-center pt-6"><CircularProgress size={30} /></div>}
+              {loading && <div className="flex justify-center pt-[2rem]"><CircularProgress size={30} /></div>}
               {error && <p className="text-red-500">{error}</p>}
+              {posts.length === 0 && !loading && <p className="text-center text-4xl pt-[2rem] font-mono font-bold dark:text-white">No posts found<br/> Make A post and check back</p>}
               {posts.map((post: any) => (
-                <UserPost feed={post} />
+                <UserPost feed={post} type />
               ))}
               
             </div>

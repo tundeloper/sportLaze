@@ -9,85 +9,10 @@ import Layout from "../components/layout/layout";
 import Predictions from "../components/predictions";
 import LiveScore from "../components/livesscore";
 import { useSportlaze } from "../hooks/useContext";
-import { useEffect, useState } from "react";
-import baseUrl from "../utils/baseUrl";
-import { useNavigate } from "react-router-dom";
 import Loading from "../components/loadings/loading";
 
 const Home = () => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const { setUser } = useSportlaze();
-
-  const navigate = useNavigate();
-  const url = baseUrl();
-
-  const getProfile = async (accessToken: string) => {
-    console.log(accessToken)
-    try {
-      const response = await fetch(`${url}/auth/profile`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-       console.log(response)
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch profile");
-      }
-
-      const data = await response.json();
-      setUser({
-        username: data.username,
-        name: data.username, 
-        email: data.email,
-        date_of_birth: data.date_of_birth,
-        followers: data.followers_count,
-        following: data.following_count,
-        favorite_sport: data.favorite_sport,
-        favorite_team: data.favorite_team,
-        formatted_join_date: data.formatted_join_date,
-        formatted_member_since: data.formatted_member_since,
-        location: data.location,
-        id: data.id as string,
-        bio: data.bio,
-      });
-      return data;
-    } catch (error) {
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    // check if user is authenticated by checking local storage
-    // if there is no token or token expires, logout and redirect to auth page
-    const token = localStorage.getItem("access_token"); // Get token from storage
-
-    if (!token) {
-      console.error("No access token found");
-      setLoading(false);
-      navigate("/auth", { replace: true });
-      return;
-    }
-    
-
-    if (token.length > 0 && token) {
-      getProfile(token)
-        .then((data) => {
-          console.log(data, 'user profile')
-          setLoading(false);
-        })
-        .catch((error) => {
-          setError(error.message);
-          setLoading(false);
-        });
-    }
-  }, []);
-
-  // const { darkMode } = useSportlaze()
+  const { loading } = useSportlaze();
 
   if (loading) return <Loading />
 

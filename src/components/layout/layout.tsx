@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import whiteImg from "../../assets/logoWhite.png";
 import UserPost from "../userProfile/post";
 import PostInput from "./post";
+import MUISnackbar from "../../utils/snackBar";
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [profile, setProfile] = useState<boolean>(false);
@@ -17,6 +18,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <div>
+      <MUISnackbar />
+
       <div className="flex sticky z-[100] top-0 justify-between items-center p-4 gradient sm:p-6">
         <SideNav
           profile={profile}

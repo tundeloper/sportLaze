@@ -11,61 +11,107 @@ import { Post } from "../../utils/interface";
 import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
 
-const UserPost: React.FC<{ feed: Post }> = ({ feed }) => {
+const UserPost: React.FC<{ feed: Post; type?: boolean }> = ({ feed, type }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
-  const { darkMode, setMessage, setSnackIsOpen} = useSportlaze();
+  const { darkMode, setMessage, setSnackIsOpen, user } = useSportlaze();
   const open = Boolean(anchorEl);
-  const url = baseUrl()
-  const token = localStorage.getItem("access_token")
+  const url = baseUrl();
+  const token = localStorage.getItem("access_token");
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
   const deletePost = async () => {
+    console.log(feed.id);
     try {
-      setSnackIsOpen(true)
       const response = await axios.delete(`${url}/posts/${feed.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      })
-      if(response.status === 200){
-        setMessage({message: "Post deleted successfully", error: false})
+      });
+      if (response.status === 200) {
+        setSnackIsOpen(true);
+        setMessage({ message: "Post deleted successfully", error: false });
       }
-      
     } catch (error) {
-      console.error(error)
-    } finally{
+      if (axios.isAxiosError(error)) {
+        if (error.message === "Network Error") {
+          setMessage({ message: "Your network seems to be down", error: true });
+        } else {
+          setMessage({ message: error.response?.data.detail, error: true });
+        }
+      }
+    } finally {
       setTimeout(() => {
-        setMessage({message: "", error: false})
-        setSnackIsOpen(false)
+        setSnackIsOpen(false);
+        setMessage({ message: "", error: false });
       }, 5000);
     }
   };
 
-  const followUser = async () => {
+  const likePost = async () => {
     try {
-      const response = await axios.post(`${url}/profile/follow/${feed.username}`, {
+      const response = await axios.post(
+        `https://lazeapi-v1.onrender.com/v1/posts/like`,
+        {post_id: 45},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response);
+      if (response.status === 200) {
+        setSnackIsOpen(true);
+        setMessage({ message: "Post liked successfully", error: false });
+      }
+    } catch (error) {
+      console.log(error)
+      if (axios.isAxiosError(error)) {
+        if (error.message === "Network Error") {
+          setMessage({ message: "Your network seems to be down", error: true });
+        } else {
+          setMessage({ message: error.response?.data.detail, error: true });
+        }
+      }
+    } finally {
+      setTimeout(() => {
+        setSnackIsOpen(false);
+        setMessage({ message: "", error: false });
+      }
+      , 5000);
+    }
+  };
+
+  const followUser = async () => {
+    console.log(feed.username,);
+    try {
+      const response = await fetch(`${url}/profile/follow/${feed.username}`, {
+        method: "POST",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      })
-      if(response.status === 200){
-        setMessage({message: "User followed successfully", error: false})
+      });
+      const data: { message: string; detail: string } = await response.json();  
+      if (response.status === 200) {
+        setSnackIsOpen(true);
+        console.log(data);
+        setMessage({ message: data.message, error: false });
       }
-      
     } catch (error) {
-      console.error(error)
-    } finally{
+      setSnackIsOpen(true);
+      // setMessage({ message: data.detail, error: false });
+    } finally {
       setTimeout(() => {
-        setMessage({message: "", error: false})
-        setSnackIsOpen(false)
+        setMessage({ message: "", error: false });
+        setSnackIsOpen(false);
       }, 5000);
     }
-  }
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -92,18 +138,24 @@ const UserPost: React.FC<{ feed: Post }> = ({ feed }) => {
             className="w-12 h-12"
           />
           <div>
-            <p className="font-semibold text-sm">{feed.name}</p>
-            <p className="text-gray-500 text-xs">@{feed.username}</p>
+            <p className="font-semibold text-sm">
+              {type ? user.name : feed.name}
+            </p>
+            <p className="text-gray-500 text-xs">
+              @{type ? user.username : feed.username}
+            </p>
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <Button
-            variant="text"
-            className="text-blue-500 font-semibold capitalize"
-            onClick={followUser}
-          >
-            FOLLOW
-          </Button>
+          {!type && (
+            <Button
+              variant="text"
+              className="text-blue-500 font-semibold capitalize"
+              onClick={followUser}
+            >
+              FOLLOW
+            </Button>
+          )}
           <Popover
             id={id}
             open={open}
@@ -130,7 +182,11 @@ const UserPost: React.FC<{ feed: Post }> = ({ feed }) => {
           >
             <div className="flex flex-col p-2">
               <Button>Bookmark Post</Button>
-              <Button onClick={deletePost} sx={{color: 'red'}}>Delete Post</Button>
+              {type && (
+                <Button onClick={deletePost} sx={{ color: "red" }}>
+                  Delete Post
+                </Button>
+              )}
             </div>
           </Popover>
           <IconButton
@@ -163,7 +219,7 @@ const UserPost: React.FC<{ feed: Post }> = ({ feed }) => {
       {/* {user interaction} */}
       <div className="flex justify-between items-center w-full pl-12 mt-1">
         <div className="flex items-center justify-center gap-4">
-          <div className="flex gap-[4px] items-center">
+          <div className="flex gap-[4px] items-center" onClick={likePost}>
             <LikeIcon fill={darkMode ? "white" : "#33363F"} />{" "}
             <p className="text-[13px] dark:text-white">{feed.likes_count}</p>
           </div>

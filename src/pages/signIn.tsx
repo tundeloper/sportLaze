@@ -87,6 +87,7 @@ const SignIn: React.FC<{
                 throw new Error("Request failed");
               }
             } catch (error) {
+              setSnackIsOpen(true);
               if (axios.isAxiosError(error)) {
                 console.log(error);
                 if (error.message === "Network Error") {
@@ -100,7 +101,7 @@ const SignIn: React.FC<{
               }
             } finally {
               setLoading(false);
-              setSnackIsOpen(true);
+              setSnackIsOpen(false);
               // setMessage({ message: 'Invalid email or password', error: true })
               setTimeout(() => {
                 setSnackIsOpen(false);

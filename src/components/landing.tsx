@@ -2,17 +2,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import HomeIcon from "../assets/home";
 import LoungeIcon from "../assets/lounge";
 import Share from "../assets/share";
-// import VideoIcon from "../assets/svgs/video icon"
-import user from "../assets/evans avatar.png";
-import AddIcon from "../assets/addBtn";
-import ExpandGray from "../assets/expandButtonsGrey";
-import post from "../assets/posted picture.png";
-import LikeIcon from "../assets/like";
-import SendIcon from "../assets/send";
-import CommentIcon from "../assets/comment";
 import img from "../assets/logo gradient.svg";
 import whitelogo from "../assets/whitelogo1.png";
-import Bookmarkicon from "../assets/bookmarkIcon";
 import vid from "../assets/video icon.png";
 import whitevid from "../assets/white video icon.png";
 import { useSportlaze } from "../hooks/useContext";
@@ -22,18 +13,6 @@ import axios from "axios";
 import baseUrl from "../utils/baseUrl";
 import UserPost from "./userProfile/post";
 import PostInput from "./layout/post";
-
-export interface feedType {
-  author_id: number;
-  name: "string";
-  username: "string";
-  profile_picture: "string";
-  content: string;
-  created_at: string;
-  hashtags: string;
-  id: number;
-  likes_count: number;
-}
 
 const Landing = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -153,65 +132,7 @@ const Landing = () => {
         {posts.map((item) => (
           <UserPost feed={item} key={item.id} />
         ))}
-
-        <div className="flex w-full gap-4">
-          <div className="w-[3.5-rem] h-[3.5rem]">
-            <img src={user} alt="user" className="h-full w-full" />
-          </div>
-          <div className="w-[100%] mb-4">
-            <div className="flex gap-4 items-center mb-2 ">
-              <div className="flex gap-2 justify-between w-full">
-                <div className="flex flex-col">
-                  <p className="font-bold dark:text-white">Evans Patrick</p>{" "}
-                  <p className="dark:text-white">@evansPatrick</p>
-                </div>
-                <div className="flex gap-2 items-center">
-                  <p className="text-secondary font-bold dark:text-white">
-                    FOLLOW
-                  </p>{" "}
-                  <AddIcon />
-                </div>
-              </div>
-              <div>{/* post */}</div>
-              <div>
-                <ExpandGray />
-              </div>
-            </div>
-            <p className="mb-2 dark:text-white">
-              🏆 Elevate your game with SportLaze!!!!! Connect, compete, and
-              support your favourite team with a community that's as passionate
-              as you are! 💪⚽️{" "}
-              <span className="font-bold">#SportLaze #GameOn</span>
-            </p>
-            <div
-              className="w-full gradient rounded-[1.5rem] mb-2"
-              style={{ overflow: "hidden", height: "auto" }}
-            >
-              {/* img */}
-              <img src={post} alt="post" className="w-full" />
-            </div>
-            <div className="flex justify-between items-center w-full">
-              <div className="flex gap-4 ml-0 md-ml-2">
-                <div className="flex gap-[4px] items-center">
-                  <LikeIcon fill={darkMode ? "white" : "#33363F"} />{" "}
-                  <p className="text-[13px] dark:text-white">15.3k</p>
-                </div>
-                <div className="flex gap-[4px] items-center">
-                  <CommentIcon fill={darkMode ? "white" : "#33363F"} />{" "}
-                  <p className="text-[13px] dark:text-white">15.3k</p>
-                </div>
-                <div className="flex gap-[1px] items-center">
-                  <SendIcon fill={darkMode ? "white" : "#222222"} />{" "}
-                  <p className="text-[13px] dark:text-white">15.3k</p>
-                </div>
-              </div>
-              {/* Bookmark */}
-              <div className="md: mr-2">
-                <Bookmarkicon fill={darkMode ? "white" : "#222222"} />
-              </div>
-            </div>
-          </div>
-        </div>
+        
       </div>
     </div>
   );
