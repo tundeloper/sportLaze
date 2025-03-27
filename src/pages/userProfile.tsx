@@ -17,9 +17,11 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState<
     "posts" | "replies" | "lounges" | "saved"
   >("posts");
-  const { user, setMessage, loading, setLoading, disMesssage } = useSportlaze();
+  const { user, loading, setLoading } = useSportlaze();
   const [posts, setPosts] = useState<Post[]>([]);
   const [error, setError] = useState<string>('');
+
+  const SortedPost = setPosts((prevPost) => prevPost.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()))
 
   const url = baseUrl();
 
@@ -154,7 +156,7 @@ const Profile = () => {
               {error && <p className="text-red-500">{error}</p>}
               {posts.length === 0 && !loading && <p className="text-center text-4xl pt-[2rem] font-mono font-bold dark:text-white">No posts found<br/> Make A post and check back</p>}
               {posts.map((post: any) => (
-                <UserPost feed={post} type />
+                <UserPost feed={post} setPost={setPosts} type />
               ))}
               
             </div>

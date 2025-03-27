@@ -13,7 +13,7 @@ import { ReactNode } from "react"
 
 const UserProfile : React.FC<{children: ReactNode}> = ({children}) => {
 
-    const { darkMode } = useSportlaze()
+    // const { darkMode } = useSportlaze()
 
     return <div className="w-screen relative bg-[#dbd2d2] h-screen dark:bg-[#4a4646]" style={{ overflowX: 'hidden' }}>
         <Layout>

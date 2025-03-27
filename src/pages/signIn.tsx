@@ -89,10 +89,11 @@ const SignIn: React.FC<{
             } catch (error) {
               setSnackIsOpen(true);
               if (axios.isAxiosError(error)) {
+                setLoading(false)
                 console.log(error);
                 if (error.message === "Network Error") {
                   setMessage({ message: error.message, error: true });
-                } else {
+                } else { 
                   setMessage({
                     message: error.response?.data.detail,
                     error: true,

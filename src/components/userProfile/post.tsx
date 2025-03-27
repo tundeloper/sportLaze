@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Avatar, Button, IconButton, Popover } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import SendIcon from "../../assets/send";
@@ -11,10 +11,15 @@ import { Post } from "../../utils/interface";
 import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
 
-const UserPost: React.FC<{ feed: Post; type?: boolean }> = ({ feed, type }) => {
+const UserPost: React.FC<{
+  feed: Post;
+  type?: boolean;
+  setPost?: Dispatch<SetStateAction<Post[]>>;
+}> = ({ feed, type, setPost }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
+
   const { darkMode, setMessage, setSnackIsOpen, user } = useSportlaze();
   const open = Boolean(anchorEl);
   const url = baseUrl();
@@ -35,6 +40,10 @@ const UserPost: React.FC<{ feed: Post; type?: boolean }> = ({ feed, type }) => {
       if (response.status === 200) {
         setSnackIsOpen(true);
         setMessage({ message: "Post deleted successfully", error: false });
+        if (setPost)
+          setPost((prevItems) =>
+            prevItems.filter((item) => item.id !== feed.id)
+          );
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -56,7 +65,7 @@ const UserPost: React.FC<{ feed: Post; type?: boolean }> = ({ feed, type }) => {
     try {
       const response = await axios.post(
         `https://lazeapi-v1.onrender.com/v1/posts/like`,
-        {post_id: 45},
+        { post_id: 45 },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -69,7 +78,7 @@ const UserPost: React.FC<{ feed: Post; type?: boolean }> = ({ feed, type }) => {
         setMessage({ message: "Post liked successfully", error: false });
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       if (axios.isAxiosError(error)) {
         if (error.message === "Network Error") {
           setMessage({ message: "Your network seems to be down", error: true });
@@ -81,13 +90,12 @@ const UserPost: React.FC<{ feed: Post; type?: boolean }> = ({ feed, type }) => {
       setTimeout(() => {
         setSnackIsOpen(false);
         setMessage({ message: "", error: false });
-      }
-      , 5000);
+      }, 5000);
     }
   };
 
   const followUser = async () => {
-    console.log(feed.username,);
+    console.log(feed.username);
     try {
       const response = await fetch(`${url}/profile/follow/${feed.username}`, {
         method: "POST",
@@ -96,7 +104,7 @@ const UserPost: React.FC<{ feed: Post; type?: boolean }> = ({ feed, type }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      const data: { message: string; detail: string } = await response.json();  
+      const data: { message: string; detail: string } = await response.json();
       if (response.status === 200) {
         setSnackIsOpen(true);
         console.log(data);
@@ -113,9 +121,6 @@ const UserPost: React.FC<{ feed: Post; type?: boolean }> = ({ feed, type }) => {
     }
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   const id = open ? "simple-popover" : undefined;
 
   return (
@@ -160,7 +165,9 @@ const UserPost: React.FC<{ feed: Post; type?: boolean }> = ({ feed, type }) => {
             id={id}
             open={open}
             anchorEl={anchorEl}
-            onClose={handleClose}
+            onClose={() => {
+              setAnchorEl(null);
+            }}
             anchorOrigin={{
               vertical: "top",
               horizontal: "center",
