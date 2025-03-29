@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSportlaze } from "../hooks/useContext";
 import GoogleIcon from "../assets/svgs/googlesvg";
+import baseUrl from "./baseUrl";
 
 const GoogleLoginButton: React.FC<{
   title: string;
@@ -32,6 +33,8 @@ const GoogleLoginButton: React.FC<{
     document.body.appendChild(script);
   }, []);
 
+  const url = baseUrl()
+
   // Handle Login Response
   const handleCredentialResponse = async (response: any) => {
     //  console.log("Encoded JWT ID token:", response.credential);
@@ -44,7 +47,7 @@ const GoogleLoginButton: React.FC<{
     try {
       setLoading(true);
       const { data } = await axios.post(
-        "https://lazeapi-v1.onrender.com/v1/auth/google",
+        `${url}/auth/google`,
         { token: response.credential },
         { headers: { "Content-Type": "application/json" } }
       );
