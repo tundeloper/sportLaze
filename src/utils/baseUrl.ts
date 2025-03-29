@@ -1,3 +1,3 @@
 export default function baseUrl () {
-  return 'https://lazeapi-v1.onrender.com/v1'
+  return 'http://localhost:8000/v1'
 }

@@ -94,7 +94,7 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({
     const getProfile = async (accessToken: string) => {
       console.log(accessToken);
       try {
-        const response = await fetch(`${url}/profile/user/me`, {
+        const response = await fetch(`${url}/auth/me`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

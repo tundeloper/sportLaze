@@ -25,26 +25,23 @@ const EditProfile = () => {
             </div>
         </div>
         <Formik
-            initialValues={{ name: "", bio: "", date_of_birth: "", website: "", location: "" }}
+            initialValues={{ name: "", username: "", bio: "", date_of_birth: "", website: "", location: "" }}
             validationSchema={EditSchema}
             onSubmit={async (values, { setSubmitting }) => {
                 console.log(values)
                 try {
                     setLoading(true)
                     setSnackIsOpen(false)
-                    const response = await fetch(`https://lazeapi-v1.onrender.com/v1/auth/${'tuns'}`, {
+                    const response = await fetch(`${url}/auth/${'tuns'}`, {
                         method: "PUT",
                         body: JSON.stringify({
-                            username: user.username,
-                            name: values.name,
-                            email: user.email,
-                            date_of_birth: "2019-08-24",
-                            country: "Nigeria",
-                            favorite_sport: values,
-                            favorite_team: "Real Madrid",
-                            location: "Lagos",
-                            "bio": "I am a software developer, web and mobile EngineerS",
-                            "website": "https://www.sportlaze.com"
+                            "username": "ednut",
+                            "name": "Frontend",
+                            "date_of_birth": "2025-03-15",
+                            "country": "US",
+                            "favorite_sport": "SOccer",
+                            "favorite_team": "Realmadrid"
+                          
                           }),
                         headers: {
                           "Content-Type": "application/json",
@@ -85,7 +82,16 @@ const EditProfile = () => {
                         <label htmlFor="name" className="font-bold dark:text-darkw">Name*</label>
                         <ErrorMessage name="name" component="div" className="text-[red] text-[12px] mb-[-.5rem]" />
                     </div>
+                    
                     <Field className={`w-full h-[40px] p-3 mb-[.5rem] bg-[transparent] outline-none  border-b ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'} dark:text-darkw`} placeholder="" id="name" name="name" type="name" />
+
+                    {/* username */}
+                    <div className="flex justify-between gap-4">
+                        <label htmlFor="name" className="font-bold dark:text-darkw">Username*</label>
+                        <ErrorMessage name="username" component="div" className="text-[red] text-[12px] mb-[-.5rem]" />
+                    </div>
+                    
+                    <Field className={`w-full h-[40px] p-3 mb-[.5rem] bg-[transparent] outline-none  border-b ${errors && touched ? 'border-[rgb(190, 63, 13)]' : 'border-[white]'} dark:text-darkw`} placeholder="" id="username" name="username" type="text" />
                     {/* bio */}
                     <div className="flex justify-between gap-4">
                         <label htmlFor="bio" className="font-bold dark:text-darkw">Bio</label>

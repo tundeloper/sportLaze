@@ -29,7 +29,7 @@ const SideNav: React.FC<{
   const getProfile = async (accessToken: string) => {
     console.log(accessToken)
     try {
-      const response = await fetch(`${url}/profile/me`, {
+      const response = await fetch(`${url}/auth/me`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -61,6 +61,7 @@ const SideNav: React.FC<{
       });
       return data;
     } catch (error) {
+      console.log(error, 'profile')
       return null;
     }
   };

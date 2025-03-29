@@ -17,11 +17,9 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState<
     "posts" | "replies" | "lounges" | "saved"
   >("posts");
-  const { user, loading, setLoading } = useSportlaze();
+  const { user, loading, setLoading, initailUser } = useSportlaze();
   const [posts, setPosts] = useState<Post[]>([]);
   const [error, setError] = useState<string>('');
-
-  const SortedPost = setPosts((prevPost) => prevPost.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()))
 
   const url = baseUrl();
 
@@ -37,13 +35,15 @@ const Profile = () => {
         throw new Error("No access token found");
       }
 
-      const response = await axios.get(`${url}/posts/user`, {
+      const response = await axios.get(`${url}/posts/user/${user.username}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      const val: Post[] = response.data
+      const SortedPost = val.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
-      setPosts(response.data);
+      setPosts(SortedPost);
     } catch (error: any) {
       if (axios.isAxiosError(error)) {
         if (error.message === "Network Error") {
@@ -153,7 +153,7 @@ const Profile = () => {
           {activeTab === "posts" && (
             <div className="min-h-[10rem]">
               {loading && <div className="flex justify-center pt-[2rem]"><CircularProgress size={30} /></div>}
-              {error && <p className="text-red-500">{error}</p>}
+              {/* {error && <p className="text-red-500">{error}</p>} */}
               {posts.length === 0 && !loading && <p className="text-center text-4xl pt-[2rem] font-mono font-bold dark:text-white">No posts found<br/> Make A post and check back</p>}
               {posts.map((post: any) => (
                 <UserPost feed={post} setPost={setPosts} type />

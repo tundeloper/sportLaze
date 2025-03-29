@@ -20,6 +20,7 @@ export const SignInSchema = Yup.object({
 
 export const EditSchema = Yup.object({
     name: Yup.string().required("name is required"),
+    username: Yup.string().required("username is required"),
     bio: Yup.string(),
     date_of_birth: Yup.string().required("Date of birth is required"),
     website: Yup.string(),
