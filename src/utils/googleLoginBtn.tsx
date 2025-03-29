@@ -45,6 +45,7 @@ const GoogleLoginButton: React.FC<{
     }
 
     try {
+      console.log(response.credential, "token Credential")
       setLoading(true);
       const { data } = await axios.post(
         `${url}/auth/google`,
