@@ -4,8 +4,11 @@ import Follow from "../components/userProfile/follow";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
+import { useState } from "react";
+import { User } from "../utils/interface";
 
 export default function FollowVerified() {
+  const [data, setData] = useState<User[]>([])
   const navigate = useNavigate();
   return (
     <UserProfile>
@@ -55,7 +58,7 @@ export default function FollowVerified() {
         {Array(5)
           .fill(0)
           .map((_, i) => (
-            <Follow />
+            <Follow setFollow={setData} />
           ))}
       </div>
     </UserProfile>

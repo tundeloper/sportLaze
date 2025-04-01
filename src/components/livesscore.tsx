@@ -163,6 +163,7 @@ const fill = darkMode ? 'white' : '#3E0F51'
                 style: { color: '#463a85'}
             }}
         >
+        {/* {slides.length === 0  && <div className="text-black font-semibold flex items-center justify-center mt6 dark:text-white">No live Match currently</div>} */}
         {slides.map((slide, index) => (
           <Box key={index} className="p-5 bg-white dark:bg-[black] rounded-lg h-[100%]" >
             {/* Team Logos */}

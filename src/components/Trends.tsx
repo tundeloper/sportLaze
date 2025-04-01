@@ -36,7 +36,7 @@ const Trends = () => {
                 </div>
                 <div style={{ padding: '0' }}><ExpandButton /></div>
             </div>
-            <Link to={'#'} className="text-center text-secondary dark:text-white">show more</Link>
+            <Link to={'/trending-channels'} className="text-center text-secondary dark:text-white">show more</Link>
         </div>
     </div>
 }

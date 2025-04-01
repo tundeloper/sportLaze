@@ -101,10 +101,10 @@ export default function Following() {
         {!loading && !error && data.length === 0 ? (
           <div className="text-center text-4xl pt-[2rem] font-mono font-bold dark:text-white">
             Nothing to show here yet ___
-            <p>No one is following you </p>
+            <p>follow someone</p>
           </div>
         ) : (
-          data.map((follower: any, i: number) => <Follow follow={follower} key={i} />)
+          data.map((follower: any, i: number) => <Follow follow={follower} key={i} following setFollow={setData} />)
         )}
       </div>
     </UserProfile>

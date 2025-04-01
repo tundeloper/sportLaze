@@ -17,12 +17,13 @@ import { Verified } from "@mui/icons-material";
 import FollowVerified from "./pages/verifiedFollow";
 import { GetSinglePost } from "./pages/getPost";
 import TrendingChannelsPage from "./components/trendingChanel";
+import CreateChannel from "./pages/create-channel";
 const Welcome = lazy(() => import("./pages/auth"));
 const Home = lazy(() => import("./pages/home"));
 const Lounge = lazy(() => import("./pages/lounge"));
 
 function App() {
-  const ctx = useContext(SportlazeContext);
+
   return (
     <SportlazeProvider>
       <GoogleOAuthProvider clientId="292887638276-kk8gmqfsjivcnjujhsiqiu5d62rkocqt.apps.googleusercontent.com">
@@ -112,6 +113,16 @@ function App() {
                 <Suspense fallback={<div>Loading...</div>}>
                   <Protect redirectPath="auth">
                     <TrendingChannelsPage />
+                  </Protect>
+                </Suspense>
+              }
+            />
+            <Route
+              path="/create-channel"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Protect redirectPath="auth">
+                    <CreateChannel />
                   </Protect>
                 </Suspense>
               }

@@ -1,7 +1,8 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Avatar, Button, IconButton, Popover } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import SendIcon from "../../assets/send";
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 // import postImage from "../../assets/poste/d picture.png";
 import CommentIcon from "../../assets/comment";
 import LikeIcon from "../../assets/like";
@@ -10,6 +11,7 @@ import { useSportlaze } from "../../hooks/useContext";
 import { Post } from "../../utils/interface";
 import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
+import { removePostId, storePostId } from "../../utils/store_likes";
 
 const UserPost: React.FC<{
   feed: Post;
@@ -20,8 +22,10 @@ const UserPost: React.FC<{
     null
   );
 
-  const { darkMode, setMessage, setSnackIsOpen, user } = useSportlaze();
+  const { darkMode, setMessage, setSnackIsOpen, user, posts, setPosts } = useSportlaze();
   const open = Boolean(anchorEl);
+  let storedIds: string[] = JSON.parse(localStorage.getItem("postIds") || "[]")
+  const [myLikes, setMylikes] = useState<string[]>(storedIds || []); //setting likes temp
   const url = baseUrl();
   const token = localStorage.getItem("access_token");
 
@@ -61,11 +65,23 @@ const UserPost: React.FC<{
     }
   };
 
-  const likePost = async () => {
+  useEffect(() => {
+    (() => {})();
+  });
+
+  const favouriteHandler = (id: string) => {
+    if (myLikes.includes(id)) {
+      unlikePost(id)
+    } else {
+      likePost(id)
+    }
+  }
+
+  const likePost = async (id: string) => {
     try {
       const response = await axios.post(
-        `https://lazeapi-v1.onrender.com/v1/posts/like`,
-        { post_id: 45 },
+        `${url}/posts/like`,
+        { post_id: id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -75,7 +91,54 @@ const UserPost: React.FC<{
       console.log(response);
       if (response.status === 200) {
         setSnackIsOpen(true);
-        setMessage({ message: "Post liked successfully", error: false });
+        setMessage({ message: "Post liked successfully ✅", error: false });
+        setMylikes(storePostId(id));
+        if (myLikes.includes(id)) setMylikes([...myLikes, id])
+        setPosts((prev) => {
+          return prev.map(post => 
+            post.id === +id ? { ...post, likes_count: post.likes_count + 1 } : post
+          );
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      if (axios.isAxiosError(error)) {
+        if (error.message === "Network Error") {
+          setMessage({ message: "Your network seems to be down", error: true });
+        } else {
+          setMessage({ message: error.response?.data.detail, error: true });
+        }
+      }
+    } finally {
+      setTimeout(() => {
+        setSnackIsOpen(false)
+        setMessage({ message: "", error: false });
+      }, 5000);
+    }
+  };
+
+  const unlikePost = async (id: string) => {
+    try {
+      const response = await axios.post(
+        `${url}/posts/unlike`,
+        { post_id: id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response);
+      if (response.status === 200) {
+        setSnackIsOpen(true);
+        setMessage({ message: "Post Unliked ✅", error: false });
+        setMylikes(removePostId(id));
+        setMylikes((prev) => prev.filter(pos => pos !== id))
+        setPosts((prev) => {
+          return prev.map(post => 
+            post.id === +id ? { ...post, likes_count: post.likes_count - 1 } : post
+          );
+        });
       }
     } catch (error) {
       console.log(error);
@@ -226,8 +289,13 @@ const UserPost: React.FC<{
       {/* {user interaction} */}
       <div className="flex justify-between items-center w-full pl-12 mt-1">
         <div className="flex items-center justify-center gap-4">
-          <div className="flex gap-[4px] items-center" onClick={likePost}>
-            <LikeIcon fill={darkMode ? "white" : "#33363F"} />{" "}
+          <div
+            className="flex gap-[4px] items-center pointer"
+            onClick={() => {
+              favouriteHandler(feed.id.toString());
+            }}
+          >
+            {myLikes.includes(feed.id.toString()) ? <FavoriteRoundedIcon color="primary" sx={{color: 'red'}}/> : <LikeIcon fill={darkMode ? "white" : "#33363F"} />}
             <p className="text-[13px] dark:text-white">{feed.likes_count}</p>
           </div>
           <div className="flex gap-[4px] items-center">

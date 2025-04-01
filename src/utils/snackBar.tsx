@@ -14,7 +14,7 @@ const MUISnackbar: React.FC = () => {
       } rounded-xl absolute top-2 .sliding-component ${
         snacksisOpen ? "show-snack" : "hide-snack"
       }`}
-      style={{ zIndex: "1000" }}
+      style={{ zIndex: "1000", position: 'fixed' }}
     >
       {disMesssage.message}
     </div>

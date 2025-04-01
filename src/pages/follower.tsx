@@ -12,7 +12,7 @@ import { User } from "../utils/interface";
 export default function Follower() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [data, setData] = useState<{}[]>([]);
+  const [data, setData] = useState<User[]>([]);
   const navigate = useNavigate();
   const url = baseUrl();
   const { user } = useSportlaze();
@@ -100,10 +100,10 @@ export default function Follower() {
         {!loading && !error && data.length === 0 ? (
           <div className="text-center text-4xl pt-[2rem] font-mono font-bold dark:text-white">
             Nothing to show here yet ___
-            <p>follow someone</p>
+            <p>No one is following you</p>
           </div>
         ) : (
-          data.map((follower: any, i: number) => <Follow follow={follower} key={i} />)
+          data.map((follower: any, i: number) => <Follow follow={follower} key={i} setFollow={setData} />)
         )}
       </div>
     </UserProfile>
