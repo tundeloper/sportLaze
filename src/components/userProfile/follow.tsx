@@ -64,7 +64,7 @@ export default function Follow({ follow, following, setFollow }: { follow?: User
         </div>
         <p className="text-gray-600 text-sm mt-1 dark:text-darkw">
           {follow?.bio ||
-            "Lorem ipsum dolor sit amet consectetur. Id blandit lectus enim sit Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam, et ex consequatur animi asperiores ut voluptatibus, voluptatem porro incidunt facilis, quis accusamus dolor laudantium laboriosam quam. Quod dolorum totam magni."}
+            "Lorem ipsum dolor sit amet consectetur. Id blandit lectus enim sit Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam, et ex consequatur animi asperiores ut voluptatibus,"}
         </p>
       </div>
 

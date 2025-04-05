@@ -27,6 +27,12 @@ export const EditSchema = Yup.object({
     location: Yup.string().required("location is required"),
 });
 
+export const createChannelSchema = Yup.object({
+    channel_name: Yup.string().required("Channel is required"),
+    description: Yup.string().required("Channel description is required"),
+    status: Yup.boolean()
+});
+
 // export const validateSelect = async ({dateOfBirth: string, country, favSport}) => {
     // try{
     //     if(dateOfBirth === '' || dateOfBirth === null ) throw Error('Please enter a valid date')

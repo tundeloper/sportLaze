@@ -2,8 +2,8 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Avatar, Button, IconButton, Popover } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import SendIcon from "../../assets/send";
-import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
-// import postImage from "../../assets/poste/d picture.png";
+import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
+// import postImage from "../../assets/posted picture.png"
 import CommentIcon from "../../assets/comment";
 import LikeIcon from "../../assets/like";
 import Bookmarkicon from "../../assets/bookmarkIcon";
@@ -22,9 +22,9 @@ const UserPost: React.FC<{
     null
   );
 
-  const { darkMode, setMessage, setSnackIsOpen, user, posts, setPosts } = useSportlaze();
+  const { darkMode, setMessage, setSnackIsOpen, user } = useSportlaze();
   const open = Boolean(anchorEl);
-  let storedIds: string[] = JSON.parse(localStorage.getItem("postIds") || "[]")
+  let storedIds: string[] = JSON.parse(localStorage.getItem("postIds") || "[]");
   const [myLikes, setMylikes] = useState<string[]>(storedIds || []); //setting likes temp
   const url = baseUrl();
   const token = localStorage.getItem("access_token");
@@ -34,7 +34,6 @@ const UserPost: React.FC<{
   };
 
   const deletePost = async () => {
-    console.log(feed.id);
     try {
       const response = await axios.delete(`${url}/posts/${feed.id}`, {
         headers: {
@@ -65,17 +64,13 @@ const UserPost: React.FC<{
     }
   };
 
-  useEffect(() => {
-    (() => {})();
-  });
-
   const favouriteHandler = (id: string) => {
     if (myLikes.includes(id)) {
-      unlikePost(id)
+      unlikePost(id);
     } else {
-      likePost(id)
+      likePost(id);
     }
-  }
+  };
 
   const likePost = async (id: string) => {
     try {
@@ -93,12 +88,15 @@ const UserPost: React.FC<{
         setSnackIsOpen(true);
         setMessage({ message: "Post liked successfully ✅", error: false });
         setMylikes(storePostId(id));
-        if (myLikes.includes(id)) setMylikes([...myLikes, id])
-        setPosts((prev) => {
-          return prev.map(post => 
-            post.id === +id ? { ...post, likes_count: post.likes_count + 1 } : post
-          );
-        });
+        if (myLikes.includes(id)) setMylikes([...myLikes, id]);
+        if (setPost)
+          setPost((prev) => {
+            return prev.map((post) =>
+              post.id === +id
+                ? { ...post, likes_count: post.likes_count + 1 }
+                : post
+            );
+          });
       }
     } catch (error) {
       console.log(error);
@@ -111,7 +109,7 @@ const UserPost: React.FC<{
       }
     } finally {
       setTimeout(() => {
-        setSnackIsOpen(false)
+        setSnackIsOpen(false);
         setMessage({ message: "", error: false });
       }, 5000);
     }
@@ -133,12 +131,15 @@ const UserPost: React.FC<{
         setSnackIsOpen(true);
         setMessage({ message: "Post Unliked ✅", error: false });
         setMylikes(removePostId(id));
-        setMylikes((prev) => prev.filter(pos => pos !== id))
-        setPosts((prev) => {
-          return prev.map(post => 
-            post.id === +id ? { ...post, likes_count: post.likes_count - 1 } : post
-          );
-        });
+        setMylikes((prev) => prev.filter((pos) => pos !== id));
+        if (setPost)
+          setPost((prev) => {
+            return prev.map((post) =>
+              post.id === +id
+                ? { ...post, likes_count: post.likes_count - 1 }
+                : post
+            );
+          });
       }
     } catch (error) {
       console.log(error);
@@ -201,12 +202,12 @@ const UserPost: React.FC<{
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <Avatar
-            src="https://via.placeholder.com/50"
+            // src="https://via.placeholder.com/50"
             alt="user icon"
             className="w-12 h-12"
-          />
+          >{feed.username ? feed.username[0].toLocaleUpperCase() : ""}</Avatar>
           <div>
-            <p className="font-semibold text-sm">
+            <p className="font-semibold text-sm dark:text-white">
               {type ? user.name : feed.name}
             </p>
             <p className="text-gray-500 text-xs">
@@ -295,11 +296,15 @@ const UserPost: React.FC<{
               favouriteHandler(feed.id.toString());
             }}
           >
-            {myLikes.includes(feed.id.toString()) ? <FavoriteRoundedIcon color="primary" sx={{color: 'red'}}/> : <LikeIcon fill={darkMode ? "white" : "#33363F"} />}
+            {myLikes.includes(feed.id.toString()) ? (
+              <FavoriteRoundedIcon color="primary" sx={{ color: "red" }} />
+            ) : (
+              <LikeIcon fill={darkMode ? "white" : "#33363F"} />
+            )}
             <p className="text-[13px] dark:text-white">{feed.likes_count}</p>
           </div>
           <div className="flex gap-[4px] items-center">
-            <CommentIcon fill={darkMode ? "white" : "#33363F"} />{" "}
+            <CommentIcon fill={darkMode ? "white" : "#33363F"} />
             <p className="text-[13px] dark:text-white">0</p>
           </div>
           <div className="flex gap-[1px] items-center">

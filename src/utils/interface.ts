@@ -11,6 +11,7 @@ export interface User {
   favorite_team: string | null;
   formatted_join_date: string | null;
   formatted_member_since: string | null;
+  profile_picture?: string;
   location: string | null;
   id: string | null;
   bio: string | null;
@@ -85,3 +86,14 @@ export interface ContextType {
   posts: Post[];
   setPosts: Dispatch<SetStateAction<Post[]>>;
 }
+
+export interface LoungeType {
+  name: string,
+  description: string,
+  icon: string,
+  id: number,
+  slug: string,
+  created_at: string,
+  created_by: 0,
+  member_count: 0
+  }

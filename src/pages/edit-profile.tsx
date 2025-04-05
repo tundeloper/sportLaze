@@ -9,7 +9,8 @@ import { EditSchema } from "../utils/validator";
 import baseUrl from "../utils/baseUrl";
 
 const EditProfile = () => {
-  const { login, setLoading, setSnackIsOpen, user, setMessage } = useSportlaze();
+  const { login, setLoading, setSnackIsOpen, user, setMessage, setUser } =
+    useSportlaze();
   const token = localStorage.getItem("access_token");
   const navigate = useNavigate();
   const url = baseUrl();
@@ -29,39 +30,58 @@ const EditProfile = () => {
           username: "",
           bio: "",
           date_of_birth: "",
-          website: "",
+          website: "https://",
           location: "",
         }}
         validationSchema={EditSchema}
         onSubmit={async (values, { setSubmitting }) => {
           setLoading(true);
+          console.log(values.website)
           const formData = new URLSearchParams();
-              formData.append("name", values.name);
-              formData.append("username", values.username);
-              formData.append("bio", values.bio);
-              formData.append("date_of_birth", values.date_of_birth);
-              formData.append("website", values.website);
-              formData.append("location", values.location);
+          formData.append("name", values.name);
+          formData.append("username", values.username);
+          formData.append("bio", values.bio);
+          formData.append("date_of_birth", values.date_of_birth);
+          formData.append("website", values.website);
+          formData.append("location", values.location);
+          const date = new Date(values.date_of_birth)
+          console.log( `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`)
+          const data = {
+           name: values.name,
+    username: values.username,
+    bio: values.bio,
+    date_of_birth: "1995-06-15",
+    website: values.website,
+    location: values.location
+          }
           try {
-            const response = await axios.put(
-              `${url}/auth/${user.username}`,
-              formData,
+            const {data} = await axios.put(
+              `${url}/auth/${user?.username}`,
+              {
+                values
+              },
               {
                 headers: { Authorization: `Bearer ${token}` },
               }
             );
-            console.log(response.data);
+            if (data) {
+              // setUser({
+              //   bio: data.user.bio
+              // })
+              navigate(`/user/${user.username}`)
+            }
           } catch (error) {
-            console.error(error)
+            console.error(error);
             if (axios.isAxiosError(error)) {
-            //   setMessage({
-            //     message: error.response?.data?.detail || "An error occurred",
-            //     error: true,
-            //   });
+              // setSnackIsOpen(true);
+              setMessage({
+                // message: error.response?.data?.detail || "An error occurred",
+                message: "An error occurred",
+                error: true,
+              });
             }
           } finally {
             setLoading(false);
-            setSnackIsOpen(true);
             setTimeout(() => setSnackIsOpen(false), 5000);
           }
         }}
@@ -84,7 +104,9 @@ const EditProfile = () => {
                   <ErrorMessage name={name}>
                     {(msg) =>
                       typeof msg === "string" ? (
-                        <div className="text-[red] text-[12px] mb-[-.5rem]">{msg}</div>
+                        <div className="text-[red] text-[12px] mb-[-.5rem]">
+                          {msg}
+                        </div>
                       ) : null
                     }
                   </ErrorMessage>

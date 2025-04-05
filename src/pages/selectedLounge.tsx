@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import Layout from "../components/layout/layout"
 import VideoIcon from "../assets/lounge/video"
@@ -19,12 +19,33 @@ import hockey from '../assets/svgs/hockey_big.jpg'
 import nfl from '../assets/svgs/nfl_big.jpg'
 import logo from '../assets/whitelogo.png'
 import InfoIcon from "../assets/lounge/infoIcon"
+import { LoungeType } from "../utils/interface"
+import axios from "axios"
+import baseUrl from "../utils/baseUrl"
 
 const LoungeId = () => {
-  const { lounge } = useParams()
+  const { slug } = useParams()
+
+  const [lounge, setLounge] = useState<LoungeType | null>(null)
+  const [loading, setLoading] = useState(false)
+  const url = baseUrl()
+
+  useEffect(() => {
+    (async() => {
+      setLoading(true)
+      try {
+        const {data} = await axios.get(`${url}/lounges/${slug}`)
+        setLounge(data)
+      } catch (error) {
+        console.error(error)
+      } finally {
+        setLoading(false)
+      }
+    })()
+  },[slug])
 
   const soccerImage = () => {
-    const loungeName = lounge?.toLocaleLowerCase()
+    const loungeName = slug?.toLocaleLowerCase()
     if(loungeName === 'soccer'){
       return soccer
     } else if (loungeName === 'basket ball') {
@@ -39,28 +60,27 @@ const LoungeId = () => {
     <div className="bg-[#F9F2F2] dark:bg-[black]">
       {/* Header Section */}
       <header className="relative text-white">
-        <div className="relative flex justify-beween h-[25rem] flex" style={{ overflow: 'hidden', background: 'rgb(0, 12, 234)' }}>
-        <img className="h-[10rem] w-auto absolute right-0 bottom-[-1rem] z-20"  src={logo} alt={lounge} style={{}}/>
+        <div className="relative flex justify-beween h-[25rem]" style={{ overflow: 'hidden', background: 'rgb(0, 12, 234)' }}>
+        <img className="h-[10rem] w-auto absolute right-0 bottom-[-1rem] z-20"  src={logo} alt={slug} style={{}}/>
           <div className="w-full h-full absolute left-0 top-0 z-10 bg-[blue]" style={{background: 'linear-gradient(to right, #463a85, #463a85, transparent, transparent)'}}>
             <div className="mt-[5rem] max-w-7xl m-auto py-10 px-6 flex flex-col md:flex p-8 relative">
               <div className="md:w-1/2">
-                <h1 className="text-5xl font-bold mb-4">{lounge}</h1>
+                <h1 className="text-5xl font-bold mb-4">{lounge?.name}</h1>
                 <div className="flex items-center gap-3">
                   <InfoIcon />
                   <p className="text-lg">
-                    {`Explore the world of ${lounge?.toLocaleLowerCase() === "the nfl" ? 'The National Football League' : lounge}, build your interest, and connect
-              with other lovers of the sport.`}
+                    {`${lounge?.description}`}
                   </p>
                 </div>
               </div>
             </div>
           </div>
           <div
-            className="w-[70%] h-[full] ml-[30%] relative overflow-hidden rounded-xl bg-cover bg-center relative flex items-end shadow-lg bg-gradient-to-t from-secondary/90 to-primary text-white hover:scale-105 transition-transform"
+            className="w-[70%] h-[full] ml-[30%] relative overflow-hidden rounded-xl bg-cover bg-center flex items-end shadow-lg bg-gradient-to-t from-secondary/90 to-primary text-white hover:scale-105 transition-transform"
             style={{
               backgroundImage: `
                 linear-gradient(to right, #5f4de2, rgba(105, 27, 154, 0.41), rgba(154, 27, 80, 0.41)),
-                url('${soccerImage()}')`,
+                url('${lounge?.icon}')`,
                 // backgroundSize: '50rem 30rem',
                 backgroundRepeat: 'no-repeat',
               outline: 'none',
@@ -104,7 +124,7 @@ const LoungeId = () => {
             { name: "Bet Predictions", icon: <PredictionIcon /> },
             { name: "Sport Dating", icon: <HeartIcon /> },
             { name: "Trending Videos", icon: <VideoIcon /> },
-            { name: `${lounge} News`, icon: <SportNewsIcon /> },
+            { name: `${lounge?.name} News`, icon: <SportNewsIcon /> },
             { name: "Create Challenges", icon: <ChallengeIcon /> },
             { name: "League Information", icon: <LeagueIcon /> },
           ].map((item, index) => (

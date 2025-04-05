@@ -58,6 +58,7 @@ const SideNav: React.FC<{
         location: data.location,
         id: data.id as string,
         bio: data.bio,
+        // profile_picture: ""
       });
       return data;
     } catch (error) {

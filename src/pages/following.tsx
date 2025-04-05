@@ -15,7 +15,7 @@ export default function Following() {
   const [data, setData] = useState<User[]>([]);
   const navigate = useNavigate();
   const url = baseUrl();
-  const { user } = useSportlaze();
+  const { user, darkMode } = useSportlaze();
 
   const fetchFollowing = async () => {
     setLoading(true);
@@ -48,11 +48,11 @@ export default function Following() {
       <div>
         <div className="flex gap-4 p-2">
           <Button onClick={() => navigate(-1)}>
-            <ArrowBackIcon sx={{ color: "black" }} />
+            <ArrowBackIcon sx={{ color: `${darkMode ? "white" : "black"}` }} />
           </Button>
 
           <div className="flex flex-col">
-            <span className="text-2xl font-bold">{user.name}</span>
+            <span className="text-2xl font-bold dark:text-white">{user.name}</span>
             <span className="text-gray-500 mt-[-.5rem]">@{user.username}</span>
           </div>
         </div>

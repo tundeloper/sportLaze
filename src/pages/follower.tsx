@@ -15,7 +15,7 @@ export default function Follower() {
   const [data, setData] = useState<User[]>([]);
   const navigate = useNavigate();
   const url = baseUrl();
-  const { user } = useSportlaze();
+  const { user, darkMode } = useSportlaze();
 
   const fetchFollowers = async () => {
     setLoading(true);
@@ -47,7 +47,7 @@ export default function Follower() {
     <UserProfile>
       <div className="flex gap-4 p-2">
         <Button onClick={() => navigate(-1)}>
-          <ArrowBackIcon sx={{ color: "black" }} />
+          <ArrowBackIcon sx={{ color: `${darkMode ? "white" : "black"}` }} />
         </Button>
         <div className="flex flex-col">
           <span className="text-2xl font-bold dark:text-white">

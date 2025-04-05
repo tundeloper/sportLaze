@@ -8,6 +8,7 @@ import hockey from '../assets/svgs/hockeyEdit.jpg'
 import nfl from '../assets/svgs/nflEdit.jpg'
 // import nfl from '../assets/svgs/the nfl.png'
 import soccer from '../assets/lounge/soccer.png'
+import { LoungeType } from "../utils/interface";
 
 // Sample data for lounges
 const lounges = [
@@ -33,7 +34,7 @@ const lounges = [
   },
 ];
 
-const TopLounges: React.FC = () => {
+const TopLounges: React.FC<{topLounges: LoungeType[]}> = ({topLounges}) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Scroll left functionality
@@ -70,8 +71,8 @@ const TopLounges: React.FC = () => {
             ref={scrollContainerRef}
           >
             {/* Cards */}
-            {lounges.map((lounge, index) => (
-              <LoungeCard stats={lounge.stats} title={lounge.title} image={lounge.image} />
+            {topLounges.map((lounge, index) => (
+              <LoungeCard {...lounge} />
             ))}
           </div>
 

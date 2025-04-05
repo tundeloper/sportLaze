@@ -130,7 +130,7 @@ const Landing = () => {
           </div>
         )}
         {posts.map((item) => (
-          <UserPost feed={item} key={item.id} />
+          <UserPost feed={item} key={item.id} setPost={setPosts} />
         ))}
         
       </div>

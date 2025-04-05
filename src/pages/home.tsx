@@ -30,7 +30,7 @@ const Home = () => {
             <Trends />
             <Lounge />
           </div>
-          <div className="bg-white h-[auto] p-4 sm: w-full dark:bg-[black] sm:rounded-[1rem]">
+          <div className="bg-white min-h-screen p-4 sm: w-full dark:bg-[black] sm:rounded-[1rem]">
             {/* <div className="flex justify-center mb-2"><img src={darkMode ? whitelogo : img} alt="sportlaze logo" className="h-[64px] w-[72px]" /></div> */}
             <Landing />
           </div>

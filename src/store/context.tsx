@@ -113,6 +113,7 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({
           username: data.username,
           name: data.name, // no name in the response
           email: data.email,
+          profile_picture: '',
           date_of_birth: data.date_of_birth,
           followers: data.followers_count,
           following: data.following_count,

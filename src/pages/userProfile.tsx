@@ -5,7 +5,7 @@ import userimg from "../assets/user/man-studio.png";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import UserPost from "../components/userProfile/post";
 import { useSportlaze } from "../hooks/useContext";
@@ -17,32 +17,37 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState<
     "posts" | "replies" | "lounges" | "saved"
   >("posts");
-  const { user, loading, setLoading, initailUser } = useSportlaze();
+  const { user, loading, setLoading, } = useSportlaze();
   const [posts, setPosts] = useState<Post[]>([]);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>("");
 
   const url = baseUrl();
+  const { username } = useParams();
 
   useEffect(() => {
     fetchPosts();
   }, []);
 
+
   const fetchPosts = async () => {
     setLoading(true);
     try {
+      console.log(user)
       const token = localStorage.getItem("access_token");
       if (!token) {
         throw new Error("No access token found");
       }
 
-      const response = await axios.get(`${url}/posts/user/${user.username}`, {
+      const response = await axios.get(`${url}/posts/user/${username}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      const val: Post[] = response.data
-      const SortedPost = val.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-
+      const val: Post[] = response.data;
+      const SortedPost = val.sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
       setPosts(SortedPost);
     } catch (error: any) {
       if (axios.isAxiosError(error)) {
@@ -84,11 +89,11 @@ const Profile = () => {
         </div>
         <div className="">
           <div className="flex gap-[3rem] mt-2 dark:text-darkw">
-            <Link to='/following'>
+            <Link to="/following">
               Following <span className="ml-3 font-bold">{user.following}</span>
             </Link>
-            <Link to='/followers'>
-              Followers <span  className="ml-3 font-bold">{user.followers}</span>
+            <Link to="/followers">
+              Followers <span className="ml-3 font-bold">{user.followers}</span>
             </Link>
           </div>
           <p className="mt-2">{user.bio}</p>
@@ -105,7 +110,7 @@ const Profile = () => {
               <span className="mr-4">
                 <CalendarTodayOutlinedIcon />
               </span>{" "}
-              <span>{user.formatted_join_date}</span>
+              <span>{user.formatted_member_since}</span>
             </div>
             <div className="flex">
               <span className="mr-4">
@@ -120,7 +125,7 @@ const Profile = () => {
             <span className="mr-4">
               <CalendarTodayOutlinedIcon />
             </span>{" "}
-            <span>Since {user.formatted_join_date}</span>
+            <span>Since {user.formatted_member_since}</span>
           </div>
         </div>
         <nav className="mt-4 flex">
@@ -152,13 +157,21 @@ const Profile = () => {
         <section className="p-1 mt-3 md:p-4">
           {activeTab === "posts" && (
             <div className="min-h-[10rem]">
-              {loading && <div className="flex justify-center pt-[2rem]"><CircularProgress size={30} /></div>}
+              {loading && (
+                <div className="flex justify-center pt-[2rem]">
+                  <CircularProgress size={30} />
+                </div>
+              )}
               {/* {error && <p className="text-red-500">{error}</p>} */}
-              {posts.length === 0 && !loading && <p className="text-center text-4xl pt-[2rem] font-mono font-bold dark:text-white">No posts found<br/> Make A post and check back</p>}
-              {posts.map((post: any) => (
-                <UserPost feed={post} setPost={setPosts} type />
-              ))}
-              
+              {posts.length === 0 && !loading && (
+                <p className="text-center text-4xl pt-[2rem] font-mono font-bold dark:text-white">
+                  No posts found
+                  <br /> Make A post and check back
+                </p>
+              )}
+              {posts.map((post: Post) => {
+                return <UserPost feed={post} setPost={setPosts} type />;
+              })}
             </div>
           )}
 
@@ -173,7 +186,7 @@ const Profile = () => {
               </div>
             </div>
           )}
-          
+
           {/* lounges */}
           {activeTab === "lounges" && (
             <div className="min-h-[10rem]">

@@ -6,15 +6,17 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import { useState } from "react";
 import { User } from "../utils/interface";
+import { useSportlaze } from "../hooks/useContext";
 
 export default function FollowVerified() {
   const [data, setData] = useState<User[]>([])
   const navigate = useNavigate();
+  const {darkMode} = useSportlaze()
   return (
     <UserProfile>
       <div className="flex gap-4 p-2">
         <Button onClick={() => navigate(-1)}>
-          <ArrowBackIcon sx={{color: 'black'}} />
+          <ArrowBackIcon sx={{ color: `${darkMode ? "white" : "black"}` }} />
         </Button>
 
         <div className="flex flex-col">
