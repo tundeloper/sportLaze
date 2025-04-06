@@ -109,7 +109,7 @@ function App() {
               }
             />
              <Route
-              path="/trending-channels"
+              path="/channels/:channelId"
               element={
                 <Suspense fallback={<div>Loading...</div>}>
                   <Protect redirectPath="auth">
@@ -119,7 +119,7 @@ function App() {
               }
             />
             <Route
-              path="/create-channel"
+              path="/lounge/create-channel/:id"
               element={
                 <Suspense fallback={<div>Loading...</div>}>
                   <Protect redirectPath="auth">

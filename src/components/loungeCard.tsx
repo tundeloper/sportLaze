@@ -5,7 +5,7 @@ import PointCircle from '../assets/svgs/signIncircle'
 import { Link } from 'react-router-dom'
 import { LoungeType } from '../utils/interface'
 
-const LoungeCard: React.FC<LoungeType> = ({ name, icon, slug, member_count }) => {
+const LoungeCard: React.FC<LoungeType> = ({ name, icon, slug, member_count, id }) => {
     return <Link to={`/lounge/${slug}`}>
         <div
             className="min-w-[150px] h-[200px] bg-[#463a85a1] overflow-hidden rounded-xl bg-cover bg-center relative flex items-end shadow-lg bg-gradient-to-t from-secondary/90 to-primary text-white hover:scale-105 transition-transform sm:w-[200px] sm:h-[250px]"
@@ -24,7 +24,7 @@ const LoungeCard: React.FC<LoungeType> = ({ name, icon, slug, member_count }) =>
                 <h3 data-testid="title" className="text-lg font-semibold absolute p-3 text-center" style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)", borderTop: '1px solid white', width: '100%', borderBottom: '1px solid white' }}>{name}</h3>
                 <div className="flex justify-between items-center mt-2 text-sm">
                     <span className="flex gap-2 items-center"><MultipleUserIcon /> {member_count}</span>
-                    <span><PointCircle /></span>
+                    <Link to={`/lounge/create-channel/${id}`}><PointCircle /></Link>
                 </div>
             </div>
         </div>

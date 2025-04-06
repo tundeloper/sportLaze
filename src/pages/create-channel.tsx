@@ -2,16 +2,20 @@ import { useState } from "react";
 import Layout from "../components/layout/layout";
 import { ErrorMessage, Field, FieldProps, Form, Formik } from "formik";
 import { createChannelSchema } from "../utils/validator";
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import baseUrl from "../utils/baseUrl";
-import { url } from "inspector";
 import { Checkbox, FormControlLabel } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSportlaze } from "../hooks/useContext";
 
 export default function CreateChannel() {
   const [description, setDescription] = useState("");
   const [selectedLounge, setSelectedLounge] = useState("Soccer");
   const maxCharCount = 244;
   const url = baseUrl();
+  const {id} = useParams()
+  const {setSnackIsOpen, setMessage} = useSportlaze()
+  const navigate = useNavigate()
 
   return (
     <Layout>
@@ -27,15 +31,39 @@ export default function CreateChannel() {
             initialValues={{ channel_name: "", channel_description: "" }}
             validationSchema={createChannelSchema}
             onSubmit={async (values, { setSubmitting }) => {
-              // Simulate a network request
-              const { data } = await axios.post(
-                `${url}/channels/${"loungeID"}`,
-                values
-              );
-              console.log(data);
               try {
+                const { data } = await axios.post(
+                  `${url}/channels/${id}`,
+                  {
+                    name: values.channel_name,
+                    description: values.channel_description,
+                    is_private: false,
+                  },
+                  {
+                    headers: {
+                      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                    },
+                  }
+                );
+                if (data) {
+                  console.log(data);
+                  setSnackIsOpen(true)
+                  setMessage({message: "Channel Created Successfully", error: false})
+                  navigate(`/channels/${id}`)
+                }
               } catch (error) {
-                console.error("Error creating channel:", error);
+                if(isAxiosError(error)) {
+                  setSnackIsOpen(true)
+                  setMessage({message: error.response?.data.detail, error: true})
+                  console.log(error.response?.data.detail);
+                }
+              } finally {
+                setSubmitting(false);
+                setTimeout(() => {
+                  setSnackIsOpen(false);
+                  setMessage({message: "", error: false})
+                  setSubmitting(false);
+                }, 5000);
               }
             }}
           >
@@ -84,7 +112,7 @@ export default function CreateChannel() {
                   className={`text-[red] text-[12px]`}
                 />
 
-                <Field type="checkbox" name="status" id="terms">
+                {/* <Field type="checkbox" name="status" id="terms">
                   {({ field }: FieldProps) => (
                     <FormControlLabel
                       control={
@@ -99,7 +127,7 @@ export default function CreateChannel() {
                       className="ml-2 text-sm text-gray-700"
                     />
                   )}
-                </Field>
+                </Field> */}
                 {/* <label htmlFor="terms" className="ml-2 text-sm text-gray-700">
                   is this channel public?
                 </label> */}
