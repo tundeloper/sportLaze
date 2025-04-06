@@ -52,6 +52,7 @@ const Lounge = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
+            "Authorization": `${localStorage.getItem("acess_token")}`
           },
         });
         console.log(data);

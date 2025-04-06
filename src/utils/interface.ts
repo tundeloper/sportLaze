@@ -88,12 +88,23 @@ export interface ContextType {
 }
 
 export interface LoungeType {
-  name: string,
-  description: string,
-  icon: string,
-  id: number,
-  slug: string,
-  created_at: string,
-  created_by: 0,
-  member_count: 0
-  }
+  name: string;
+  description: string;
+  icon: string;
+  id: number;
+  slug: string;
+  created_at: string;
+  created_by: 0;
+  member_count: 0;
+}
+
+export interface channelType {
+  name: string;
+  description: string;
+  is_private: boolean;
+  id: 0;
+  lounge_id: number;
+  created_at: string;
+  created_by: string;
+  member_count: 0;
+}

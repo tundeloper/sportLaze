@@ -55,7 +55,6 @@ const GoogleLoginButton: React.FC<{
 
       
       if (data.access_token) {
-        console.log('sign in with google ', data)
         login(data.access_token);
         setInitUser({
           access_token: data.access_token,

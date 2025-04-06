@@ -102,8 +102,6 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({
           },
         });
 
-        console.log(response);
-
         if (!response.ok) {
           throw new Error("Failed to fetch profile");
         }
