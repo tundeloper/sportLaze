@@ -23,7 +23,7 @@ export const EditSchema = Yup.object({
     username: Yup.string().required("username is required"),
     bio: Yup.string(),
     date_of_birth: Yup.string().required("Date of birth is required"),
-    website: Yup.string(),
+    website: Yup.string().url('Invalid URL'),
     location: Yup.string().required("location is required"),
 });
 

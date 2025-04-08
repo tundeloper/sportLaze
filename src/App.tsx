@@ -19,6 +19,7 @@ import { GetSinglePost } from "./pages/getPost";
 import TrendingChannelsPage from "./components/trendingChanel";
 import CreateChannel from "./pages/create-channel";
 import { Monetization } from "./pages/monetization";
+import { PromotionPage } from "./pages/promotion";
 const Welcome = lazy(() => import("./pages/auth"));
 const Home = lazy(() => import("./pages/home"));
 const Lounge = lazy(() => import("./pages/lounge"));
@@ -134,6 +135,16 @@ function App() {
                 <Suspense fallback={<div>Loading...</div>}>
                   <Protect redirectPath="auth">
                     <Lounge />
+                  </Protect>
+                </Suspense>
+              }
+            />
+            <Route
+              path="/promotion"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Protect redirectPath="auth">
+                    <PromotionPage />
                   </Protect>
                 </Suspense>
               }

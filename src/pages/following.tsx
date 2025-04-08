@@ -1,6 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import UserProfile from "../components/userProfile/profile";
-import Follow from "../components/userProfile/follow";
 import { Button, CircularProgress } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useSportlaze } from "../hooks/useContext";
@@ -8,11 +7,13 @@ import { useEffect, useState } from "react";
 import baseUrl from "../utils/baseUrl";
 import axios from "axios";
 import { User } from "../utils/interface";
+import Followings from "../components/userProfile/following";
 
 export default function Following() {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<User[]>([]);
+  const [followers, setFollowers] = useState<User[]>([]);
   const navigate = useNavigate();
   const url = baseUrl();
   const { user, darkMode } = useSportlaze();
@@ -25,14 +26,19 @@ export default function Following() {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       }); // Fetch followers
+      const {data} = await axios.get(`${url}/profile/followers`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      }); // Fetch followers
 
-      console.log('following', response.data);
+      setFollowers(data);
       setData(response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error);
         setError(error.response?.data?.detail || error.message);
-        navigate("/auth", { replace: true });
+        // navigate("/auth", { replace: true });
       }
     } finally {
       setLoading(false);
@@ -104,7 +110,7 @@ export default function Following() {
             <p>follow someone</p>
           </div>
         ) : (
-          data.map((follower: any, i: number) => <Follow follow={follower} key={i} following setFollow={setData} />)
+          data.map((follower, i: number) => <Followings follow={follower} key={i} follower={followers} setFollow={setData} />)
         )}
       </div>
     </UserProfile>

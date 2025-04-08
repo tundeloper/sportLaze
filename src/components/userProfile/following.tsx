@@ -1,3 +1,4 @@
+
 import { Avatar } from "@mui/material";
 import avat from "../../assets/user/man-studio.png";
 import { Link } from "react-router-dom";
@@ -7,16 +8,18 @@ import baseUrl from "../../utils/baseUrl";
 import { useSportlaze } from "../../hooks/useContext";
 
 
-export default function Follow({ follow, following, setFollow }: { follow?: User, following?: boolean , setFollow: Dispatch<SetStateAction<User[]>>}) {
+export default function Followings({ follow, follower, setFollow }: { follow: User, follower: User[] , setFollow: Dispatch<SetStateAction<User[]>>}) {
   const [isHovered, setIsHovered] = useState(false);
   const {setSnackIsOpen, setMessage} = useSportlaze()
   const token = localStorage.getItem("access_token");
+  const isFollower = follower.some(foll => foll.id === follow.id)
+
   const url = baseUrl()
 
   const unFollowUser = async () => {
-
+    setFollow((prev) => prev.filter((foll) => foll.id !== follow.id))
     try {
-      const response = await fetch(`${url}/profile/unfollow/${follow?.username}`, {
+      const response = await fetch(`${url}/profile/unfollow/${follow.username}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -26,8 +29,7 @@ export default function Follow({ follow, following, setFollow }: { follow?: User
       const data: { message: string; detail: string } = await response.json();
       if (response.status === 200) {
         setSnackIsOpen(true);
-        console.log(data);
-        if (following) setFollow((prev) => [...prev])
+         setFollow((prev) => [...prev])
         setMessage({ message: data.message, error: false });
       }
     } catch (error) {
@@ -57,9 +59,9 @@ export default function Follow({ follow, following, setFollow }: { follow?: User
           </span>
           <div className="flex items-center space-x-2">
             <span className="text-gray-500">@{follow?.username}</span>
-            {/* <span className="bg-secondary20 text-xs px-2 py-0.5 rounded-lg text-gray-300">
+            {isFollower ?<span className="bg-secondary20 text-xs px-2 py-0.5 rounded-lg text-gray-300">
               Follows you
-            </span> */}
+            </span> : ''}
           </div>
         </div>
         <p className="text-gray-600 text-sm mt-1 dark:text-darkw">
@@ -75,7 +77,7 @@ export default function Follow({ follow, following, setFollow }: { follow?: User
         onMouseLeave={() => setIsHovered(false)}
         onClick={unFollowUser}
       >
-        {isHovered ? "Unfollow" : "Following"}
+        Unfollow
       </button>
     </div>
   );

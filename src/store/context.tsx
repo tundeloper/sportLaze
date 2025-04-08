@@ -1,5 +1,6 @@
 import React, { createContext, ReactNode, useEffect, useState } from "react";
 import getInitialTheme from "../utils/initialTheme";
+import { Navigate } from "react-router-dom";
 import {
   ContextType,
   initialUser,
@@ -125,6 +126,7 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({
         });
         return data;
       } catch (error) {
+        logout()
         return null;
       }
     };

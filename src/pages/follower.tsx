@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import UserProfile from "../components/userProfile/profile";
-import Follow from "../components/userProfile/follow";
+import Follow from "../components/userProfile/follower";
 import { Button, CircularProgress } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useEffect, useState } from "react";
@@ -8,11 +8,13 @@ import axios from "axios";
 import baseUrl from "../utils/baseUrl";
 import { useSportlaze } from "../hooks/useContext";
 import { User } from "../utils/interface";
+import Followers from "../components/userProfile/follower";
 
 export default function Follower() {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<User[]>([]);
+  const [following, setFollowing] = useState<User[]>([]);
   const navigate = useNavigate();
   const url = baseUrl();
   const { user, darkMode } = useSportlaze();
@@ -26,13 +28,18 @@ export default function Follower() {
         },
       }); // Fetch followers
 
-      console.log('followers', response.data);
+      const {data} = await axios.get(`${url}/profile/following`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+
+      setFollowing(data)
       setData(response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error);
         setError(error.response?.data?.detail || error.message);
-        navigate("/auth", { replace: true });
       }
     } finally {
       setLoading(false);
@@ -103,7 +110,7 @@ export default function Follower() {
             <p>No one is following you</p>
           </div>
         ) : (
-          data.map((follower: any, i: number) => <Follow follow={follower} key={i} setFollow={setData} />)
+          data.map((follower: User, i: number) => <Followers follow={follower} following={following} setFollowings={setFollowing} key={i} setFollow={setData} />)
         )}
       </div>
     </UserProfile>

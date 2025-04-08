@@ -1,12 +1,13 @@
 import { NavLink } from "react-router-dom";
 import UserProfile from "../components/userProfile/profile";
-import Follow from "../components/userProfile/follow";
+import Follow from "../components/userProfile/follower";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import { useState } from "react";
 import { User } from "../utils/interface";
 import { useSportlaze } from "../hooks/useContext";
+import VerifiedFollowers from "../components/userProfile/verifiedFollower";
 
 export default function FollowVerified() {
   const [data, setData] = useState<User[]>([])
@@ -60,7 +61,7 @@ export default function FollowVerified() {
         {Array(5)
           .fill(0)
           .map((_, i) => (
-            <Follow setFollow={setData} />
+            <VerifiedFollowers setFollow={setData} />
           ))}
       </div>
     </UserProfile>

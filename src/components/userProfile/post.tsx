@@ -311,10 +311,17 @@ const UserPost: React.FC<{
             <SendIcon fill={darkMode ? "white" : "#222222"} />
             <p className="text-[13px] dark:text-white">0</p>
           </div>
+          <div className="flex gap-2 items-center">
+            {/* <SendIcon fill={darkMode ? "white" : "#222222"} /> */}
+            <p className="dark:text-white">repost</p>
+            <p className="text-[13px] dark:text-white">0</p>
+          </div>
         </div>
         {/* Bookmark */}
-        <div className="mr-2">
-          <Bookmarkicon fill={darkMode ? "white" : "#222222"} />
+        <div>
+          <div className="mr-2">
+            <Bookmarkicon fill={darkMode ? "white" : "#222222"} />
+          </div>
         </div>
       </div>
     </div>

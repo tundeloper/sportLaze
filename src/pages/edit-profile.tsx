@@ -46,19 +46,13 @@ const EditProfile = () => {
           formData.append("location", values.location);
           const date = new Date(values.date_of_birth)
           console.log( `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`)
-          const data = {
-           name: values.name,
-    username: values.username,
-    bio: values.bio,
-    date_of_birth: "1995-06-15",
-    website: values.website,
-    location: values.location
-          }
+          
           try {
             const {data} = await axios.put(
               `${url}/auth/${user?.username}`,
               {
-                values
+               ...values,
+               date_of_birth: '2020-08-24'
               },
               {
                 headers: { Authorization: `Bearer ${token}` },
