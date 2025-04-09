@@ -24,7 +24,7 @@ const LoungeCard: React.FC<LoungeType> = ({ name, icon, slug, member_count, id }
                 <h3 data-testid="title" className="text-lg font-semibold absolute p-3 text-center" style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)", borderTop: '1px solid white', width: '100%', borderBottom: '1px solid white' }}>{name}</h3>
                 <div className="flex justify-between items-center mt-2 text-sm">
                     <span className="flex gap-2 items-center"><MultipleUserIcon /> {member_count}</span>
-                    <Link to={`/lounge/create-channel/${id}`}><PointCircle /></Link>
+                    <Link to={`/channels/${id}`}><PointCircle /></Link>
                 </div>
             </div>
         </div>

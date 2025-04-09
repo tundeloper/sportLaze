@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../components/layout/layout";
 import { ErrorMessage, Field, FieldProps, Form, Formik } from "formik";
 import { createChannelSchema } from "../utils/validator";
@@ -16,6 +16,27 @@ export default function CreateChannel() {
   const {id} = useParams()
   const {setSnackIsOpen, setMessage} = useSportlaze()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await axios.get(`${url}/lounges/`, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Authorization": `${localStorage.getItem("acess_token")}`
+          },
+        });
+        console.log('channel')
+        const found = data.find((item : any) => 'id' in item)
+        console.log(found, 'found')
+        setSelectedLounge('data');
+      } catch (error) {
+        console.error("Error fetching lounges:", error);
+      } finally {
+      }
+    })()
+  }, [])
 
   return (
     <Layout>

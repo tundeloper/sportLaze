@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Avatar, Button, IconButton, Popover } from "@mui/material";
+import { Avatar, Button, IconButton, Popover, Tooltip } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import SendIcon from "../../assets/send";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
@@ -13,6 +13,7 @@ import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
 import { removePostId, storePostId } from "../../utils/store_likes";
 import { Share } from "../../assets/svgs/tabler_share";
+import { formatFullDate, timeAgo } from "../../utils/format-date";
 
 const UserPost: React.FC<{
   feed: Post;
@@ -211,9 +212,16 @@ const UserPost: React.FC<{
             <p className="font-semibold text-sm dark:text-white">
               {type ? user.name : feed.name}
             </p>
-            <p className="text-gray-500 text-xs">
-              @{type ? user.username : feed.username}
-            </p>
+            <div className="flex gap-3">
+              <p className="text-gray-500 text-xs">
+                @{type ? user.username : feed.username}
+              </p>
+              <Tooltip title={`${formatFullDate(feed.created_at)}`}>
+              <p className="text-gray-500 text-xs">
+                {type ? timeAgo(`${feed.created_at}`) : timeAgo(`${feed.created_at}`)}
+              </p>
+              </Tooltip>
+            </div>
           </div>
         </div>
         <div className="flex items-center space-x-2">
