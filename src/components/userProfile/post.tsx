@@ -12,6 +12,7 @@ import { Post } from "../../utils/interface";
 import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
 import { removePostId, storePostId } from "../../utils/store_likes";
+import { Share } from "../../assets/svgs/tabler_share";
 
 const UserPost: React.FC<{
   feed: Post;
@@ -311,14 +312,13 @@ const UserPost: React.FC<{
             <SendIcon fill={darkMode ? "white" : "#222222"} />
             <p className="text-[13px] dark:text-white">0</p>
           </div>
-          <div className="flex gap-2 items-center">
-            {/* <SendIcon fill={darkMode ? "white" : "#222222"} /> */}
-            <p className="dark:text-white">repost</p>
-            <p className="text-[13px] dark:text-white">0</p>
-          </div>
         </div>
         {/* Bookmark */}
-        <div>
+        <div className="flex items-center justify-center gap-4">
+          <div className="flex gap-[1px] items-center">
+            <Share fill={darkMode ? "white" : "#222222"} />
+            <p className="text-[13px] dark:text-white">0</p>
+          </div>
           <div className="mr-2">
             <Bookmarkicon fill={darkMode ? "white" : "#222222"} />
           </div>
