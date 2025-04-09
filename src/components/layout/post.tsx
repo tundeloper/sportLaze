@@ -3,8 +3,9 @@ import {
   Button,
   TextareaAutosize,
   ClickAwayListener,
+  CircularProgress,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import avat from "../../assets/user/man-studio.png";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import ImageIcon from "@mui/icons-material/Image";
@@ -26,6 +27,7 @@ export default function PostInput() {
   const [text, setText] = useState<string>("");
   const [media, setMedia] = useState<MediaFile[]>([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
+  const [isPosting, setIsPosting] = useState<boolean>(false);
 
   const API_URL = baseUrl();
   const { setMessage, setSnackIsOpen, user } = useSportlaze();
@@ -39,38 +41,35 @@ export default function PostInput() {
       formData.append(`media_${index}`, item.file);
     });
 
-    console.log(formData);
-
     try {
-      setSnackIsOpen(false);
+      setIsPosting(true);
       const token = localStorage.getItem("access_token");
-      const res = await axios.post(
-        `${API_URL}/posts`,
-        { content: text },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(res);
+
+      const res = await axios.post(`${API_URL}/posts`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       if (res.status === 200) {
         setText("");
+        setMedia([]);
+        setMessage({ message: "Post created successfully!", error: false });
         setSnackIsOpen(true);
-        setMessage({ message: "Post created successfully", error: false });
       }
-      // setResponse(JSON.stringify(res.data, null, 2));
-      // setError("");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.message === "Network Error") {
           setMessage({ message: "Your network seems to be down", error: true });
         } else {
-          setMessage({ message: error.response?.data.detail, error: true });
+          // setMessage({ message: error.response?.data.detail || "An error occurred", error: true });
+          console.log(error)
         }
+        setSnackIsOpen(true);
       }
     } finally {
+      setIsPosting(false);
       setTimeout(() => {
         setSnackIsOpen(false);
         setMessage({ message: "", error: false });
@@ -88,12 +87,23 @@ export default function PostInput() {
   };
 
   const handleRemoveFile = (index: number) => {
-    setMedia((prev) => prev.filter((_, i) => i !== index));
+    setMedia((prev) => {
+      const toRemove = prev[index].preview;
+      URL.revokeObjectURL(toRemove); // Clean up
+      return prev.filter((_, i) => i !== index);
+    });
   };
 
   const handleEmojiClick = (emojiObject: { emoji: string }) => {
     setText((prev) => prev + emojiObject.emoji);
   };
+
+  useEffect(() => {
+    // Cleanup all preview URLs when unmounting or media changes
+    return () => {
+      media.forEach((item) => URL.revokeObjectURL(item.preview));
+    };
+  }, [media]);
 
   return (
     <div className="w-full p-4 border rounded-lg shadow-md mb-2 bg-white relative dark:bg-black">
@@ -107,7 +117,7 @@ export default function PostInput() {
           value={text}
           onChange={(e) => setText(e.target.value)}
           minRows={3}
-          maxRows={4} // Ensures it becomes scrollable after a certain height
+          maxRows={4}
           style={{ resize: "none", overflow: "auto" }}
         />
       </div>
@@ -166,7 +176,7 @@ export default function PostInput() {
                 <div
                   className="absolute z-10 bg-white dark:bg-gray-800 shadow-lg p-2 rounded-md"
                   style={{
-                    top: "40px", // Position below icon
+                    top: "40px",
                     left: "0",
                     minWidth: "250px",
                     maxWidth: "300px",
@@ -185,14 +195,16 @@ export default function PostInput() {
           </ClickAwayListener>
           <CalendarMonthIcon className="cursor-pointer" />
         </div>
+
         <Button
           variant="contained"
           color="primary"
           onClick={handlePost}
           className="bg-secondary text-white px-4 py-1 rounded-lg disabled:opacity-50"
-          disabled={!text.trim() && media.length === 0}
+          disabled={isPosting || (!text.trim() && media.length === 0)}
+          startIcon={isPosting ? <CircularProgress size={16} color="inherit" /> : null}
         >
-          Post
+          {isPosting ? "Posting..." : "Post"}
         </Button>
       </div>
     </div>

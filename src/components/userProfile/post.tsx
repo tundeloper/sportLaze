@@ -315,9 +315,9 @@ const UserPost: React.FC<{
         </div>
         {/* Bookmark */}
         <div className="flex items-center justify-center gap-4">
-          <div className="flex gap-[1px] items-center">
+          <div className="flex gap-[2px] items-center">
             <Share fill={darkMode ? "white" : "#222222"} />
-            <p className="text-[13px] dark:text-white">0</p>
+            {/* <p className="text-[13px] dark:text-white">0</p> */}
           </div>
           <div className="mr-2">
             <Bookmarkicon fill={darkMode ? "white" : "#222222"} />
