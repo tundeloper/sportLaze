@@ -19,12 +19,12 @@ export const SignInSchema = Yup.object({
 });
 
 export const EditSchema = Yup.object({
-    name: Yup.string().required("name is required"),
-    username: Yup.string().required("username is required"),
+    name: Yup.string(),
+    username: Yup.string(),
     bio: Yup.string(),
-    date_of_birth: Yup.string().required("Date of birth is required"),
+    date_of_birth: Yup.string(),
     website: Yup.string().url('Invalid URL'),
-    location: Yup.string().required("location is required"),
+    location: Yup.string(),
 });
 
 export const createChannelSchema = Yup.object({

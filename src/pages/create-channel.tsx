@@ -9,34 +9,43 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSportlaze } from "../hooks/useContext";
 
 export default function CreateChannel() {
-  const [description, setDescription] = useState("");
-  const [selectedLounge, setSelectedLounge] = useState("Soccer");
+
+  const [selectedLounge, setSelectedLounge] = useState<{
+    created_at: string,
+    created_by: number,
+    description: string,
+    icon: string,
+    id: number,
+    member_count: number,
+    name: string,
+    slug: string,
+  }[]>([]);
+
   const maxCharCount = 244;
   const url = baseUrl();
-  const {id} = useParams()
-  const {setSnackIsOpen, setMessage} = useSportlaze()
+  const { id } = useParams()
+  const { setSnackIsOpen, setMessage } = useSportlaze()
   const navigate = useNavigate()
 
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await axios.get(`${url}/lounges/`, {
+        const { data } = await axios.get(`${url}/lounges`, {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
             "Authorization": `${localStorage.getItem("acess_token")}`
           },
         });
-        console.log('channel')
-        const found = data.find((item : any) => 'id' in item)
-        console.log(found, 'found')
-        setSelectedLounge('data');
+        const found =
+          console.log(data, 'channnel creation')
+        setSelectedLounge(data);
       } catch (error) {
         console.error("Error fetching lounges:", error);
       } finally {
       }
     })()
-  }, [])
+  }, [id])
 
   return (
     <Layout>
@@ -69,20 +78,20 @@ export default function CreateChannel() {
                 if (data) {
                   console.log(data);
                   setSnackIsOpen(true)
-                  setMessage({message: "Channel Created Successfully", error: false})
+                  setMessage({ message: "Channel Created Successfully", error: false })
                   navigate(`/channels/${id}`)
                 }
               } catch (error) {
-                if(isAxiosError(error)) {
+                if (isAxiosError(error)) {
                   setSnackIsOpen(true)
-                  setMessage({message: error.response?.data.detail, error: true})
+                  setMessage({ message: error.response?.data.detail, error: true })
                   console.log(error.response?.data.detail);
                 }
               } finally {
                 setSubmitting(false);
                 setTimeout(() => {
                   setSnackIsOpen(false);
-                  setMessage({message: "", error: false})
+                  setMessage({ message: "", error: false })
                   setSubmitting(false);
                 }, 5000);
               }
@@ -98,9 +107,8 @@ export default function CreateChannel() {
                     Name of Channel
                   </label>
                   <Field
-                    className={`w-full p-3 border border-gray-400 bg-transparent text-secondary rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors ? "border-[rgb(190, 63, 13)]" : "border-[white]"
-                    }`}
+                    className={`w-full p-3 border border-gray-400 bg-transparent text-secondary rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors ? "border-[rgb(190, 63, 13)]" : "border-[white]"
+                      }`}
                     placeholder="Type Name of Channel"
                     name="channel_name"
                     type="text"
@@ -164,9 +172,9 @@ export default function CreateChannel() {
                   Lounges
                 </label>
                 <div className="flex gap-2" id="lounges">
-                  <button className="px-4 py-2 border rounded-full bg-gray-200 text-gray-700 font-medium">
-                    {selectedLounge}
-                  </button>
+                  <span className="px-4 py-2 border rounded-full bg-gray-200 text-gray-700 font-medium">
+                    {id && selectedLounge.find(item => item.id === +id)?.name}
+                  </span>
                 </div>
                 <button
                   disabled={isSubmitting}

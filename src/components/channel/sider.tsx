@@ -15,14 +15,14 @@ export const Sidebar = () => {
         <span>+ </span>
         <span>Create Channels</span>
       </Button>
-      <Button
+      {/* <Button
         variant="outlined"
         className="flex gap-2 text-secondary"
         sx={{ borderRadius: "100rem", textTransform: "capitalize", borderColor: "#463a85", borderWidth: '.1rem', color:"#463a85" }}
       >
         <span>➔</span>
         <span>Join Channels</span>
-      </Button>
+      </Button> */}
       <Button
         variant="outlined"
         className="flex gap-2"

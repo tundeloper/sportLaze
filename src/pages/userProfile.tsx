@@ -78,7 +78,7 @@ const Profile = () => {
           Edit Profile
         </Link>
         <div className="flex justify-center items-center absolute right-[2rem] bottom-[-2rem] h-[6rem] w-[6rem] border rounded-[100%]">
-          <Avatar src={userimg} sx={{ width: 93, height: 93 }} />
+          {user.profile_picture ? (<Avatar src={user.profile_picture} sx={{ width: 93, height: 93 }} />) : (<Avatar sx={{ width: 93, height: 93 }}>{user.username && user?.username[0].toLocaleUpperCase()}</Avatar>)}
           {/* <Avatar src="https://avatars.githubusercontent.com/u/67442529?v=4" sx={{ width: 93, height: 93 }} /> */}
         </div>
       </div>

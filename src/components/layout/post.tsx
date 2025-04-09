@@ -109,7 +109,12 @@ export default function PostInput() {
     <div className="w-full p-4 border rounded-lg shadow-md mb-2 bg-white relative dark:bg-black">
       <div className="flex items-start gap-2 mb-2">
         <Link to={`/user/${user.username}`}>
-          <Avatar src={avat} sx={{ width: 50, height: 50 }} />
+          {user.profile_picture ? (<Avatar src={user.profile_picture} sx={{ width: 50, height: 50 }} />) : (<Avatar
+            alt="user icon"
+            sx={{ width: 50, height: 50 }}
+          >{user.username && user?.username[0].toLocaleUpperCase()}</Avatar>)}
+
+
         </Link>
         <TextareaAutosize
           placeholder="What is happening?"
