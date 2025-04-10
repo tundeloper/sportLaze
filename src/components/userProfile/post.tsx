@@ -14,6 +14,7 @@ import baseUrl from "../../utils/baseUrl";
 import { removePostId, storePostId } from "../../utils/store_likes";
 import { Share } from "../../assets/svgs/tabler_share";
 import { formatFullDate, timeAgo } from "../../utils/format-date";
+import { RetweetIcon } from "../../assets/svgs/retweet";
 
 const UserPost: React.FC<{
   feed: Post;
@@ -319,10 +320,14 @@ const UserPost: React.FC<{
             <CommentIcon fill={darkMode ? "white" : "#33363F"} />
             <p className="text-[13px] dark:text-white">0</p>
           </div>
-          <div className="flex gap-[1px] items-center">
-            <SendIcon fill={darkMode ? "white" : "#222222"} />
+          <div className="flex gap-[4px] items-center">
+            <RetweetIcon fill={darkMode ? "white" : "#222222"} />
             <p className="text-[13px] dark:text-white">0</p>
           </div>
+          {/* <div className="flex gap-[1px] items-center">
+            <SendIcon fill={darkMode ? "white" : "#222222"} />
+            <p className="text-[13px] dark:text-white">0</p>
+          </div> */}
         </div>
         {/* Bookmark */}
         <div className="flex items-center justify-center gap-4">
