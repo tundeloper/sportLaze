@@ -12,7 +12,7 @@ import moreIcon from "../../assets/svgs/More icon.svg";
 import homeIcon from "../../assets/svgs/home icon.svg";
 import verifyicon from "../../assets/svgs/verify icon.svg";
 import DropBar from "./drop-bart";
-import avat from "../../assets/user/man-studio.png"
+import avat from "../../assets/user/man-studio.png";
 import baseUrl from "../../utils/baseUrl";
 
 const SideNav: React.FC<{
@@ -27,7 +27,7 @@ const SideNav: React.FC<{
   const url = baseUrl();
 
   const getProfile = async (accessToken: string) => {
-    console.log(accessToken)
+    console.log(accessToken);
     try {
       const response = await fetch(`${url}/auth/me`, {
         method: "GET",
@@ -37,7 +37,7 @@ const SideNav: React.FC<{
         },
       });
 
-       console.log(response)
+      console.log(response);
 
       if (!response.ok) {
         throw new Error("Failed to fetch profile");
@@ -46,7 +46,7 @@ const SideNav: React.FC<{
       const data = await response.json();
       setUser({
         username: data.username,
-        name: data.name, 
+        name: data.name,
         email: data.email,
         date_of_birth: data.date_of_birth,
         followers: data.followers_count,
@@ -58,11 +58,11 @@ const SideNav: React.FC<{
         location: data.location,
         id: data.id as string,
         bio: data.bio,
-        profile_picture: data.profile_picture
+        profile_picture: data.profile_picture,
       });
       return data;
     } catch (error) {
-      console.log(error, 'profile')
+      console.log(error, "profile");
       return null;
     }
   };
@@ -78,18 +78,18 @@ const SideNav: React.FC<{
       navigate("/auth", { replace: true });
       return;
     }
-    
 
     if (token.length > 0 && token) {
       getProfile(token)
         .then((data) => {
-          console.log(data, 'user profile')
+          console.log(data, "user profile");
           // setLoading(false);
         })
         .catch((error) => {
           // setError(error.message);
           // setLoading(false);
-        }).finally(() => {
+        })
+        .finally(() => {
           // setLoading(false);
         });
     }
@@ -129,17 +129,31 @@ const SideNav: React.FC<{
         </Button>
         <div className="border-b border-grey pb-4 mb-3">
           <div className="flex justify-center flex-col items-center mb-4">
-            <Avatar src={avat} sx={{ width: 70, height: 70 }}/>
-            <p className="font-bold text-xl">{user.name ? user.name : '_'}</p>
-            <p>@{user.username ? user.username : '_'}</p>
+            {user.profile_picture ? (
+              <Avatar
+                src={user.profile_picture}
+                sx={{ width: 70, height: 70 }}
+              />
+            ) : (
+              <Avatar sx={{ width: 70, height: 70 }}>
+                {user.username && user.username[0].toLocaleUpperCase()}
+              </Avatar>
+            )}
+            <p className="font-bold text-xl">{user.name ? user.name : "_"}</p>
+            <p>@{user.username ? user.username : "_"}</p>
           </div>
           <div className="flex justify-around">
-            <Link to={'/following'} className="flex flex-col items-center">
+            <Link to={"/following"} className="flex flex-col items-center">
               <p className="text">Following</p>
-              <p className="font-bold">{Number(user.following) >= 0 ? user.following : '_'}</p>
+              <p className="font-bold">
+                {Number(user.following) >= 0 ? user.following : "_"}
+              </p>
             </Link>
-            <Link to={'/followers'} className="flex flex-col items-center">
-              <p>Followers</p> <p className="font-bold">{Number(user.followers) >= 0 ? user.followers : '_'}</p>
+            <Link to={"/followers"} className="flex flex-col items-center">
+              <p>Followers</p>{" "}
+              <p className="font-bold">
+                {Number(user.followers) >= 0 ? user.followers : "_"}
+              </p>
             </Link>
           </div>
         </div>
@@ -217,7 +231,6 @@ const SideNav: React.FC<{
           <Button
             variant="contained"
             color="primary"
-            
             sx={{
               textTransform: "capitalize",
               background: "white",

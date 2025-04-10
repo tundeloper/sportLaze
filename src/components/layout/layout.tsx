@@ -11,7 +11,7 @@ import whiteImg from "../../assets/logoWhite.png";
 import UserPost from "../userProfile/post";
 import PostInput from "./post";
 import MUISnackbar from "../../utils/snackBar";
-import { Button, Popover, Typography } from "@mui/material";
+import { Avatar, Button, Popover, Typography } from "@mui/material";
 import { useSportlaze } from "../../hooks/useContext";
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -118,14 +118,23 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 5
               </div>
             </div>
-            <Button aria-describedby={id} sx={{p: 0}} onClick={handleClick} style={{ padding: '0', margin: '0' }}>
+            <section aria-describedby={id} onClick={handleClick} style={{ padding: '0', margin: '0' }}>
               <div
-                className="p-3 hidden bg-primary sm:block"
+                className="hidden bg-primary sm:block"
                 style={{ borderRadius: "10rem" }}
               >
-                <UserIcon />
+                {user.profile_picture ? (
+              <Avatar
+                src={user.profile_picture}
+                sx={{ width: 40, height: 40 }}
+              />
+            ) : (
+              <Avatar sx={{ width: 40, height: 40 }}>
+                {user.username && user.username[0].toLocaleUpperCase()}
+              </Avatar>
+            )}
               </div>
-            </Button>
+            </section>
             <Popover
               id={id}
               open={open}

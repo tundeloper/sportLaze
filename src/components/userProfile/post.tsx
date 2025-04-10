@@ -203,11 +203,14 @@ const UserPost: React.FC<{
       {/* Post Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <Avatar
-            // src="https://via.placeholder.com/50"
+          {feed.profile_picture ? (<Avatar
+          src={feed.profile_picture}
             alt="user icon"
             className="w-12 h-12"
-          >{feed.username ? feed.username[0].toLocaleUpperCase() : ""}</Avatar>
+          />): (<Avatar
+            alt="user icon"
+            className="w-12 h-12"
+          >{feed.username ? feed.username[0].toLocaleUpperCase() : ""}</Avatar>)}
           <div>
             <p className="font-semibold text-sm dark:text-white">
               {type ? user.name : feed.name}

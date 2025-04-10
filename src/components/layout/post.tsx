@@ -36,28 +36,30 @@ export default function PostInput() {
     if (!text.trim() && media.length === 0) return;
 
     const formData = new FormData();
-    formData.append("text", text);
-    media.forEach((item, index) => {
-      formData.append(`media_${index}`, item.file);
+    formData.append("content", text);
+    media.forEach((item) => {
+      formData.append('media', item.file);
     });
 
     try {
-      setIsPosting(true);
-      const token = localStorage.getItem("access_token");
+      setSnackIsOpen(false);
+    const token = localStorage.getItem("access_token");
 
-      const res = await axios.post(`${API_URL}/posts`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    const res = await axios.post(`${API_URL}/posts`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-      if (res.status === 200) {
-        setText("");
-        setMedia([]);
-        setMessage({ message: "Post created successfully!", error: false });
-        setSnackIsOpen(true);
-      }
+    console.log(res)
+
+    if (res.status === 200 || res.status === 201) {
+      setText("");
+      setMedia([]);
+      setMessage({ message: "Post created successfully!", error: false });
+      setSnackIsOpen(true);
+    }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.message === "Network Error") {

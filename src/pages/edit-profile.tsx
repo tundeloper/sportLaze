@@ -7,12 +7,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { EditSchema } from "../utils/validator";
 import baseUrl from "../utils/baseUrl";
-import camera from "../assets/svgs/Camera.png"
+import camera from "../assets/svgs/Camera.png";
 import { useRef, useState } from "react";
 
 const EditProfile = () => {
-  const { login, setLoading, setSnackIsOpen, user, setUser } =
-    useSportlaze();
+  const { login, setLoading, setSnackIsOpen, user, setUser } = useSportlaze();
   const token = localStorage.getItem("access_token");
   const navigate = useNavigate();
   const url = baseUrl();
@@ -40,18 +39,23 @@ const EditProfile = () => {
       setMessage("Please select a file first.");
       return;
     }
+    console.log("uplaod");
 
     const formData = new FormData();
     formData.append("file", file);
 
     try {
       setUploading(true);
-      const response = await axios.post(`${url}profile/upload-picture`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // Replace with actual token
-        },
-      });
+      const response = await axios.post(
+        `${url}/profile/upload-picture`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // Replace with actual token
+          },
+        }
+      );
 
       if (response.status === 200) {
         setMessage("Upload successful!");
@@ -65,30 +69,33 @@ const EditProfile = () => {
     }
   };
 
-
   return (
     <UserProfile>
       <div className="flex bg-gradient-to-b from-[#463a85] to-[#9a1b39] p-[-16px] w-full h-[10rem] relative">
         <div className="absolute"></div>
+        <button onClick={handleUpload}>upload</button>
 
-        <div className="flex justify-center overflow-hidden items-center absolute right-[2rem] bottom-[-2rem] h-[6rem] w-[6rem] border rounded-[100%] cursor-pointer" onClick={handleAvatarClick}>
-        {previewUrl ? (
-          <img
-            src={previewUrl}
-            alt="Preview"
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        <div
+          className="flex justify-center overflow-hidden items-center absolute right-[2rem] bottom-[-2rem] h-[6rem] w-[6rem] border rounded-[100%] cursor-pointer"
+          onClick={handleAvatarClick}
+        >
+          {previewUrl ? (
+            <img
+              src={previewUrl}
+              alt="Preview"
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          ) : (
+            <img src={camera} alt="cameraicon" />
+            // <FiCamer size={32} color="#888" />
+          )}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            ref={fileInputRef}
+            style={{ display: "none" }}
           />
-        ) : (
-          <img src={camera} alt="cameraicon" />
-          // <FiCamer size={32} color="#888" />
-        )}
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          ref={fileInputRef}
-          style={{ display: "none" }}
-        />
         </div>
       </div>
       <Formik
@@ -97,30 +104,31 @@ const EditProfile = () => {
           username: "",
           bio: "",
           date_of_birth: "",
-          website: "https://",
+          website: "",
           location: "",
         }}
         validationSchema={EditSchema}
         onSubmit={async (values, { setSubmitting }) => {
           setLoading(true);
-          if (file) await handleUpload()  
-          console.log(values.website)
-          const formData = new URLSearchParams();
-          formData.append("name", values.name);
-          formData.append("username", values.username);
-          formData.append("bio", values.bio);
-          formData.append("date_of_birth", values.date_of_birth);
-          formData.append("website", values.website);
-          formData.append("location", values.location);
-          const date = new Date(values.date_of_birth)
-          console.log( `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`)
-          
+          if (file) {
+            console.log(file);
+            handleUpload().then(() => {
+              navigate(`/user/${user.username}`);
+            });
+          }
+          console.log(values.website);
+          console.log(values, "values");
+
+          const cleaned = Object.fromEntries(
+            Object.entries(values).filter(([_, val]) => val !== "")
+          );
+          console.log(cleaned, "cleaned");
+
           try {
-            const {data} = await axios.put(
+            const { data } = await axios.put(
               `${url}/auth/${user?.username}`,
               {
-               ...values,
-               date_of_birth: '2020-08-24'
+                ...cleaned
               },
               {
                 headers: { Authorization: `Bearer ${token}` },
@@ -130,7 +138,7 @@ const EditProfile = () => {
               // setUser({
               //   bio: data.user.bio
               // })
-              navigate(`/user/${user.username}`)
+              navigate(`/user/${user.username}`);
             }
           } catch (error) {
             console.error(error);
