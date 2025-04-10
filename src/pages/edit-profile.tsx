@@ -73,7 +73,7 @@ const EditProfile = () => {
     <UserProfile>
       <div className="flex bg-gradient-to-b from-[#463a85] to-[#9a1b39] p-[-16px] w-full h-[10rem] relative">
         <div className="absolute"></div>
-        <button onClick={handleUpload}>upload</button>
+        {/* <button onClick={handleUpload}>upload</button> */}
 
         <div
           className="flex justify-center overflow-hidden items-center absolute right-[2rem] bottom-[-2rem] h-[6rem] w-[6rem] border rounded-[100%] cursor-pointer"
