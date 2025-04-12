@@ -15,6 +15,7 @@ import { removePostId, storePostId } from "../../utils/store_likes";
 import { Share } from "../../assets/svgs/tabler_share";
 import { formatFullDate, timeAgo } from "../../utils/format-date";
 import { RetweetIcon } from "../../assets/svgs/retweet";
+import PostScroll from "./postslider";
 
 const UserPost: React.FC<{
   feed: Post;
@@ -24,7 +25,7 @@ const UserPost: React.FC<{
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
-
+  console.log(feed.media_files)
   const { darkMode, setMessage, setSnackIsOpen, user } = useSportlaze();
   const open = Boolean(anchorEl);
   let storedIds: string[] = JSON.parse(localStorage.getItem("postIds") || "[]");
@@ -191,7 +192,7 @@ const UserPost: React.FC<{
   const id = open ? "simple-popover" : undefined;
 
   return (
-    <div className="bg-white p-0 pt-1 rounded-lg w-full dark:bg-black md:p-4">
+    <div className="bg-white p-0 pt-1 rounded-lg w-full mb-1   dark:bg-black md:p-4">
       {/* Shared Label */}
       {/* check if it persoal post or other feed 
       if it's personal post indicate, if it's share indicate it as well  */}
@@ -204,14 +205,17 @@ const UserPost: React.FC<{
       {/* Post Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          {feed.profile_picture ? (<Avatar
-          src={feed.profile_picture}
-            alt="user icon"
-            className="w-12 h-12"
-          />): (<Avatar
-            alt="user icon"
-            className="w-12 h-12"
-          >{feed.username ? feed.username[0].toLocaleUpperCase() : ""}</Avatar>)}
+          {feed.profile_picture ? (
+            <Avatar
+              src={feed.profile_picture}
+              alt="user icon"
+              className="w-12 h-12"
+            />
+          ) : (
+            <Avatar alt="user icon" className="w-12 h-12">
+              {feed.username ? feed.username[0].toLocaleUpperCase() : ""}
+            </Avatar>
+          )}
           <div>
             <p className="font-semibold text-sm dark:text-white">
               {type ? user.name : feed.name}
@@ -221,9 +225,11 @@ const UserPost: React.FC<{
                 @{type ? user.username : feed.username}
               </p>
               <Tooltip title={`${formatFullDate(feed.created_at)}`}>
-              <p className="text-gray-500 text-xs">
-                {type ? timeAgo(`${feed.created_at}`) : timeAgo(`${feed.created_at}`)}
-              </p>
+                <p className="text-gray-500 text-xs">
+                  {type
+                    ? timeAgo(`${feed.created_at}`)
+                    : timeAgo(`${feed.created_at}`)}
+                </p>
               </Tooltip>
             </div>
           </div>
@@ -293,13 +299,18 @@ const UserPost: React.FC<{
       </div>
 
       {/* Post Image */}
-      {/* <div className="mt-3 ml-12">
-        <img
+      <div className="mt-3 ml-12">
+        {/* <img
           src={postImage}
           alt="SportLaze post image"
           className="w-full h-auto rounded-md"
-        />
-      </div> */}
+        /> */}
+        {feed.media_files.length > 0 ? (
+          <PostScroll posts={feed.media_files}/>
+        ) : (
+          ""
+        )}
+      </div>
       {/* {user interaction} */}
       <div className="flex justify-between items-center w-full pl-12 mt-1">
         <div className="flex items-center justify-center gap-4">

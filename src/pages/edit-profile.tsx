@@ -159,12 +159,12 @@ const EditProfile = () => {
         {({ errors, touched }) => (
           <Form className="flex flex-col gap-2 mt-10 p-2 px-4">
             {[
-              { label: "Name*", name: "name", type: "text" },
-              { label: "Username*", name: "username", type: "text" },
+              { label: "Name", name: "name", type: "text" },
+              { label: "Username", name: "username", type: "text" },
               { label: "Bio", name: "bio", type: "text" },
-              { label: "Date of Birth*", name: "date_of_birth", type: "text" },
+              { label: "Date of Birth", name: "date_of_birth", type: "text" },
               { label: "Website", name: "website", type: "text" },
-              { label: "Location*", name: "location", type: "text" },
+              { label: "Location", name: "location", type: "text" },
             ].map(({ label, name, type }) => (
               <div key={name}>
                 <div className="flex justify-between gap-4">

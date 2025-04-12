@@ -49,19 +49,26 @@ export const initialUser = {
   id: "",
 };
 
+export interface postSlide {
+  media_url: string;
+  media_type: string;
+  id: number;
+  order_index: number;
+}
+
 export interface Post {
   author_id: number;
   content: string;
   name: string;
-  media_url: string,
+  media_url: string;
   username: string;
   profile_picture: string;
   created_at: string;
   hashtags: string;
-  media_type: string,
+  media_type: string;
   id: number;
-  likes_count: number,
-  media_files: string[],
+  likes_count: number;
+  media_files: postSlide[];
 }
 
 export interface MediaFile {
