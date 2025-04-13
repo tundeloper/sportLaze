@@ -1,7 +1,18 @@
 import Carousel from "react-material-ui-carousel";
 import { postSlide } from "../../utils/interface";
+import { useRef } from "react";
 
 const PostScroll: React.FC<{ posts: postSlide[] }> = ({ posts }) => {
+    const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+
+    const handleChange = (_now: number, _previous: number) => {
+        // Pause all videos
+        videoRefs.current.forEach((video) => {
+          if (video && !video.paused) {
+            video.pause();
+          }
+        });
+      };
   return (
     <Carousel
     indicators={true}
@@ -13,7 +24,7 @@ const PostScroll: React.FC<{ posts: postSlide[] }> = ({ posts }) => {
         style: { color: "#fff", background: '#463a85' },
       }}
     >
-      {posts.map((post) => {
+      {posts.map((post, index) => {
 
         return (
             <div
@@ -24,6 +35,7 @@ const PostScroll: React.FC<{ posts: postSlide[] }> = ({ posts }) => {
           {post.media_type === "video" ? (
           <video
             src={post.media_url}
+            ref={(el) => (videoRefs.current[index] = el)}
             controls 
             className="max-h-full max-w-full object-contain rounded-md"
           />
