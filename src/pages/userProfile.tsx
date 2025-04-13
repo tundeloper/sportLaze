@@ -72,9 +72,14 @@ const Profile = () => {
     <UserProfile>
       <div className="flex bg-gradient-to-b from-[#463a85] to-[#9a1b39] p-[-16px] w-full h-[10rem] relative">
         <div className="absolute" id="camera"></div>
+        {user.banner_image ? <img
+              src={user?.banner_image}
+              alt="Preview"
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            /> : ""}
         <Link
           to="/edit-profile"
-          className="absolute top-4 right-[2rem] border !text-sm py-1 px-3 rounded-2xl !text-white !no-underline cursor-pointer"
+          className="absolute bg-gradient-to-b from-[#463a85] to-[#9a1b39] top-4 right-[2rem] border !text-sm py-1 px-3 rounded-2xl !text-white !no-underline cursor-pointer"
         >
           Edit Profile
         </Link>

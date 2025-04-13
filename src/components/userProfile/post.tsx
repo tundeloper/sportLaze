@@ -25,7 +25,6 @@ const UserPost: React.FC<{
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
-  console.log(feed.media_files)
   const { darkMode, setMessage, setSnackIsOpen, user } = useSportlaze();
   const open = Boolean(anchorEl);
   let storedIds: string[] = JSON.parse(localStorage.getItem("postIds") || "[]");

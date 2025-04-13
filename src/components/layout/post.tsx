@@ -16,7 +16,7 @@ import EmojiPicker from "emoji-picker-react";
 import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
 import { useSportlaze } from "../../hooks/useContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface MediaFile {
   file: File;
@@ -28,6 +28,7 @@ export default function PostInput() {
   const [media, setMedia] = useState<MediaFile[]>([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [isPosting, setIsPosting] = useState<boolean>(false);
+  const navigate = useNavigate()
 
   const API_URL = baseUrl();
   const { setMessage, setSnackIsOpen, user } = useSportlaze();
@@ -43,6 +44,7 @@ export default function PostInput() {
 
     try {
       setSnackIsOpen(false);
+      setIsPosting(true)
     const token = localStorage.getItem("access_token");
 
     const res = await axios.post(`${API_URL}/posts`, formData, {
@@ -57,8 +59,9 @@ export default function PostInput() {
     if (res.status === 200 || res.status === 201) {
       setText("");
       setMedia([]);
+      navigate(`/user/${user.username}`)
       setMessage({ message: "Post created successfully!", error: false });
-      setSnackIsOpen(true);
+      setSnackIsOpen(false);
     }
     } catch (error) {
       if (axios.isAxiosError(error)) {

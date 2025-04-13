@@ -16,13 +16,31 @@ const EditProfile = () => {
   const navigate = useNavigate();
   const url = baseUrl();
   const [file, setFile] = useState<File | null>(null);
+  const [bannerFile, setBannerFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewBannarUrl, setPreviewBnnarUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const bannerFileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleAvatarClick = () => {
+  const handleAvatarClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation()
     fileInputRef.current?.click();
+  };
+
+  const handleBannerClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation()
+    bannerFileInputRef.current?.click();
+  };
+
+  const handleBannerFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.files?.[0];
+    if (selected) {
+      setBannerFile(selected);
+      setPreviewBnnarUrl(URL.createObjectURL(selected));
+      setMessage(null);
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,6 +49,41 @@ const EditProfile = () => {
       setFile(selected);
       setPreviewUrl(URL.createObjectURL(selected));
       setMessage(null);
+    }
+  };
+
+  const handleUploadBanner = async () => {
+    if (!bannerFile) {
+      setMessage("Please select a file first.");
+      return;
+    }
+    console.log("uplaod");
+
+    const formData = new FormData();
+    formData.append("file", bannerFile);
+
+    try {
+      setUploading(true);
+      const response = await axios.post(
+        `${url}/profile/upload-banner`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // Replace with actual token
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setMessage("Upload successful!");
+      } else {
+        setMessage("Upload failed.");
+      }
+    } catch (error) {
+      setMessage("An error occurred during upload.");
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -71,10 +124,24 @@ const EditProfile = () => {
 
   return (
     <UserProfile>
-      <div className="flex bg-gradient-to-b from-[#463a85] to-[#9a1b39] p-[-16px] w-full h-[10rem] relative">
-        <div className="absolute"></div>
-        {/* <button onClick={handleUpload}>upload</button> */}
-
+      <div className="flex items-center justify-center bg-gradient-to-b from-[#463a85] to-[#9a1b39] p-[-16px] w-full h-[10rem] relative cursor-pointer" onClick={handleBannerClick}>
+      {previewBannarUrl ? (
+            <img
+              src={previewBannarUrl}
+              alt="Preview"
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          ) : (
+            <img src={camera} alt="cameraicon" />
+            // <FiCamer size={32} color="#888" />
+          )}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleBannerFileChange}
+            ref={bannerFileInputRef}
+            style={{ display: "none" }}
+          />
         <div
           className="flex justify-center overflow-hidden items-center absolute right-[2rem] bottom-[-2rem] h-[6rem] w-[6rem] border rounded-[100%] cursor-pointer"
           onClick={handleAvatarClick}
@@ -113,6 +180,11 @@ const EditProfile = () => {
           if (file) {
             console.log(file);
             handleUpload().then(() => {
+              navigate(`/user/${user.username}`);
+            });
+          } else if (bannerFile) {
+            console.log(bannerFile);
+            handleUploadBanner().then(() => {
               navigate(`/user/${user.username}`);
             });
           }
