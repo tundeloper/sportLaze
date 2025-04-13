@@ -1,56 +1,97 @@
 import Carousel from "react-material-ui-carousel";
 import { postSlide } from "../../utils/interface";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const PostScroll: React.FC<{ posts: postSlide[] }> = ({ posts }) => {
-    const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [maxHeight, setMaxHeight] = useState(300); // default
 
-    const handleChange = (_now: number, _previous: number) => {
-        // Pause all videos
-        videoRefs.current.forEach((video) => {
-          if (video && !video.paused) {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const video = entry.target as HTMLVideoElement;
+          if (!entry.isIntersecting && !video.paused) {
             video.pause();
           }
         });
-      };
-  return (
-    <Carousel
-    indicators={true}
-    navButtonsAlwaysVisible={false}
-    animation="slide"
-    autoPlay={false}
-    duration={500}
-      activeIndicatorIconButtonProps={{
-        style: { color: "#fff", background: '#463a85' },
-      }}
-    >
-      {posts.map((post, index) => {
+      },
+      { threshold: 0.25 }
+    );
 
-        return (
-            <div
+    const videos = document.querySelectorAll("video");
+    videos.forEach((video) => observer.observe(video));
+
+    return () => {
+      videos.forEach((video) => observer.unobserve(video));
+    };
+  }, [posts]);
+
+  const handleChange = () => {
+    const videos = document.querySelectorAll("video");
+    videos.forEach((video) => video.pause());
+  };
+
+  const handleVideoPlay = (playingVideo: HTMLVideoElement) => {
+    const videos = document.querySelectorAll("video");
+    videos.forEach((video) => {
+      if (video !== playingVideo && !video.paused) {
+        video.pause();
+      }
+    });
+  };
+
+  const handleMediaLoad = (element: HTMLImageElement | HTMLVideoElement) => {
+    if (element && element.offsetHeight > maxHeight) {
+      setMaxHeight(element.offsetHeight);
+    }
+  };
+
+  return (
+    <div ref={containerRef} className="w-full max-w-[800px] mx-auto">
+      <Carousel
+        indicators={true}
+        navButtonsAlwaysVisible={false}
+        animation="slide"
+        autoPlay={false}
+        duration={500}
+        onChange={handleChange}
+        activeIndicatorIconButtonProps={{
+          style: { color: "#fff", background: "#463a85" },
+        }}
+      >
+        {posts.map((post) => (
+          <div
             key={post.id}
             className="flex items-center justify-center w-full p-2"
-            style={{ minHeight: "300px" }} // Fix this to a value matching your tallest content
+            style={{ height: `${maxHeight}px` }}
           >
-          {post.media_type === "video" ? (
-          <video
-            src={post.media_url}
-            ref={(el) => (videoRefs.current[index] = el)}
-            controls 
-            className="max-h-full max-w-full object-contain rounded-md"
-          />
-        ) : (
-          <img
-            src={post.media_url}
-            alt="SportLaze post"
-            className="max-h-full max-w-full object-contain rounded-md"
-          />
-        )}
+            {post.media_type === "video" ? (
+              <video
+                src={post.media_url}
+                controls
+                className="max-h-full max-w-full object-contain rounded-md"
+                onPlay={(e) => handleVideoPlay(e.currentTarget)}
+                onLoadedMetadata={(e) =>
+                  handleMediaLoad(e.currentTarget as HTMLVideoElement)
+                }
+              />
+            ) : (
+              <img
+                src={post.media_url}
+                alt="SportLaze post"
+                className="max-h-full max-w-full w-full object-contain rounded-md"
+                onLoad={(e) =>
+                  handleMediaLoad(e.currentTarget as HTMLImageElement)
+                }
+              />
+            )}
           </div>
-        );
-      })}
-    </Carousel>
+        ))}
+      </Carousel>
+    </div>
   );
 };
 
-export default PostScroll
+export default PostScroll;
+    

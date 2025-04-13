@@ -192,7 +192,7 @@ const UserPost: React.FC<{
   const id = open ? "simple-popover" : undefined;
 
   return (
-    <div className="bg-white p-0 pt-1 rounded-lg w-full mb-1   dark:bg-black md:p-4">
+    <div className="bg-white p-0 pt-1 rounded-lg w-full mb-2  dark:bg-black md:p-4">
       {/* Shared Label */}
       {/* check if it persoal post or other feed 
       if it's personal post indicate, if it's share indicate it as well  */}

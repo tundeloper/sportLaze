@@ -15,6 +15,8 @@ export interface User {
   location: string | null;
   id: string | null;
   bio: string | null;
+  website: string | null
+  banner_image: string | null
 }
 
 export const initialUserval = {
@@ -31,6 +33,8 @@ export const initialUserval = {
   location: null,
   id: null,
   bio: null,
+  website: null,
+  banner_image: null
 };
 
 export interface InitialUser {

@@ -123,6 +123,8 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({
           location: data.location,
           id: data.id as string,
           bio: data.bio,
+          website: data.website,
+          banner_image: data.banner_image,
         });
         return data;
       } catch (error) {
