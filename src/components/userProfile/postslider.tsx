@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 const PostScroll: React.FC<{ posts: postSlide[] }> = ({ posts }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [maxHeight, setMaxHeight] = useState(300); // default
+  const [maxHeight, setMaxHeight] = useState(250); // default
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -70,7 +70,7 @@ const PostScroll: React.FC<{ posts: postSlide[] }> = ({ posts }) => {
               <video
                 src={post.media_url}
                 controls
-                className="max-h-full max-w-full object-contain rounded-md"
+                className="max-h-full max-w-full  object-contain rounded-md"
                 onPlay={(e) => handleVideoPlay(e.currentTarget)}
                 onLoadedMetadata={(e) =>
                   handleMediaLoad(e.currentTarget as HTMLVideoElement)

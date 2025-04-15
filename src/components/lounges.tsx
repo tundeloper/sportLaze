@@ -57,7 +57,7 @@ const Lounge = () => {
                 </div>
             </div>
         </div>
-        <Link to='#' className="flex justify-center text-center text-secondary mb-4 dark:text-white">Show more</Link>
+        <Link to='/lounge' className="flex justify-center text-center text-secondary mb-4 dark:text-white">Show more</Link>
     </div>
 }
 

@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+import { number } from "yup";
 
 export interface User {
   username: string | null;
@@ -17,6 +18,26 @@ export interface User {
   bio: string | null;
   website: string | null
   banner_image: string | null
+}
+
+export interface Userprofile {
+  id: number,
+username: string,
+name: string,
+email: string,
+date_of_birth: string,
+country: string,
+favorite_sport: string,
+favorite_team: string,
+bio: string,
+location: string,
+following_count: number,
+followers_count: number,
+formatted_join_date: number,
+formatted_member_since: string,
+profile_picture: string,
+banner_image: string,
+website: string
 }
 
 export const initialUserval = {

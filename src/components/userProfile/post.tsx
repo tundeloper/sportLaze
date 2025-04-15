@@ -8,7 +8,7 @@ import CommentIcon from "../../assets/comment";
 import LikeIcon from "../../assets/like";
 import Bookmarkicon from "../../assets/bookmarkIcon";
 import { useSportlaze } from "../../hooks/useContext";
-import { Post } from "../../utils/interface";
+import { Post, Userprofile } from "../../utils/interface";
 import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
 import { removePostId, storePostId } from "../../utils/store_likes";
@@ -16,15 +16,18 @@ import { Share } from "../../assets/svgs/tabler_share";
 import { formatFullDate, timeAgo } from "../../utils/format-date";
 import { RetweetIcon } from "../../assets/svgs/retweet";
 import PostScroll from "./postslider";
+import { Link } from "react-router-dom";
 
 const UserPost: React.FC<{
   feed: Post;
+  userProfile?: Userprofile;
   type?: boolean;
   setPost?: Dispatch<SetStateAction<Post[]>>;
-}> = ({ feed, type, setPost }) => {
+}> = ({ feed, type, setPost, userProfile }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
+  console.log(userProfile, 'post')
   const { darkMode, setMessage, setSnackIsOpen, user } = useSportlaze();
   const open = Boolean(anchorEl);
   let storedIds: string[] = JSON.parse(localStorage.getItem("postIds") || "[]");
@@ -162,7 +165,6 @@ const UserPost: React.FC<{
   };
 
   const followUser = async () => {
-    console.log(feed.username);
     try {
       const response = await fetch(`${url}/profile/follow/${feed.username}`, {
         method: "POST",
@@ -204,6 +206,7 @@ const UserPost: React.FC<{
       {/* Post Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
+          <Link to={`/user/${feed.username}`}>
           {feed.profile_picture ? (
             <Avatar
               src={feed.profile_picture}
@@ -215,13 +218,14 @@ const UserPost: React.FC<{
               {feed.username ? feed.username[0].toLocaleUpperCase() : ""}
             </Avatar>
           )}
+          </Link>
           <div>
-            <p className="font-semibold text-sm dark:text-white">
-              {type ? user.name : feed.name}
-            </p>
+            <Link to={`/user/${feed.username}`} className="font-semibold text-sm dark:text-white">
+              {type ? feed.name : feed.name}
+            </Link>
             <div className="flex gap-3">
               <p className="text-gray-500 text-xs">
-                @{type ? user.username : feed.username}
+                @{type ? feed.username : feed.username}
               </p>
               <Tooltip title={`${formatFullDate(feed.created_at)}`}>
                 <p className="text-gray-500 text-xs">

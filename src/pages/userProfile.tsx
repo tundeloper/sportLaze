@@ -11,14 +11,15 @@ import UserPost from "../components/userProfile/post";
 import { useSportlaze } from "../hooks/useContext";
 import axios from "axios";
 import baseUrl from "../utils/baseUrl";
-import { Post } from "../utils/interface";
+import { Post, Userprofile } from "../utils/interface";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState<
     "posts" | "replies" | "lounges" | "saved"
   >("posts");
-  const { user, loading, setLoading, } = useSportlaze();
+  const { user, loading, setLoading } = useSportlaze();
   const [posts, setPosts] = useState<Post[]>([]);
+  const [profile, setUserProfile] = useState<Userprofile>();
   const [error, setError] = useState<string>("");
 
   const url = baseUrl();
@@ -28,15 +29,20 @@ const Profile = () => {
     fetchPosts();
   }, []);
 
-
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      console.log(user)
+      console.log(user);
       const token = localStorage.getItem("access_token");
       if (!token) {
         throw new Error("No access token found");
       }
+
+      const { data } = await axios.get(`${url}/profile/user/${username}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const response = await axios.get(`${url}/posts/user/${username}`, {
         headers: {
@@ -48,7 +54,8 @@ const Profile = () => {
         (a, b) =>
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       );
-      console.log(SortedPost)
+      console.log(SortedPost);
+      setUserProfile(data);
       setPosts(SortedPost);
     } catch (error: any) {
       if (axios.isAxiosError(error)) {
@@ -72,66 +79,105 @@ const Profile = () => {
     <UserProfile>
       <div className="flex bg-gradient-to-b from-[#463a85] to-[#9a1b39] p-[-16px] w-full h-[10rem] relative">
         <div className="absolute" id="camera"></div>
-        {user.banner_image ? <img
-              src={user?.banner_image}
-              alt="Preview"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            /> : ""}
-        <Link
+
+        {profile?.banner_image ? (
+          <img
+            src={profile?.banner_image}
+            alt="Preview"
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        ) : (
+          ""
+        )}
+        {user.username === username && <Link
           to="/edit-profile"
           className="absolute bg-gradient-to-b from-[#463a85] to-[#9a1b39] top-4 right-[2rem] border !text-sm py-1 px-3 rounded-2xl !text-white !no-underline cursor-pointer"
         >
           Edit Profile
-        </Link>
+        </Link>}
         <div className="flex justify-center items-center absolute right-[2rem] bottom-[-2rem] h-[6rem] w-[6rem] border rounded-[100%]">
-          {user.profile_picture ? (<Avatar src={user.profile_picture} sx={{ width: 93, height: 93 }} />) : (<Avatar sx={{ width: 93, height: 93 }}>{user.username && user?.username[0].toLocaleUpperCase()}</Avatar>)}
+          {profile?.profile_picture ? (
+            <Avatar
+              src={profile.profile_picture}
+              sx={{ width: 93, height: 93 }}
+            />
+          ) : (
+            <Avatar sx={{ width: 93, height: 93 }}>
+              {profile?.username && profile?.username[0].toLocaleUpperCase()}
+            </Avatar>
+          )}
           {/* <Avatar src="https://avatars.githubusercontent.com/u/67442529?v=4" sx={{ width: 93, height: 93 }} /> */}
         </div>
       </div>
       <div className="px-2 py-2 dark:text-darkw">
         <div>
-          <p className="font-semibold text-lg">{user.name}</p>
-          <p className="text-gray-500 text-xs">@{user.username}</p>
+          <p className="font-semibold text-lg">{user.username === username ? user.name : profile?.name}</p>
+          <p className="text-gray-500 text-xs">@{user.username === username ? user.username : profile?.username}</p>
         </div>
         <div className="">
           <div className="flex gap-[3rem] mt-2 dark:text-darkw">
-            <Link to="/following">
-              Following <span className="ml-3 font-bold">{user.following}</span>
-            </Link>
-            <Link to="/followers">
-              Followers <span className="ml-3 font-bold">{user.followers}</span>
-            </Link>
+            
+              {user.username === username ? (
+                <Link to="/following">Following <span className="ml-3 font-bold">{user?.following}</span></Link>
+              ) : (
+                <Link to="#">Following<span className="ml-3 font-bold">{profile?.following_count}</span></Link>  
+              )}
+            
+              {user.username === username ? (
+                <Link to="/followers"> Follower <span className="ml-3 font-bold">{user?.followers}</span> </Link>
+              ) : (
+                <Link to={'#'}> Follower <span className="ml-3 font-bold">{profile?.followers_count}</span></Link>
+              )}
           </div>
-          <p className="mt-2">{user.bio}</p>
+          <p className="mt-2">{user.username === username ? user.bio : profile?.bio}</p>
         </div>
         <div className="mt-2">
           <div className="flex">
             <span className="mr-4">
               <LocationOnOutlinedIcon />
-            </span>{" "}
-            <span>{user.location}</span>
+            </span>
+            <span>{user.name === username ? user.location : profile?.location}</span>
           </div>
           <div className="flex mt-2 gap-4">
             <div className="flex">
               <span className="mr-4">
                 <CalendarTodayOutlinedIcon />
-              </span>{" "}
-              <span>{user.formatted_member_since}</span>
+              </span>
+              <span>{user.name === username ? user.formatted_member_since : profile?.formatted_member_since}</span>
             </div>
             <div className="flex">
               <span className="mr-4">
                 <LinkOutlinedIcon sx={{ color: "#463a85" }} />
-              </span>{" "}
-              <Link to="/" className="text-[#463a85]">
-                sportlaze.com
-              </Link>
+              </span>
+              {profile?.website ? (
+                <Link to={profile.website}>
+                  {(() => {
+                    try {
+                      const urlWithProtocol = profile.website.startsWith("http")
+                        ? profile.website
+                        : `https://${profile.website}`;
+                      const hostname = new URL(urlWithProtocol).hostname;
+                      return `${hostname}`;
+                    } catch {
+                      return "";
+                    }
+                  })()}
+                </Link>
+              ) : (
+                ""
+              )}
+              {/* {profile ? (
+                <Link to={"#"}>{profile.website ? new URL(`${profile.website}`).hostname : ''}</Link>
+              ) : (
+                <Link to={"#"}>{new URL(`${user.website}`).hostname}</Link>
+              )} */}
             </div>
           </div>
           <div className="flex mt-2">
             <span className="mr-4">
               <CalendarTodayOutlinedIcon />
             </span>{" "}
-            <span>Since {user.formatted_member_since}</span>
+            <span>Joined {user.username === username ? user.formatted_join_date : profile?.formatted_join_date}</span>
           </div>
         </div>
         <nav className="mt-4 flex">
@@ -176,7 +222,14 @@ const Profile = () => {
                 </p>
               )}
               {posts.map((post: Post) => {
-                return <UserPost feed={post} setPost={setPosts} type />;
+                return (
+                  <UserPost
+                    feed={post}
+                    setPost={setPosts}
+                    type
+                    userProfile={profile}
+                  />
+                );
               })}
             </div>
           )}
