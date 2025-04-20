@@ -24,7 +24,7 @@ import baseUrl from "../utils/baseUrl";
 //     password:string,
 //   }
 
-interface formprps { name: string, email: string, password?: string, dateOfBirth: string, country: SingleValue<{ label: string, value: string, }>, favSport: SingleValue<{ label: string, value: string, }>, FavSportTeam: SingleValue<{ label: string, value: string, }> }
+export interface formprps { name: string, email: string, password?: string, dateOfBirth: string, country: SingleValue<{ label: string, value: string, }>, favSport: SingleValue<{ label: string, value: string, }>, FavSportTeam: SingleValue<{ label: string, value: string, }> }
 
 const SignUp: React.FC<{ visible: boolean }> = ({ visible }) => {
     const [userData, setUserData] = useState<formprps>({ name: '', email: '', dateOfBirth: '2014-12-14', country: { label: '', value: '' }, favSport: { label: '', value: '' }, FavSportTeam: { label: '', value: '' } })

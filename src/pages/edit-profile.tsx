@@ -9,6 +9,8 @@ import { EditSchema } from "../utils/validator";
 import baseUrl from "../utils/baseUrl";
 import camera from "../assets/svgs/Camera.png";
 import { useRef, useState } from "react";
+import { formprps } from "./signUp";
+import DOB from "../components/auth/DOB";
 
 const EditProfile = () => {
   const { login, setLoading, setSnackIsOpen, user, setUser } = useSportlaze();
@@ -23,14 +25,22 @@ const EditProfile = () => {
   const [message, setMessage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const bannerFileInputRef = useRef<HTMLInputElement | null>(null);
+  const [userData, setUserData] = useState<formprps>({
+    name: "",
+    email: "",
+    dateOfBirth: "",
+    country: { label: "", value: "" },
+    favSport: { label: "", value: "" },
+    FavSportTeam: { label: "", value: "" },
+  });
 
   const handleAvatarClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.stopPropagation()
+    event.stopPropagation();
     fileInputRef.current?.click();
   };
 
   const handleBannerClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.stopPropagation()
+    event.stopPropagation();
     bannerFileInputRef.current?.click();
   };
 
@@ -124,24 +134,27 @@ const EditProfile = () => {
 
   return (
     <UserProfile>
-      <div className="flex items-center justify-center bg-gradient-to-b from-[#463a85] to-[#9a1b39] p-[-16px] w-full h-[10rem] relative cursor-pointer" onClick={handleBannerClick}>
-      {previewBannarUrl ? (
-            <img
-              src={previewBannarUrl}
-              alt="Preview"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
-          ) : (
-            <img src={camera} alt="cameraicon" />
-            // <FiCamer size={32} color="#888" />
-          )}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleBannerFileChange}
-            ref={bannerFileInputRef}
-            style={{ display: "none" }}
+      <div
+        className="flex items-center justify-center bg-gradient-to-b from-[#463a85] to-[#9a1b39] p-[-16px] w-full h-[10rem] relative cursor-pointer"
+        onClick={handleBannerClick}
+      >
+        {previewBannarUrl ? (
+          <img
+            src={previewBannarUrl}
+            alt="Preview"
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
+        ) : (
+          <img src={camera} alt="cameraicon" />
+          // <FiCamer size={32} color="#888" />
+        )}
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleBannerFileChange}
+          ref={bannerFileInputRef}
+          style={{ display: "none" }}
+        />
         <div
           className="flex justify-center overflow-hidden items-center absolute right-[2rem] bottom-[-2rem] h-[6rem] w-[6rem] border rounded-[100%] cursor-pointer"
           onClick={handleAvatarClick}
@@ -188,11 +201,14 @@ const EditProfile = () => {
               navigate(`/user/${user.username}`);
             });
           }
-          console.log(values.website);
-          console.log(values, "values");
+
+          let data = { ...values };
+          if (!userData.dateOfBirth.includes("NaN")) {
+            data = { ...values, date_of_birth: userData.dateOfBirth };
+          }
 
           const cleaned = Object.fromEntries(
-            Object.entries(values).filter(([_, val]) => val !== "")
+            Object.entries(data).filter(([_, val]) => val !== "")
           );
           console.log(cleaned, "cleaned");
 
@@ -200,7 +216,7 @@ const EditProfile = () => {
             const { data } = await axios.put(
               `${url}/auth/${user?.username}`,
               {
-                ...cleaned
+                ...cleaned,
               },
               {
                 headers: { Authorization: `Bearer ${token}` },
@@ -234,7 +250,7 @@ const EditProfile = () => {
               { label: "Name", name: "name", type: "text" },
               { label: "Username", name: "username", type: "text" },
               { label: "Bio", name: "bio", type: "text" },
-              { label: "Date of Birth", name: "date_of_birth", type: "text" },
+              // { label: "Date of Birth", name: "date_of_birth", type: "text" },
               { label: "Website", name: "website", type: "text" },
               { label: "Location", name: "location", type: "text" },
             ].map(({ label, name, type }) => (
@@ -263,6 +279,17 @@ const EditProfile = () => {
                 />
               </div>
             ))}
+            <div>
+              <div className="flex justify-between gap-4">
+                <label
+                  htmlFor={"dob"}
+                  className="font-bold mb-2 dark:text-darkw"
+                >
+                  Date of Birth
+                </label>
+              </div>
+              <DOB userData={userData} setUserData={setUserData} />
+            </div>
             <Button
               sx={{
                 color: "white",

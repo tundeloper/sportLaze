@@ -47,7 +47,7 @@ const DOB: React.FC<{ userData: formprps, setUserData: Dispatch<SetStateAction<f
         <div className='flex-1'>
             <Select options={monthData} placeholder="Month" value={selectedMonth} onChange={monthChange} styles={{}} />
         </div>
-        <div className='flex-2'>
+        <div className='w-[5rem]'>
             <Select options={dayData} placeholder="Day" value={selectedDay} onChange={dayChange} styles={{}} />
         </div>
         <div className='flex-1'>

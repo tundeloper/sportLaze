@@ -8,7 +8,7 @@ import CommentIcon from "../../assets/comment";
 import LikeIcon from "../../assets/like";
 import Bookmarkicon from "../../assets/bookmarkIcon";
 import { useSportlaze } from "../../hooks/useContext";
-import { Post, Userprofile } from "../../utils/interface";
+import { Post, User, Userprofile } from "../../utils/interface";
 import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
 import { removePostId, storePostId } from "../../utils/store_likes";
@@ -21,19 +21,25 @@ import { Link } from "react-router-dom";
 const UserPost: React.FC<{
   feed: Post;
   userProfile?: Userprofile;
+  followers?: User[];
+  setFollowers?: Dispatch<SetStateAction<User[]>>;
   type?: boolean;
   setPost?: Dispatch<SetStateAction<Post[]>>;
-}> = ({ feed, type, setPost, userProfile }) => {
+}> = ({ feed, type, setPost, userProfile, followers, setFollowers }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
-  console.log(userProfile, 'post')
   const { darkMode, setMessage, setSnackIsOpen, user } = useSportlaze();
   const open = Boolean(anchorEl);
   let storedIds: string[] = JSON.parse(localStorage.getItem("postIds") || "[]");
   const [myLikes, setMylikes] = useState<string[]>(storedIds || []); //setting likes temp
+  const [commentText, setCommentText] = useState("");
+  const [comments, setComments] = useState<string[]>(["Babatunde ehhn", "This boy no go kill me"]); // should be an interface or type
   const url = baseUrl();
   const token = localStorage.getItem("access_token");
+
+  const followedUser =
+    followers && followers.some((user) => user.username === feed.username);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -67,6 +73,42 @@ const UserPost: React.FC<{
         setSnackIsOpen(false);
         setMessage({ message: "", error: false });
       }, 5000);
+    }
+  };
+
+  const followHandler = (username: string | null) => {
+    if (followedUser) {
+      console.log(username, followers);
+      setFollowers &&
+        setFollowers((prev) =>
+          prev.filter((user) => user.username !== username)
+        );
+      UnfollowUser();
+      console.log("remove");
+    } else {
+      followUser();
+      setFollowers &&
+        setFollowers((prev) => [
+          ...prev,
+          {
+            username: feed.username,
+            name: feed.name,
+            email: null,
+            followers: null,
+            following: null,
+            date_of_birth: null,
+            favorite_sport: null,
+            favorite_team: null,
+            formatted_join_date: null,
+            formatted_member_since: null,
+            profile_picture: "",
+            location: null,
+            id: null,
+            bio: null,
+            website: null,
+            banner_image: null,
+          },
+        ]);
     }
   };
 
@@ -177,7 +219,7 @@ const UserPost: React.FC<{
       if (response.status === 200) {
         setSnackIsOpen(true);
         console.log(data);
-        setMessage({ message: data.message, error: false });
+        setMessage({ message: `You followed ${feed.username}`, error: false });
       }
     } catch (error) {
       setSnackIsOpen(true);
@@ -187,6 +229,63 @@ const UserPost: React.FC<{
         setMessage({ message: "", error: false });
         setSnackIsOpen(false);
       }, 5000);
+    }
+  };
+
+  const UnfollowUser = async () => {
+    try {
+      const response = await fetch(`${url}/profile/unfollow/${feed.username}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("Unfollowed");
+      const data: { message: string; detail: string } = await response.json();
+      if (response.status === 200) {
+        setSnackIsOpen(true);
+        console.log(data);
+        setMessage({
+          message: `You unfollowed ${feed.username}`,
+          error: false,
+        });
+      }
+    } catch (error) {
+      setSnackIsOpen(true);
+      setMessage({ message: `You unfollowed ${feed.username}`, error: true });
+    } finally {
+      setTimeout(() => {
+        setMessage({ message: "", error: false });
+        setSnackIsOpen(false);
+      }, 5000);
+    }
+  };
+
+  const postComment = async () => {
+    if (!commentText.trim()) return;
+
+    try {
+      const response = await axios.post(
+        `${url}/posts/comment`,
+        { post_id: feed.id, content: commentText },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setComments([...comments, commentText]);
+        setCommentText("");
+        setSnackIsOpen(true);
+        setMessage({ message: "Comment added!", error: false });
+      }
+    } catch (error) {
+      setMessage({ message: "Failed to comment", error: true });
+    } finally {
+      setTimeout(() => setSnackIsOpen(false), 3000);
     }
   };
 
@@ -207,20 +306,23 @@ const UserPost: React.FC<{
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <Link to={`/user/${feed.username}`}>
-          {feed.profile_picture ? (
-            <Avatar
-              src={feed.profile_picture}
-              alt="user icon"
-              className="w-12 h-12"
-            />
-          ) : (
-            <Avatar alt="user icon" className="w-12 h-12">
-              {feed.username ? feed.username[0].toLocaleUpperCase() : ""}
-            </Avatar>
-          )}
+            {feed.profile_picture ? (
+              <Avatar
+                src={feed.profile_picture}
+                alt="user icon"
+                className="w-12 h-12"
+              />
+            ) : (
+              <Avatar alt="user icon" className="w-12 h-12">
+                {feed.username ? feed.username[0].toLocaleUpperCase() : ""}
+              </Avatar>
+            )}
           </Link>
           <div>
-            <Link to={`/user/${feed.username}`} className="font-semibold text-sm dark:text-white">
+            <Link
+              to={`/user/${feed.username}`}
+              className="font-semibold text-sm dark:text-white"
+            >
               {type ? feed.name : feed.name}
             </Link>
             <div className="flex gap-3">
@@ -238,14 +340,17 @@ const UserPost: React.FC<{
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          {!type && (
-            <Button
-              variant="text"
-              className="text-blue-500 font-semibold capitalize"
-              onClick={followUser}
+          {type && user.username === feed.username ? (
+            ""
+          ) : (
+            <button
+              className={`border border-secondary  text-gray-700 px-4 py-1 rounded-full ${
+                followedUser ? "hover:bg-primary" : "hover:bg-secondary"
+              } hover:text-white transition-all`}
+              onClick={() => followHandler(feed.username)}
             >
-              FOLLOW
-            </Button>
+              {followedUser ? "Unfollow " : "Follow"}
+            </button>
           )}
           <Popover
             id={id}
@@ -309,7 +414,7 @@ const UserPost: React.FC<{
           className="w-full h-auto rounded-md"
         /> */}
         {feed.media_files.length > 0 ? (
-          <PostScroll posts={feed.media_files}/>
+          <PostScroll posts={feed.media_files} />
         ) : (
           ""
         )}
@@ -353,6 +458,42 @@ const UserPost: React.FC<{
             <Bookmarkicon fill={darkMode ? "white" : "#222222"} />
           </div>
         </div>
+      </div>
+
+      {/* comment section */}
+      <div className="flex justify-between flex-col w-full pl-12 mt-4 pr-4">
+        {/* <div className="flex items-center gap-2">
+          <input
+            type="text"
+            className="flex-1 border border-gray-300 rounded-full px-4 py-2 text-sm dark:bg-[#1e1e1e] dark:text-white"
+            placeholder="Write a comment..."
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+          />
+          <button
+            className="bg-primary text-white rounded-full px-4 py-2 text-sm hover:bg-opacity-80 transition cursor-pointer"
+            onClick={postComment}
+            disabled={true}
+          >
+            Comment
+          </button>
+        </div> */}
+
+        {/* comment list */}
+        {/* <div className="mt-3 space-y-2">
+          {comments.length > 0 ? (
+            comments.map((comment, idx) => (
+              <div
+                key={idx}
+                className="text-sm text-gray-800 dark:text-white border-b pb-1"
+              >
+                {comment}
+              </div>
+            ))
+          ) : (
+            <p className="text-xs text-gray-400">No comments yet</p>
+          )}
+        </div> */}
       </div>
     </div>
   );
