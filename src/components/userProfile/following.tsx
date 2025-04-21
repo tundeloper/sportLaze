@@ -1,4 +1,3 @@
-
 import { Avatar } from "@mui/material";
 import avat from "../../assets/user/man-studio.png";
 import { Link } from "react-router-dom";
@@ -7,34 +6,44 @@ import { Dispatch, SetStateAction, useState } from "react";
 import baseUrl from "../../utils/baseUrl";
 import { useSportlaze } from "../../hooks/useContext";
 
-
-export default function Followings({ follow, follower, setFollow }: { follow: User, follower: User[] , setFollow: Dispatch<SetStateAction<User[]>>}) {
+export default function Followings({
+  follow,
+  follower,
+  setFollow,
+}: {
+  follow: User;
+  follower: User[];
+  setFollow: Dispatch<SetStateAction<User[]>>;
+}) {
   const [isHovered, setIsHovered] = useState(false);
-  const {setSnackIsOpen, setMessage} = useSportlaze()
+  const { setSnackIsOpen, setMessage } = useSportlaze();
   const token = localStorage.getItem("access_token");
-  const isFollower = follower.some(foll => foll.id === follow.id)
+  const isFollower = follower.some((foll) => foll.id === follow.id);
 
-  const url = baseUrl()
+  const url = baseUrl();
 
   const unFollowUser = async () => {
-    setFollow((prev) => prev.filter((foll) => foll.id !== follow.id))
+    setFollow((prev) => prev.filter((foll) => foll.id !== follow.id));
     try {
-      const response = await fetch(`${url}/profile/unfollow/${follow.username}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `${url}/profile/unfollow/${follow.username}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const data: { message: string; detail: string } = await response.json();
       if (response.status === 200) {
         setSnackIsOpen(true);
-         setFollow((prev) => [...prev])
+        setFollow((prev) => [...prev]);
         setMessage({ message: data.message, error: false });
       }
     } catch (error) {
       setSnackIsOpen(true);
-      console.log(error)
+      console.log(error);
       // setMessage({ message: data.detail, error: false });
     } finally {
       setTimeout(() => {
@@ -48,7 +57,11 @@ export default function Followings({ follow, follower, setFollow }: { follow: Us
     <div className="flex items-start space-x-3 p-4 bg-gray-100 rounded-lg w-full dark:bg-black">
       {/* Profile Image */}
       <Link to={"#"}>
-        <Avatar src={avat} sizes={"30"} />{" "}
+        {follow.profile_picture ? (
+          <Avatar src={follow.profile_picture} sizes={"30"} />
+        ) : (
+          <Avatar sizes={"30"} />
+        )}
       </Link>
 
       {/* User Info */}
@@ -59,9 +72,13 @@ export default function Followings({ follow, follower, setFollow }: { follow: Us
           </span>
           <div className="flex items-center space-x-2">
             <span className="text-gray-500">@{follow?.username}</span>
-            {isFollower ?<span className="bg-secondary20 text-xs px-2 py-0.5 rounded-lg text-gray-300">
-              Follows you
-            </span> : ''}
+            {isFollower ? (
+              <span className="bg-secondary20 text-xs px-2 py-0.5 rounded-lg text-gray-300">
+                Follows you
+              </span>
+            ) : (
+              ""
+            )}
           </div>
         </div>
         <p className="text-gray-600 text-sm mt-1 dark:text-darkw">

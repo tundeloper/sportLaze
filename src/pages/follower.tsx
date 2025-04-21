@@ -28,13 +28,13 @@ export default function Follower() {
         },
       }); // Fetch followers
 
-      const {data} = await axios.get(`${url}/profile/following`, {
+      const { data } = await axios.get(`${url}/profile/following`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       });
 
-      setFollowing(data)
+      setFollowing(data);
       setData(response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -110,7 +110,15 @@ export default function Follower() {
             <p>No one is following you</p>
           </div>
         ) : (
-          data.map((follower: User, i: number) => <Followers follow={follower} following={following} setFollowings={setFollowing} key={i} setFollow={setData} />)
+          data.map((follower: User, i: number) => (
+            <Followers
+              follow={follower}
+              following={following}
+              setFollowings={setFollowing}
+              key={i}
+              setFollow={setData}
+            />
+          ))
         )}
       </div>
     </UserProfile>

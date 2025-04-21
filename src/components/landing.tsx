@@ -8,7 +8,7 @@ import vid from "../assets/video icon.png";
 import whitevid from "../assets/white video icon.png";
 import { useSportlaze } from "../hooks/useContext";
 import { CircularProgress } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import baseUrl from "../utils/baseUrl";
 import UserPost from "./userProfile/post";
@@ -17,10 +17,12 @@ import { User } from "../utils/interface";
 
 const Landing = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [followers, setFollowers] = useState<User[]>([])
+  const [followers, setFollowers] = useState<User[]>([]);
   const navigate = useNavigate();
   const { darkMode, setPosts, posts } = useSportlaze();
   const fill = darkMode ? "#d3d3d3" : "#2D439B";
+  const observerRef = useRef<HTMLDivElement | null>(null);
+
 
   const API_URL = baseUrl();
 
@@ -32,13 +34,13 @@ const Landing = () => {
         },
       });
 
-      const {data} = await axios.get(`${API_URL}/profile/following`, {
+      const { data } = await axios.get(`${API_URL}/profile/following`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
 
-      setFollowers(data)
+      setFollowers(data);
       return response.data; // Return feed data
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -66,7 +68,9 @@ const Landing = () => {
 
     const data = await getFeed(token);
     console.log(data);
-    if (data) setPosts(data);
+    if (data) setPosts((prev) => [...prev, ...data])
+    // if (data && posts.length > data.length) setPosts(data);
+    // if (data && posts.length < data.length) setPosts(data);
     setLoading(false);
   };
 
@@ -139,9 +143,14 @@ const Landing = () => {
           </div>
         )}
         {posts.map((item) => (
-          <UserPost feed={item} key={item.id} setPost={setPosts} followers={followers} setFollowers={setFollowers}/>
+          <UserPost
+            feed={item}
+            key={item.id}
+            setPost={setPosts}
+            followers={followers}
+            setFollowers={setFollowers}
+          />
         ))}
-        
       </div>
     </div>
   );

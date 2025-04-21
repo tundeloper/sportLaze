@@ -26,7 +26,7 @@ export default function Following() {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       }); // Fetch followers
-      const {data} = await axios.get(`${url}/profile/followers`, {
+      const { data } = await axios.get(`${url}/profile/followers`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -58,7 +58,9 @@ export default function Following() {
           </Button>
 
           <div className="flex flex-col">
-            <span className="text-2xl font-bold dark:text-white">{user.name}</span>
+            <span className="text-2xl font-bold dark:text-white">
+              {user.name}
+            </span>
             <span className="text-gray-500 mt-[-.5rem]">@{user.username}</span>
           </div>
         </div>
@@ -110,7 +112,14 @@ export default function Following() {
             <p>follow someone</p>
           </div>
         ) : (
-          data.map((follower, i: number) => <Followings follow={follower} key={i} follower={followers} setFollow={setData} />)
+          data.map((follower, i: number) => (
+            <Followings
+              follow={follower}
+              key={i}
+              follower={followers}
+              setFollow={setData}
+            />
+          ))
         )}
       </div>
     </UserProfile>
