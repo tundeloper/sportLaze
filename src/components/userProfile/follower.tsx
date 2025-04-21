@@ -6,49 +6,60 @@ import { Dispatch, SetStateAction, useState } from "react";
 import baseUrl from "../../utils/baseUrl";
 import { useSportlaze } from "../../hooks/useContext";
 
-
-export default function Followers({ follow, following, setFollowings, setFollow }: { follow: User, following: User[], setFollowings: Dispatch<SetStateAction<User[]>>, setFollow: Dispatch<SetStateAction<User[]>>}) {
+export default function Followers({
+  follow,
+  following,
+  setFollowings,
+  setFollow,
+}: {
+  follow: User;
+  following: User[];
+  setFollowings: Dispatch<SetStateAction<User[]>>;
+  setFollow: Dispatch<SetStateAction<User[]>>;
+}) {
   const [isHovered, setIsHovered] = useState(false);
-  const {setSnackIsOpen, setMessage} = useSportlaze()
-  const isFollowing = following.some(foll => foll.id === follow.id)
+  const { setSnackIsOpen, setMessage } = useSportlaze();
+  const isFollowing = following.some((foll) => foll.id === follow.id);
 
-  
   const token = localStorage.getItem("access_token");
-  const url = baseUrl()
+  const url = baseUrl();
 
   const followHandler = () => {
-    if(isFollowing) {
-      unFollowUser()
+    if (isFollowing) {
+      unFollowUser();
       setFollowings((prev) => {
-        return prev.filter(foll => foll.id !== follow.id)
-      })
+        return prev.filter((foll) => foll.id !== follow.id);
+      });
     } else {
-      followUser()
+      followUser();
       setFollowings((prev) => {
-        return [...prev, {...follow}]
-      })
+        return [...prev, { ...follow }];
+      });
     }
-  }
+  };
 
   const unFollowUser = async () => {
     try {
-      const response = await fetch(`${url}/profile/unfollow/${follow.username}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `${url}/profile/unfollow/${follow.username}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const data: { message: string; detail: string } = await response.json();
       if (response.status === 200) {
         setSnackIsOpen(true);
         console.log(data);
-        if (following) setFollow((prev) => [...prev])
+        if (following) setFollow((prev) => [...prev]);
         setMessage({ message: data.message, error: false });
       }
     } catch (error) {
       setSnackIsOpen(true);
-      console.log(error)
+      console.log(error);
       // setMessage({ message: data.detail, error: false });
     } finally {
       setTimeout(() => {
@@ -71,12 +82,12 @@ export default function Followers({ follow, following, setFollowings, setFollow 
       if (response.status === 200) {
         setSnackIsOpen(true);
         console.log(data);
-        if (following) setFollow((prev) => [...prev])
+        if (following) setFollow((prev) => [...prev]);
         setMessage({ message: data.message, error: false });
       }
     } catch (error) {
       setSnackIsOpen(true);
-      console.log(error)
+      console.log(error);
       // setMessage({ message: data.detail, error: false });
     } finally {
       setTimeout(() => {
@@ -89,8 +100,12 @@ export default function Followers({ follow, following, setFollowings, setFollow 
   return (
     <div className="flex items-start space-x-3 p-4 bg-gray-100 rounded-lg w-full dark:bg-black">
       {/* Profile Image */}
-      <Link to={"#"}>
-        <Avatar src={avat} sizes={"30"} />{" "}
+      <Link to={`/user/${follow.username}`}>
+        {follow.profile_picture ? (
+          <Avatar src={follow.profile_picture} sizes={"30"} />
+        ) : (
+          <Avatar  sizes={"30"} />
+        )}
       </Link>
 
       {/* User Info */}
@@ -114,7 +129,9 @@ export default function Followers({ follow, following, setFollowings, setFollow 
 
       {/* Follow Button */}
       <button
-        className={`border border-secondary  text-gray-700 px-4 py-1 rounded-full ${isFollowing? 'hover:bg-primary': 'hover:bg-secondary'} hover:text-white transition-all`}
+        className={`border border-secondary  text-gray-700 px-4 py-1 rounded-full ${
+          isFollowing ? "hover:bg-primary" : "hover:bg-secondary"
+        } hover:text-white transition-all`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={followHandler}

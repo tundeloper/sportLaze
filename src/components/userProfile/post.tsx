@@ -34,7 +34,10 @@ const UserPost: React.FC<{
   let storedIds: string[] = JSON.parse(localStorage.getItem("postIds") || "[]");
   const [myLikes, setMylikes] = useState<string[]>(storedIds || []); //setting likes temp
   const [commentText, setCommentText] = useState("");
-  const [comments, setComments] = useState<string[]>(["Babatunde ehhn", "This boy no go kill me"]); // should be an interface or type
+  const [comments, setComments] = useState<string[]>([
+    "Babatunde ehhn",
+    "This boy no go kill me",
+  ]); // should be an interface or type
   const url = baseUrl();
   const token = localStorage.getItem("access_token");
 
@@ -340,18 +343,19 @@ const UserPost: React.FC<{
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          {type && user.username === feed.username ? (
-            ""
-          ) : (
-            <button
-              className={`border border-secondary  text-gray-700 px-4 py-1 rounded-full ${
-                followedUser ? "hover:bg-primary" : "hover:bg-secondary"
-              } hover:text-white transition-all`}
-              onClick={() => followHandler(feed.username)}
-            >
-              {followedUser ? "Unfollow " : "Follow"}
-            </button>
-          )}
+          {!type && user.username === feed.username
+            ? null
+            : !type &&
+              user.name !== feed.name && (
+                <button
+                  className={`border border-secondary  text-gray-700 px-4 py-1 rounded-full ${
+                    followedUser ? "hover:bg-primary" : "hover:bg-secondary"
+                  } hover:text-white transition-all`}
+                  onClick={() => followHandler(feed.username)}
+                >
+                  {followedUser ? "Unfollow " : "Follow"}
+                </button>
+              )}
           <Popover
             id={id}
             open={open}
@@ -380,7 +384,7 @@ const UserPost: React.FC<{
           >
             <div className="flex flex-col p-2">
               <Button>Bookmark Post</Button>
-              {type && (
+              {type && user.username === feed.username && (
                 <Button onClick={deletePost} sx={{ color: "red" }}>
                   Delete Post
                 </Button>

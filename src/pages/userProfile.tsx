@@ -32,7 +32,6 @@ const Profile = () => {
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      console.log(user);
       const token = localStorage.getItem("access_token");
       if (!token) {
         throw new Error("No access token found");
@@ -143,14 +142,14 @@ const Profile = () => {
               <span className="mr-4">
                 <CalendarTodayOutlinedIcon />
               </span>
-              <span>{user.name === username ? user.formatted_member_since : profile?.formatted_member_since}</span>
+              <span>Joined {user.username === username ? user.formatted_join_date : profile?.formatted_join_date}</span>
             </div>
             <div className="flex">
               <span className="mr-4">
                 <LinkOutlinedIcon sx={{ color: "#463a85" }} />
               </span>
               {profile?.website ? (
-                <Link to={profile.website}>
+                <Link to={profile.website} target="_blank">
                   {(() => {
                     try {
                       const urlWithProtocol = profile.website.startsWith("http")
@@ -173,12 +172,12 @@ const Profile = () => {
               )} */}
             </div>
           </div>
-          <div className="flex mt-2">
+          {/* <div className="flex mt-2">
             <span className="mr-4">
               <CalendarTodayOutlinedIcon />
-            </span>{" "}
+            </span>
             <span>Joined {user.username === username ? user.formatted_join_date : profile?.formatted_join_date}</span>
-          </div>
+          </div> */}
         </div>
         <nav className="mt-4 flex">
           <button
@@ -215,7 +214,7 @@ const Profile = () => {
                 </div>
               )}
               {/* {error && <p className="text-red-500">{error}</p>} */}
-              {posts.length === 0 && !loading && (
+              {posts.length === 0 && !loading &&  (
                 <p className="text-center text-4xl pt-[2rem] font-mono font-bold dark:text-white">
                   No posts found
                   <br /> Make A post and check back
