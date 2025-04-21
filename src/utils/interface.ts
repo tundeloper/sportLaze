@@ -17,27 +17,27 @@ export interface User {
   id: string | null;
   bio: string | null;
   website: string | null;
-  banner_image: string | null
+  banner_image: string | null;
 }
 
 export interface Userprofile {
-  id: number,
-username: string,
-name: string,
-email: string,
-date_of_birth: string,
-country: string,
-favorite_sport: string,
-favorite_team: string,
-bio: string,
-location: string,
-following_count: number,
-followers_count: number,
-formatted_join_date: number,
-formatted_member_since: string,
-profile_picture: string,
-banner_image: string,
-website: string
+  id: number;
+  username: string;
+  name: string;
+  email: string;
+  date_of_birth: string;
+  country: string;
+  favorite_sport: string;
+  favorite_team: string;
+  bio: string;
+  location: string;
+  following_count: number;
+  followers_count: number;
+  formatted_join_date: number;
+  formatted_member_since: string;
+  profile_picture: string;
+  banner_image: string;
+  website: string;
 }
 
 export const initialUserval = {
@@ -55,7 +55,7 @@ export const initialUserval = {
   id: null,
   bio: null,
   website: null,
-  banner_image: null
+  banner_image: null,
 };
 
 export interface InitialUser {
@@ -143,3 +143,17 @@ export interface channelType {
   created_by: string;
   member_count: 0;
 }
+
+export type commentsType = {
+  id: number;
+  content: string;
+  created_at: string;
+  updated_at: string;
+  author_id: 14;
+  post_id: 58;
+  parent_id: null;
+  author_name: string;
+  author_username: string;
+  author_profile_picture: string;
+  replie: [];
+};

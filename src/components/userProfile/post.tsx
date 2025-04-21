@@ -8,7 +8,7 @@ import CommentIcon from "../../assets/comment";
 import LikeIcon from "../../assets/like";
 import Bookmarkicon from "../../assets/bookmarkIcon";
 import { useSportlaze } from "../../hooks/useContext";
-import { Post, User, Userprofile } from "../../utils/interface";
+import { commentsType, Post, User, Userprofile } from "../../utils/interface";
 import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
 import { removePostId, storePostId } from "../../utils/store_likes";
@@ -17,6 +17,7 @@ import { formatFullDate, timeAgo } from "../../utils/format-date";
 import { RetweetIcon } from "../../assets/svgs/retweet";
 import PostScroll from "./postslider";
 import { Link } from "react-router-dom";
+import CommentSection from "./comments";
 
 const UserPost: React.FC<{
   feed: Post;
@@ -33,11 +34,9 @@ const UserPost: React.FC<{
   const open = Boolean(anchorEl);
   let storedIds: string[] = JSON.parse(localStorage.getItem("postIds") || "[]");
   const [myLikes, setMylikes] = useState<string[]>(storedIds || []); //setting likes temp
+  const [showComments, setSHowComments] = useState<boolean>(false);
   const [commentText, setCommentText] = useState("");
-  const [comments, setComments] = useState<string[]>([
-    "Babatunde ehhn",
-    "This boy no go kill me",
-  ]); // should be an interface or type
+  const [comments, setComments] = useState<commentsType[]>([]); // should be an interface or type
   const url = baseUrl();
   const token = localStorage.getItem("access_token");
 
@@ -265,12 +264,28 @@ const UserPost: React.FC<{
     }
   };
 
+  const getComment = async () => {
+    try {
+      const { data } = await axios.get(`${url}/social/comments/${feed.id}`);
+
+      console.log(data);
+
+      if (data) {
+        setComments(data);
+      }
+    } catch (error) {
+      setMessage({ message: "Failed to comment", error: true });
+    } finally {
+      setTimeout(() => setSnackIsOpen(false), 3000);
+    }
+  };
+
   const postComment = async () => {
     if (!commentText.trim()) return;
 
     try {
       const response = await axios.post(
-        `${url}/posts/comment`,
+        `${url}/social/comments`,
         { post_id: feed.id, content: commentText },
         {
           headers: {
@@ -280,7 +295,7 @@ const UserPost: React.FC<{
       );
 
       if (response.status === 200) {
-        setComments([...comments, commentText]);
+        setComments((prev) => [...prev, response.data]);
         setCommentText("");
         setSnackIsOpen(true);
         setMessage({ message: "Comment added!", error: false });
@@ -439,9 +454,15 @@ const UserPost: React.FC<{
             )}
             <p className="text-[13px] dark:text-white">{feed.likes_count}</p>
           </div>
-          <div className="flex gap-[4px] items-center">
+          <div
+            className="flex gap-[4px] items-center cursor-pointer"
+            onClick={() => {
+              getComment();
+              setSHowComments((prev) => !prev);
+            }}
+          >
             <CommentIcon fill={darkMode ? "white" : "#33363F"} />
-            <p className="text-[13px] dark:text-white">0</p>
+            <p className="text-[13px] dark:text-white">{comments.length === 0 ? null : comments.length}</p>
           </div>
           <div className="flex gap-[4px] items-center">
             <RetweetIcon fill={darkMode ? "white" : "#222222"} />
@@ -465,40 +486,40 @@ const UserPost: React.FC<{
       </div>
 
       {/* comment section */}
-      <div className="flex justify-between flex-col w-full pl-12 mt-4 pr-4">
-        {/* <div className="flex items-center gap-2">
-          <input
-            type="text"
-            className="flex-1 border border-gray-300 rounded-full px-4 py-2 text-sm dark:bg-[#1e1e1e] dark:text-white"
-            placeholder="Write a comment..."
-            value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
-          />
-          <button
-            className="bg-primary text-white rounded-full px-4 py-2 text-sm hover:bg-opacity-80 transition cursor-pointer"
-            onClick={postComment}
-            disabled={true}
-          >
-            Comment
-          </button>
-        </div> */}
+      {showComments && (
+        <div className="flex justify-between flex-col w-full pl-12 mt-4 pr-4">
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              className="flex-1 border border-gray-300 rounded-full px-4 py-2 text-sm dark:bg-[#1e1e1e] dark:text-white"
+              placeholder="Write a comment..."
+              value={commentText}
+              onChange={(e) => {
+                setCommentText(e.target.value);
+              }}
+            />
+            <button
+              className="bg-primary text-white rounded-full px-4 py-2 text-sm hover:bg-opacity-80 transition cursor-pointer"
+              onClick={postComment}
+              // disabled={true}
+            >
+              Comment
+            </button>
+          </div>
 
-        {/* comment list */}
-        {/* <div className="mt-3 space-y-2">
-          {comments.length > 0 ? (
-            comments.map((comment, idx) => (
-              <div
-                key={idx}
-                className="text-sm text-gray-800 dark:text-white border-b pb-1"
-              >
-                {comment}
-              </div>
-            ))
-          ) : (
-            <p className="text-xs text-gray-400">No comments yet</p>
-          )}
-        </div> */}
-      </div>
+          {/* comment list */}
+          {/* <div className="bg-white p-0 pt-1 rounded-lg w-full mb-2  dark:bg-black md:p-4"> */}
+          <div className="mt-3 space-y-2">
+            {comments.length > 0 ? (
+              comments.map((comment, idx) => (
+                <CommentSection comment={comment} key={idx} setComment={setComments}/>
+              ))
+            ) : (
+              <p className="text-xs text-gray-400 flex justify-center">No comments yet, be the first to comment</p>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
