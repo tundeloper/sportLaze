@@ -7,25 +7,46 @@ import baseUrl from "../utils/baseUrl";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSportlaze } from "../hooks/useContext";
+import Select, { SingleValue } from "react-select";
+import { customStyles } from "../utils/customdrop styles";
+
+type OptionType = {
+  value: 'public' | 'private';
+  label: string;
+};
+
+const options: OptionType[] = [
+  { value: 'public', label: 'Public Channel' },
+  { value: 'private', label: 'Private Channel' },
+];
+
 
 export default function CreateChannel() {
+  const [selectedLounge, setSelectedLounge] = useState<
+    {
+      created_at: string;
+      created_by: number;
+      description: string;
+      icon: string;
+      id: number;
+      member_count: number;
+      name: string;
+      slug: string;
+    }[]
+  >([]);
 
-  const [selectedLounge, setSelectedLounge] = useState<{
-    created_at: string,
-    created_by: number,
-    description: string,
-    icon: string,
-    id: number,
-    member_count: number,
-    name: string,
-    slug: string,
-  }[]>([]);
+  const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
+
+  const handleChange = (option: OptionType | null) => {
+    setSelectedOption(option);
+    console.log('Selected channel type:', option?.value);
+  };
 
   const maxCharCount = 244;
   const url = baseUrl();
-  const { id } = useParams()
-  const { setSnackIsOpen, setMessage } = useSportlaze()
-  const navigate = useNavigate()
+  const { id } = useParams();
+  const { setSnackIsOpen, setMessage } = useSportlaze();
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -34,18 +55,17 @@ export default function CreateChannel() {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "Authorization": `${localStorage.getItem("acess_token")}`
+            Authorization: `${localStorage.getItem("acess_token")}`,
           },
         });
-        const found =
-          console.log(data, 'channnel creation')
+        const found = console.log(data, "channnel creation");
         setSelectedLounge(data);
       } catch (error) {
         console.error("Error fetching lounges:", error);
       } finally {
       }
-    })()
-  }, [id])
+    })();
+  }, [id]);
 
   return (
     <Layout>
@@ -71,27 +91,35 @@ export default function CreateChannel() {
                   },
                   {
                     headers: {
-                      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                      Authorization: `Bearer ${localStorage.getItem(
+                        "access_token"
+                      )}`,
                     },
                   }
                 );
                 if (data) {
                   console.log(data);
-                  setSnackIsOpen(true)
-                  setMessage({ message: "Channel Created Successfully", error: false })
-                  navigate(`/channels/${id}`)
+                  setSnackIsOpen(true);
+                  setMessage({
+                    message: "Channel Created Successfully",
+                    error: false,
+                  });
+                  navigate(`/channels/${id}`);
                 }
               } catch (error) {
                 if (isAxiosError(error)) {
-                  setSnackIsOpen(true)
-                  setMessage({ message: error.response?.data.detail, error: true })
+                  setSnackIsOpen(true);
+                  setMessage({
+                    message: error.response?.data.detail,
+                    error: true,
+                  });
                   console.log(error.response?.data.detail);
                 }
               } finally {
                 setSubmitting(false);
                 setTimeout(() => {
                   setSnackIsOpen(false);
-                  setMessage({ message: "", error: false })
+                  setMessage({ message: "", error: false });
                   setSubmitting(false);
                 }, 5000);
               }
@@ -107,8 +135,9 @@ export default function CreateChannel() {
                     Name of Channel
                   </label>
                   <Field
-                    className={`w-full p-3 border border-gray-400 bg-transparent text-secondary rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors ? "border-[rgb(190, 63, 13)]" : "border-[white]"
-                      }`}
+                    className={`w-full p-3 border border-gray-400 bg-transparent text-secondary rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      errors ? "border-[rgb(190, 63, 13)]" : "border-[#ffffff]"
+                    }`}
                     placeholder="Type Name of Channel"
                     name="channel_name"
                     type="text"
@@ -140,6 +169,16 @@ export default function CreateChannel() {
                   component="div"
                   className={`text-[red] text-[12px]`}
                 />
+                <div className="w-full mt-2 mb-4">
+                  <label className="block mb-2 text-black">Channel Type</label>
+                  <Select
+                    value={selectedOption}
+                    onChange={handleChange}
+                    options={options}
+                    placeholder="Select channel type..."
+                    styles={customStyles}
+                  />
+                </div>
 
                 {/* <Field type="checkbox" name="status" id="terms">
                   {({ field }: FieldProps) => (
@@ -173,7 +212,7 @@ export default function CreateChannel() {
                 </label>
                 <div className="flex gap-2" id="lounges">
                   <span className="px-4 py-2 border rounded-full bg-gray-200 text-gray-700 font-medium">
-                    {id && selectedLounge.find(item => item.id === +id)?.name}
+                    {id && selectedLounge.find((item) => item.id === +id)?.name}
                   </span>
                 </div>
                 <button

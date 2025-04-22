@@ -17,6 +17,10 @@ import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
 import { useSportlaze } from "../../hooks/useContext";
 import { Link, useNavigate } from "react-router-dom";
+// import emojiicon from "../../assets/svgs/post/mingcute_emoji-line.svg";
+import PostVideo from "../../assets/svgs/post/tabler_video";
+import { PhotoUploadIcon } from "../../assets/svgs/post/tabler_photo";
+import { EmojiUploadicon } from "../../assets/svgs/post/mingcute_emoji-line";
 
 interface MediaFile {
   file: File;
@@ -28,10 +32,10 @@ export default function PostInput() {
   const [media, setMedia] = useState<MediaFile[]>([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [isPosting, setIsPosting] = useState<boolean>(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const API_URL = baseUrl();
-  const { setMessage, setSnackIsOpen, user } = useSportlaze();
+  const { setMessage, setSnackIsOpen, user, darkMode } = useSportlaze();
 
   const handlePost = async () => {
     if (!text.trim() && media.length === 0) return;
@@ -39,37 +43,37 @@ export default function PostInput() {
     const formData = new FormData();
     formData.append("content", text);
     media.forEach((item) => {
-      formData.append('media', item.file);
+      formData.append("media", item.file);
     });
 
     try {
       setSnackIsOpen(false);
-      setIsPosting(true)
-    const token = localStorage.getItem("access_token");
+      setIsPosting(true);
+      const token = localStorage.getItem("access_token");
 
-    const res = await axios.post(`${API_URL}/posts`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+      const res = await axios.post(`${API_URL}/posts`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    console.log(res)
+      console.log(res);
 
-    if (res.status === 200 || res.status === 201) {
-      setText("");
-      setMedia([]);
-      navigate(`/user/${user.username}`)
-      setMessage({ message: "Post created successfully!", error: false });
-      setSnackIsOpen(false);
-    }
+      if (res.status === 200 || res.status === 201) {
+        setText("");
+        setMedia([]);
+        navigate(`/user/${user.username}`);
+        setMessage({ message: "Post created successfully!", error: false });
+        setSnackIsOpen(false);
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.message === "Network Error") {
           setMessage({ message: "Your network seems to be down", error: true });
         } else {
           // setMessage({ message: error.response?.data.detail || "An error occurred", error: true });
-          console.log(error)
+          console.log(error);
         }
         setSnackIsOpen(true);
       }
@@ -114,12 +118,13 @@ export default function PostInput() {
     <div className="w-full p-4 border rounded-lg shadow-md mb-2 bg-white relative dark:bg-black">
       <div className="flex items-start gap-2 mb-2">
         <Link to={`/user/${user.username}`}>
-          {user.profile_picture ? (<Avatar src={user.profile_picture} sx={{ width: 50, height: 50 }} />) : (<Avatar
-            alt="user icon"
-            sx={{ width: 50, height: 50 }}
-          >{user.username && user?.username[0].toLocaleUpperCase()}</Avatar>)}
-
-
+          {user.profile_picture ? (
+            <Avatar src={user.profile_picture} sx={{ width: 50, height: 50 }} />
+          ) : (
+            <Avatar alt="user icon" sx={{ width: 50, height: 50 }}>
+              {user.username && user?.username[0].toLocaleUpperCase()}
+            </Avatar>
+          )}
         </Link>
         <TextareaAutosize
           placeholder="What is happening?"
@@ -158,7 +163,9 @@ export default function PostInput() {
       <div className="flex justify-between items-center mt-2">
         <div className="flex gap-3 text-gray-500">
           <label>
-            <ImageIcon className="cursor-pointer" />
+            {/* <ImageIcon className="cursor-pointer" /> */}
+            {/* <img src={imageicon} alt="video" className="cursor-pointer" /> */}
+            <PhotoUploadIcon fill={darkMode ? 'white' : 'black'} />
             <input
               type="file"
               accept="image/*"
@@ -168,7 +175,8 @@ export default function PostInput() {
             />
           </label>
           <label>
-            <VideoCameraBackIcon className="cursor-pointer" />
+            {/* <VideoCameraBackIcon className="cursor-pointer" /> */}
+            <PostVideo fill={darkMode ? 'white' : 'black'}/>
             <input
               type="file"
               accept="video/*"
@@ -178,10 +186,16 @@ export default function PostInput() {
           </label>
           <ClickAwayListener onClickAway={() => setShowEmojiPicker(false)}>
             <div className="relative">
-              <EmojiEmotionsIcon
+              {/* <EmojiEmotionsIcon
                 className="cursor-pointer"
                 onClick={() => setShowEmojiPicker((prev) => !prev)}
-              />
+              /> */}
+              <div className="cursor-pointer"
+                onClick={() => setShowEmojiPicker((prev) => !prev)}>
+                <EmojiUploadicon fill={darkMode ? 'white' : 'black'} />
+              </div>
+             
+
               {showEmojiPicker && (
                 <div
                   className="absolute z-10 bg-white dark:bg-gray-800 shadow-lg p-2 rounded-md"
@@ -212,7 +226,9 @@ export default function PostInput() {
           onClick={handlePost}
           className="bg-secondary text-white px-4 py-1 rounded-lg disabled:opacity-50"
           disabled={isPosting || (!text.trim() && media.length === 0)}
-          startIcon={isPosting ? <CircularProgress size={16} color="inherit" /> : null}
+          startIcon={
+            isPosting ? <CircularProgress size={16} color="inherit" /> : null
+          }
         >
           {isPosting ? "Posting..." : "Post"}
         </Button>
