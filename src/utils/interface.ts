@@ -93,7 +93,15 @@ export interface Post {
   media_type: string;
   id: number;
   likes_count: number;
+  comments_count: number;
+  reposts_count: number;
   media_files: postSlide[];
+  type: "post" | "repost";
+  post_id: number;
+  reposter_username: string;
+  reposter_name: string;
+  reposter_id: number;
+  quote: string | null;
 }
 
 export interface MediaFile {
@@ -151,9 +159,21 @@ export type commentsType = {
   updated_at: string;
   author_id: 14;
   post_id: 58;
-  parent_id: null;
+  parent_id: number;
   author_name: string;
   author_username: string;
   author_profile_picture: string;
-  replie: [];
+  replies: commentsType[];
+};
+
+export type Repost = {
+  created_at: string;
+  id: number;
+  name: string;
+  post_id: 66;
+  profile_picture: string;
+  quote: string | null;
+  user_id: number;
+  username: string;
+  original_post: Post;
 };

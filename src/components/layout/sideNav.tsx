@@ -25,6 +25,7 @@ const SideNav: React.FC<{
 
   const navigate = useNavigate();
   const url = baseUrl();
+  const queryParams = new URLSearchParams({ tab: 'bookmarks' })
 
   const getProfile = async (accessToken: string) => {
     console.log(accessToken);
@@ -194,7 +195,7 @@ const SideNav: React.FC<{
             <LoungeIcon h={25} w={27} /> <p>Lounge</p>
           </NavLink>
           <NavLink
-            to={"/bookmark"}
+            to={`user/${user.username}?${queryParams.toString()}`}
             className={({ isActive }) =>
               `flex items center gap-4 rounded-md pl-10 py-3 hover:bg-secondary ${
                 isActive && "border-r-[.3rem] border-white"

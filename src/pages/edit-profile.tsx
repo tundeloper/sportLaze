@@ -11,6 +11,7 @@ import camera from "../assets/svgs/Camera.png";
 import { useRef, useState } from "react";
 import { formprps } from "./signUp";
 import DOB from "../components/auth/DOB";
+import CountriesDropDown from "../components/auth/contrydropdown";
 
 const EditProfile = () => {
   const { login, setLoading, setSnackIsOpen, user, setUser } = useSportlaze();
@@ -202,7 +203,7 @@ const EditProfile = () => {
             });
           }
 
-          let data = { ...values };
+          let data = { ...values, location: userData.country?.value };
           if (!userData.dateOfBirth.includes("NaN")) {
             data = { ...values, date_of_birth: userData.dateOfBirth };
           }
@@ -252,7 +253,7 @@ const EditProfile = () => {
               { label: "Bio", name: "bio", type: "text" },
               // { label: "Date of Birth", name: "date_of_birth", type: "text" },
               { label: "Website", name: "website", type: "text" },
-              { label: "Location", name: "location", type: "text" },
+              // { label: "Location", name: "location", type: "text" },
             ].map(({ label, name, type }) => (
               <div key={name}>
                 <div className="flex justify-between gap-4">
@@ -280,6 +281,20 @@ const EditProfile = () => {
               </div>
             ))}
             <div>
+              <div className="mb-4">
+              <div className="flex justify-between gap-4">
+                <label
+                  htmlFor={"dob"}
+                  className="font-bold mb-2 dark:text-darkw"
+                >
+                  Location
+                </label>
+              </div>
+              <CountriesDropDown
+                setUserData={setUserData}
+                userData={userData}
+              />
+              </div>
               <div className="flex justify-between gap-4">
                 <label
                   htmlFor={"dob"}

@@ -22,6 +22,7 @@ import createAds from "../assets/promotion/ic_round-add.svg";
 import deleteIcon from "../assets/promotion/material-symbols_delete-outline-rounded.svg";
 import uploadicon from "../assets/promotion/material-symbols_upload.svg";
 import promotionIcon from "../assets/promotion/promotion-icon.svg";
+import { NavLink } from "react-router-dom";
 
 export const PromotionPage = () => {
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
@@ -89,28 +90,41 @@ export const PromotionPage = () => {
   return (
     <Layout>
       <section id="promotion" className="bg-[rgb(249,244,244)] pt-3">
-        <img src={gradimg} alt="sportlaze logo" className="ml-3" />
+        <img src={gradimg} alt="sportlaze logo" className="ml-6" />
         <Box
           display="flex"
           flexDirection={{ xs: "column", lg: "row" }}
           minHeight="100vh"
           bgcolor="#f9f4f4"
+          gap={10}
         >
           {/* Sidebar */}
-          <Box
-            width={{ xs: "100%", lg: "20%" }}
-            p={3}
-            color="blue"
-            fontWeight="500"
-          >
-            <Typography borderLeft={"4px solid blue"} pl={1} mb={2}>
+          <div className="text-[blue] p-6 flex flex-col">
+            <NavLink
+              to="/promotion"
+              className={({ isActive }) =>
+                `pl-1 mb-2 border-l-4 ${isActive ? "border-[blue]" : ""}`
+              }
+            >
               Post Details
-            </Typography>
-            <Typography pl={1} mb={2}>
+            </NavLink>
+            <NavLink
+              to="/ads-target"
+              className={({ isActive }) =>
+                `pl-1 mb-2 border-l-2 ${isActive ? "border-[blue]" : ""}`
+              }
+            >
               Ads Target
-            </Typography>
-            <Typography pl={1}>Payment</Typography>
-          </Box>
+            </NavLink>
+            <NavLink
+              to="/payment"
+              className={({ isActive }) =>
+                `pl-1 mb-2 border-l-4 ${isActive ? "border-[blue]" : ""}`
+              }
+            >
+              Payment
+            </NavLink>
+          </div>
 
           {/* Main Content */}
           <Box
@@ -369,7 +383,7 @@ export const PromotionPage = () => {
                       ))
                     ) : (
                       <div
-                      className="h-[18rem] w-full rounded-md mb-2 bg-slate-300"
+                        className="h-[18rem] w-full rounded-md mb-2 bg-slate-300"
                         // height={200}
                         // borderRadius={2}
                         // mb={2}
@@ -378,31 +392,29 @@ export const PromotionPage = () => {
                       />
                     )}
                   </Box>
-
                   <Typography variant="body2" mb={1}>
                     {formik.values.headline || (
                       <em style={{ color: "#888" }}>Headline</em>
                     )}
                   </Typography>
-
                   <Typography
                     variant="caption"
                     fontStyle="italic"
                     color="text.secondary"
                   >
                     {formik.values.url
-                        ? (() => {
-                            try {
-                              const urlWithProtocol =
-                                formik.values.url.startsWith("http")
-                                  ? formik.values.url
-                                  : `https://${formik.values.url}`;
-                              const hostname = new URL(urlWithProtocol).hostname;
-                              return `From ${hostname}`;
-                            } catch {
-                              return "From website.com";
-                            }
-                          })()
+                      ? (() => {
+                          try {
+                            const urlWithProtocol =
+                              formik.values.url.startsWith("http")
+                                ? formik.values.url
+                                : `https://${formik.values.url}`;
+                            const hostname = new URL(urlWithProtocol).hostname;
+                            return `From ${hostname}`;
+                          } catch {
+                            return "From website.com";
+                          }
+                        })()
                       : "From website.com"}
                   </Typography>
                   <Divider sx={{ my: 2 }} />
@@ -439,9 +451,7 @@ export const PromotionPage = () => {
               borderColor={"gray"}
               padding={2}
             >
-              <Typography color="primary">
-                Back
-              </Typography>
+              <Typography color="primary">Back</Typography>
               <Box display="flex" gap={2} fontSize="0.9rem">
                 <Button
                   variant="text"
@@ -475,7 +485,6 @@ export const PromotionPage = () => {
                 </Button>
               </Box>
             </Box>
-
           </Box>
         </Box>
       </section>

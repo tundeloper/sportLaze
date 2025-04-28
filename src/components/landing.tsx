@@ -13,16 +13,16 @@ import axios from "axios";
 import baseUrl from "../utils/baseUrl";
 import UserPost from "./userProfile/post";
 import PostInput from "./layout/post";
-import { User } from "../utils/interface";
+import { Repost, User } from "../utils/interface";
 
 const Landing = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [followers, setFollowers] = useState<User[]>([]);
+  const [repost, setRepost] = useState<Repost[]>([]);
   const navigate = useNavigate();
-  const { darkMode, setPosts, posts } = useSportlaze();
+  const { darkMode, setPosts, posts, user, initailUser } = useSportlaze();
   const fill = darkMode ? "#d3d3d3" : "#2D439B";
   const observerRef = useRef<HTMLDivElement | null>(null);
-
 
   const API_URL = baseUrl();
 
@@ -68,7 +68,7 @@ const Landing = () => {
 
     const data = await getFeed(token);
     console.log(data);
-    if (data) setPosts((prev) => [...prev, ...data])
+    if (data) setPosts((prev) => [...prev, ...data]);
     // if (data && posts.length > data.length) setPosts(data);
     // if (data && posts.length < data.length) setPosts(data);
     setLoading(false);
@@ -76,6 +76,17 @@ const Landing = () => {
 
   useEffect(() => {
     fetchFeed();
+    ( async () => {
+      try {
+        const { data } = await axios.get(
+          `${API_URL}/social/reposts/user/${user.username}`
+        );
+        console.log(data, "reposts");
+        setRepost(data);
+      } catch (error) {
+        console.log(error);
+      }
+    })()
   }, []);
 
   return (
@@ -142,11 +153,13 @@ const Landing = () => {
             <CircularProgress size={30} />
           </div>
         )}
-        {posts.map((item) => (
+        {posts.map((item, idx) => (
           <UserPost
             feed={item}
-            key={item.id}
+            key={idx}
             setPost={setPosts}
+            reposts={repost}
+            setReposts={setRepost}
             followers={followers}
             setFollowers={setFollowers}
           />

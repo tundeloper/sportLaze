@@ -5,28 +5,48 @@ import userimg from "../assets/user/man-studio.png";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import UserPost from "../components/userProfile/post";
 import { useSportlaze } from "../hooks/useContext";
 import axios from "axios";
 import baseUrl from "../utils/baseUrl";
-import { Post, Userprofile } from "../utils/interface";
+import { Post, Repost, Userprofile } from "../utils/interface";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState<
-    "posts" | "replies" | "lounges" | "saved"
+    "posts" | "replies" | "lounges" | "bookmarks"
   >("posts");
   const { user, loading, setLoading } = useSportlaze();
   const [posts, setPosts] = useState<Post[]>([]);
+  const [reposts, setReposts] = useState<Repost[]>([]);
   const [profile, setUserProfile] = useState<Userprofile>();
   const [error, setError] = useState<string>("");
 
   const url = baseUrl();
   const { username } = useParams();
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location.search);
+  const bookmark = searchParams.get('tab');
 
   useEffect(() => {
     fetchPosts();
+    if(bookmark) {
+      setActiveTab(bookmark as 'bookmarks')
+    }
+    if (user.username) {
+          (async () => {
+            try {
+              const { data } = await axios.get(
+                `${url}/social/reposts/user/${user.username}`
+              );
+              console.log(data, "repost");
+              setReposts(data)
+            } catch (error) {
+              console.log(error);
+            }
+          })();
+        }
   }, []);
 
   const fetchPosts = async () => {
@@ -199,10 +219,10 @@ const Profile = () => {
             Lounges
           </button>
           <button
-            onClick={() => setActiveTab("saved")}
-            className={tabClass("saved")}
+            onClick={() => setActiveTab("bookmarks")}
+            className={tabClass("bookmarks")}
           >
-            Saved
+            Bookmarks
           </button>
         </nav>
         <section className="p-1 mt-3 md:p-4">
@@ -226,6 +246,8 @@ const Profile = () => {
                     feed={post}
                     setPost={setPosts}
                     type
+                    reposts={reposts}
+                    setReposts={setReposts}
                     userProfile={profile}
                   />
                 );
@@ -256,9 +278,9 @@ const Profile = () => {
               </div>
             </div>
           )}
-          {activeTab === "saved" && (
+          {activeTab === "bookmarks" && (
             <div className="min-h-[10rem]">
-              <p className="text-gray-500 text-sm">Saved</p>
+              <p className="text-gray-500 text-sm">Bookmarks</p>
               <div className="mt-2">
                 <p className="text-gray-700">
                   This is where the saved content will be shown.

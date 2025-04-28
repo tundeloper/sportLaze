@@ -1,17 +1,19 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { Avatar, Button, IconButton, Popover, Tooltip } from "@mui/material";
 import { commentsType } from "../../utils/interface";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { formatFullDate, timeAgo } from "../../utils/format-date";
-import { RetweetIcon } from "../../assets/svgs/retweet";
 import CommentIcon from "../../assets/comment";
 import LikeIcon from "../../assets/like";
 import { useSportlaze } from "../../hooks/useContext";
 import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
 
-const CommentSection: React.FC<{ comment: commentsType, setComment: Dispatch<SetStateAction<commentsType[]>> }> = ({ comment, setComment }) => {
+const CommentSection: React.FC<{
+  comment: commentsType;
+  setComment: Dispatch<SetStateAction<commentsType[]>>;
+}> = ({ comment, setComment }) => {
   const { darkMode, user, setMessage, setSnackIsOpen } = useSportlaze();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -21,21 +23,34 @@ const CommentSection: React.FC<{ comment: commentsType, setComment: Dispatch<Set
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const url = baseUrl()
+  const url = baseUrl();
+  const [showReply, setShowReply] = useState(false)
 
   const deleteComment = async () => {
     try {
-      const response = await axios.delete(`${url}/social/comments/${comment.id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-        },
-      });
+      const response = await axios.delete(
+        `${url}/social/comments/${comment.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
       if (response.status === 200) {
         setSnackIsOpen(true);
         setMessage({ message: "Comment deleted successfully", error: false });
-          setComment((prevItems) =>
-            prevItems.filter((item) => item.id !== comment.id)
-          );
+        setComment((prevItems) =>
+          prevItems.filter((item) => item.id !== comment.id)
+        );
+        // if (setPost)
+        //   setPost((prev) => {
+        //     return prev.map((post) => {
+        //       const feedId = feed.type === "repost" ? post.post_id : post.id;
+        //       return feedId === +`${feed.type === "repost" ? feed.id : feed.id}`
+        //         ? { ...post, comments_count: post.comments_count + 1 }
+        //         : post;
+        //     });
+        //   });
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -186,18 +201,21 @@ const CommentSection: React.FC<{ comment: commentsType, setComment: Dispatch<Set
       {/* {user interaction} */}
       <div className="flex justify-between items-center w-full pl-12 mt-1">
         <div className="flex items-center justify-center gap-4">
-          {/* <div
-            className="flex gap-[4px] items-center pointer"
-            onClick={() => {
-              favouriteHandler(feed.id.toString());
-            }}
-          >
-            
-              <LikeIcon fill={darkMode ? "white" : "#33363F"} />
- 
-            <p className="text-[13px] dark:text-white">0</p>
-          </div>
           <div
+            className="flex gap-[4px] items-center pointer"
+            // onClick={() => {
+            //   favouriteHandler(feed.id.toString());
+            // }}
+          >
+            <LikeIcon fill={darkMode ? "white" : "#33363F"} />
+
+            {/* <p className="text-[13px] dark:text-white">0</p> */}
+          </div>
+          <div className="flex gap-[4px] items-center cursor-pointer" onClick={() => setShowReply((prev) => !prev)}>
+            <CommentIcon fill={darkMode ? "white" : "#33363F"} />
+            {/* <p className="text-[13px] dark:text-white">0</p> */}
+          </div>
+          {/* <div
             className="flex gap-[4px] items-center cursor-pointer"
             onClick={() => {
               getComment();
@@ -226,6 +244,15 @@ const CommentSection: React.FC<{ comment: commentsType, setComment: Dispatch<Set
             <Bookmarkicon fill={darkMode ? "white" : "#222222"} />
           </div>
         </div> */}
+      </div>
+      <div className="flex justify-between items-center w-full pl-8 mt-1">
+        {showReply && (
+          <div className="flex-1">
+            {comment.replies.map((rep, index) => {
+              return <CommentSection key={rep.id} comment={rep} setComment={setComment} />;
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
