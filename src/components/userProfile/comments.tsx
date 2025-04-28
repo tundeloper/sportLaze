@@ -9,6 +9,7 @@ import LikeIcon from "../../assets/like";
 import { useSportlaze } from "../../hooks/useContext";
 import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
+import CommentFeild from "./commentField";
 
 const CommentSection: React.FC<{
   comment: commentsType;
@@ -25,6 +26,46 @@ const CommentSection: React.FC<{
   };
   const url = baseUrl();
   const [showReply, setShowReply] = useState(false)
+  const [showReplyInput, setShowReplyInput] = useState(false)
+  const [commentText, setCommentText] = useState("");
+  const token = localStorage.getItem("access_token")
+
+  const postComment = async () => {
+    if (!commentText.trim()) return;
+    // const feedId = feed.type === "repost" ? feed.post_id : feed.id;
+
+    try {
+      const response = await axios.post(
+        `${url}/social/comments`,
+        { post_id: comment.parent_id, parent_id: comment.id, content: commentText },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        // setComment((prev) => [...prev, response.data]);
+        setCommentText("");
+        setSnackIsOpen(true);
+        setMessage({ message: "Comment added!", error: false });
+        // if (setPost)
+        //   setPost((prev) => {
+        //     return prev.map((post) => {
+        //       const feedId = feed.type === "repost" ? post.post_id : post.id;
+        //       return feedId === +`${feed.type === "repost" ? feed.id : feed.id}`
+        //         ? { ...post, comments_count: post.comments_count + 1 }
+        //         : post;
+        //     });
+        //   });
+      }
+    } catch (error) {
+      setMessage({ message: "Failed to comment", error: true });
+    } finally {
+      setTimeout(() => setSnackIsOpen(false), 3000);
+    }
+  };
 
   const deleteComment = async () => {
     try {
@@ -67,6 +108,7 @@ const CommentSection: React.FC<{
       }, 5000);
     }
   };
+  
 
   return (
     <div className="bg-white p-0 pt-1 rounded-lg w-full mb-1  dark:bg-black md:p-2">
@@ -158,6 +200,7 @@ const CommentSection: React.FC<{
             }}
           >
             <div className="flex flex-col p-2">
+              <Button onClick={() => setShowReplyInput(prev => !prev)}>Reply</Button>
               {/* <Button>Bookmark Post</Button> */}
               {user.username === comment.author_username && (
                 <Button onClick={deleteComment} sx={{ color: "red" }}>
@@ -245,6 +288,7 @@ const CommentSection: React.FC<{
           </div>
         </div> */}
       </div>
+      {showReplyInput && <CommentFeild commentText={commentText} setCommentText={setCommentText} postComment={postComment} />}
       <div className="flex justify-between items-center w-full pl-8 mt-1">
         {showReply && (
           <div className="flex-1">
