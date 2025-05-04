@@ -1,11 +1,11 @@
 import React, { createContext, ReactNode, useEffect, useState } from "react";
 import getInitialTheme from "../utils/initialTheme";
-import { Navigate } from "react-router-dom";
 import {
   ContextType,
   initialUser,
   InitialUser,
   initialUserval,
+  Notification,
   Post,
   User,
 } from "../utils/interface";
@@ -15,7 +15,7 @@ export const SportlazeContext = createContext<ContextType | undefined>(
   undefined
 );
 
-const TOKEN_EXPIRY_HOURS = 12; // Token expires in 12 hours
+const TOKEN_EXPIRY_HOURS = 24; // Token expires in 12 hours
 const url = baseUrl();
 
 export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({
@@ -52,6 +52,7 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({
   const [opensnacks, setOpensnacks] = useState<boolean>(false);
   const [user, setUser] = useState<User>(initialUserval);
   const [initUser, setInitUser] = useState<InitialUser>(initialUser);
+  const [notification, setNotification] = useState<Notification[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
 
   // Sync theme mode with local storage
@@ -67,7 +68,7 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({
 
   // Save token with expiry time
   const login = (token: string) => {
-    const expiryTime = Date.now() + 1 * 60 * 60 * 1000; // 1 hours
+    const expiryTime = Date.now() + TOKEN_EXPIRY_HOURS * 60 * 60 * 1000; // 24 hours
     setToken(token);
     localStorage.setItem("access_token", token);
     localStorage.setItem("token_expiry", expiryTime.toString());
@@ -78,7 +79,9 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({
     setToken(null);
     localStorage.removeItem("access_token");
     localStorage.removeItem("token_expiry");
+    localStorage.removeItem("username");
   };
+  
 
   // Check if token is expired on app load
   useEffect(() => {
@@ -168,6 +171,8 @@ export const SportlazeProvider: React.FC<{ children: ReactNode }> = ({
         setMessage,
         snacksisOpen: opensnacks,
         setSnackIsOpen: setOpensnacks,
+        notifications: notification,
+        setNotifications: setNotification,
       }}
     >
       {children}

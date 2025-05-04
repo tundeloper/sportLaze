@@ -15,16 +15,17 @@ interface RepostWithQuoteProps {
   setshowQuote: Dispatch<SetStateAction<boolean>>;
   setReposts?: Dispatch<SetStateAction<Repost[]>>;
   setRepost: Dispatch<SetStateAction<boolean>>;
+  setPosts?: Dispatch<SetStateAction<Post[]>>;
   repostHandler: () => void;
-  onSubmit?: (quote: string) => void;
+  // onSubmit?: (quote: string) => void;
 }
 
 const RepostWithQuote: FC<RepostWithQuoteProps> = ({
   originalPost,
-  onSubmit,
+  // onSubmit,
   setshowQuote,
-  repostHandler,
   setRepost,
+  setPosts,
   setReposts
 }) => {
   const [quote, setQuote] = useState<string>("");
@@ -47,12 +48,27 @@ const RepostWithQuote: FC<RepostWithQuoteProps> = ({
 
       if (data) {
         const FeedId = originalPost?.type === "repost" ? originalPost.post_id : originalPost?.id
-        if (setReposts) {
-          setReposts((prevItems) =>
-            prevItems.filter((item) => item.id !== originalPost?.id)
-          );
-        }
+        setReposts && setReposts((prev) => [...prev, data])
+        // if (setReposts) {
+        //   setReposts((prevItems) =>
+        //     prevItems.filter((item) => item.id !==  FeedId)
+        //   );
+        if (setPosts)
+          setPosts((prev) => {
+            return prev.map((post) => {
+              const feedId = originalPost?.type === "repost" ? post.post_id : post.id;
+              //increment the list of reposts count
+              return feedId === +`${originalPost?.type === "repost" ? post.post_id : post.id}`
+                ? { ...post, reposts_count: post.reposts_count + 1 }
+                : post;
+            });
+          });
       }
+        
+
+        setshowQuote(false);
+        setQuote("");
+      
     } catch (error) {
       console.log(error);
       setSnackIsOpen(true);
@@ -62,7 +78,6 @@ const RepostWithQuote: FC<RepostWithQuoteProps> = ({
         setSnackIsOpen(false)
       }, 3000);
     }
-    setRepost && setRepost(false)
     // if (onSubmit) {
     //   onSubmit(quote);
     // } else {
@@ -80,7 +95,7 @@ const RepostWithQuote: FC<RepostWithQuoteProps> = ({
       style={{ zIndex: "100" }}
       onClick={(event) => {
         setshowQuote(false);
-        // event.stopPropagation();
+        event.stopPropagation();
       }}
     >
       <div

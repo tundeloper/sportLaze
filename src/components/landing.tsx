@@ -13,16 +13,18 @@ import axios from "axios";
 import baseUrl from "../utils/baseUrl";
 import UserPost from "./userProfile/post";
 import PostInput from "./layout/post";
-import { Repost, User } from "../utils/interface";
+import { Bookmarks, Repost, User } from "../utils/interface";
 
 const Landing = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [followers, setFollowers] = useState<User[]>([]);
+  const [bookmarks, setBookmarks] = useState<Bookmarks[]>([]);
   const [repost, setRepost] = useState<Repost[]>([]);
   const navigate = useNavigate();
-  const { darkMode, setPosts, posts, user, initailUser } = useSportlaze();
+  const { darkMode, setPosts, posts, user } = useSportlaze();
   const fill = darkMode ? "#d3d3d3" : "#2D439B";
-  const observerRef = useRef<HTMLDivElement | null>(null);
+  // const observerRef = useRef<HTMLDivElement | null>(null);
+  const token = localStorage.getItem("access_token");
 
   const API_URL = baseUrl();
 
@@ -40,6 +42,13 @@ const Landing = () => {
         },
       });
 
+      const bookmar = await axios.get(`${API_URL}/social/bookmarks`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setBookmarks(bookmar.data);
       setFollowers(data);
       return response.data; // Return feed data
     } catch (error) {
@@ -57,7 +66,7 @@ const Landing = () => {
 
   const fetchFeed = async () => {
     setLoading(true);
-    const token = localStorage.getItem("access_token"); // Get token from storage
+    // Get token from storage
 
     if (!token) {
       console.error("No access token found");
@@ -76,17 +85,18 @@ const Landing = () => {
 
   useEffect(() => {
     fetchFeed();
-    ( async () => {
+    (async () => {
       try {
         const { data } = await axios.get(
-          `${API_URL}/social/reposts/user/${user.username}`
+          `${API_URL}/social/reposts/user/${localStorage.getItem('username')}`
         );
-        console.log(data, "reposts");
+        
         setRepost(data);
+        console.log(data, repost);
       } catch (error) {
         console.log(error);
       }
-    })()
+    })();
   }, []);
 
   return (
@@ -162,6 +172,8 @@ const Landing = () => {
             setReposts={setRepost}
             followers={followers}
             setFollowers={setFollowers}
+            bookmarks={bookmarks}
+            setBookmarks={setBookmarks}
           />
         ))}
       </div>

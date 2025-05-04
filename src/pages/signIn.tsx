@@ -83,6 +83,7 @@ const SignIn: React.FC<{
                   id: data?.user?.id,
                 });
                 navigate("/", { replace: true });
+                localStorage.setItem("username", data?.user?.username);
               } else {
                 throw new Error("Request failed");
               }

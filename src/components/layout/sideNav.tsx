@@ -195,7 +195,7 @@ const SideNav: React.FC<{
             <LoungeIcon h={25} w={27} /> <p>Lounge</p>
           </NavLink>
           <NavLink
-            to={`user/${user.username}?${queryParams.toString()}`}
+            to={`/user/${user.username}?${queryParams.toString()}`}
             className={({ isActive }) =>
               `flex items center gap-4 rounded-md pl-10 py-3 hover:bg-secondary ${
                 isActive && "border-r-[.3rem] border-white"
@@ -213,7 +213,6 @@ const SideNav: React.FC<{
               }`
             }
           >
-            {" "}
             <img src={verifyicon} alt="verify_icon" /> <p>Get Verified</p>
           </NavLink>
         </div>

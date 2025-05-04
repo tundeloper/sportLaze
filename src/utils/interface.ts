@@ -128,6 +128,8 @@ export interface ContextType {
   setInitUser: Dispatch<SetStateAction<InitialUser>>;
   posts: Post[];
   setPosts: Dispatch<SetStateAction<Post[]>>;
+  notifications: Notification[];
+  setNotifications: Dispatch<SetStateAction<Notification[]>>;
 }
 
 export interface LoungeType {
@@ -176,4 +178,43 @@ export type Repost = {
   user_id: number;
   username: string;
   original_post: Post;
+};
+
+export type Bookmarks = {
+  id: number;
+  user_id: number;
+  post_id: number;
+  created_at: string;
+  post: Post;
+};
+
+export type Notification = {
+  id: number;
+  user_id: number;
+  sender_id: number;
+  sender_name: string;
+  sender_username: string;
+  sender_profile_picture: string;
+  type: "like" | "comment" | "repost" | "follow" | "mention" | "quote_repost" | "message";
+  content: string;
+  reference_id: number;
+  reference_type: string;
+  is_read: boolean;
+  created_at: string;
+};
+
+export enum NotificationType {
+  LIKE = "LIKE",
+  COMMENT = "COMMENT",
+  REPOST = "REPOST",
+  FOLLOW = "FOLLOW",
+  MENTION = "MENTION",
+  QUOTE_REPOST = "QUOTE_REPOST",
+  MESSAGE = "MESSAGE",
+}
+
+export type SearchType = {
+  hashtags:{hashtag: string, count: number}[];
+  lounges: LoungeType[];
+  users: User[];
 };

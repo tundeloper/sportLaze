@@ -25,19 +25,25 @@ const CommentSection: React.FC<{
     setAnchorEl(event.currentTarget);
   };
   const url = baseUrl();
-  const [showReply, setShowReply] = useState(false)
-  const [showReplyInput, setShowReplyInput] = useState(false)
+  const [showReply, setShowReply] = useState(false);
+  const [showReplyInput, setShowReplyInput] = useState(false);
   const [commentText, setCommentText] = useState("");
-  const token = localStorage.getItem("access_token")
+  const token = localStorage.getItem("access_token");
 
   const postComment = async () => {
     if (!commentText.trim()) return;
+    console.log(comment.id, "commentID");
+    console.log(comment.post_id, "postID");
     // const feedId = feed.type === "repost" ? feed.post_id : feed.id;
 
     try {
       const response = await axios.post(
         `${url}/social/comments`,
-        { post_id: comment.parent_id, parent_id: comment.id, content: commentText },
+        {
+          post_id: comment.parent_id,
+          parent_id: comment.id,
+          content: commentText,
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -108,7 +114,6 @@ const CommentSection: React.FC<{
       }, 5000);
     }
   };
-  
 
   return (
     <div className="bg-white p-0 pt-1 rounded-lg w-full mb-1  dark:bg-black md:p-2">
@@ -200,7 +205,9 @@ const CommentSection: React.FC<{
             }}
           >
             <div className="flex flex-col p-2">
-              <Button onClick={() => setShowReplyInput(prev => !prev)}>Reply</Button>
+              <Button onClick={() => setShowReplyInput((prev) => !prev)}>
+                Reply
+              </Button>
               {/* <Button>Bookmark Post</Button> */}
               {user.username === comment.author_username && (
                 <Button onClick={deleteComment} sx={{ color: "red" }}>
@@ -254,7 +261,10 @@ const CommentSection: React.FC<{
 
             {/* <p className="text-[13px] dark:text-white">0</p> */}
           </div>
-          <div className="flex gap-[4px] items-center cursor-pointer" onClick={() => setShowReply((prev) => !prev)}>
+          <div
+            className="flex gap-[4px] items-center cursor-pointer"
+            onClick={() => setShowReply((prev) => !prev)}
+          >
             <CommentIcon fill={darkMode ? "white" : "#33363F"} />
             {/* <p className="text-[13px] dark:text-white">0</p> */}
           </div>
@@ -288,12 +298,24 @@ const CommentSection: React.FC<{
           </div>
         </div> */}
       </div>
-      {showReplyInput && <CommentFeild commentText={commentText} setCommentText={setCommentText} postComment={postComment} />}
+      {showReplyInput && (
+        <CommentFeild
+          commentText={commentText}
+          setCommentText={setCommentText}
+          postComment={postComment}
+        />
+      )}
       <div className="flex justify-between items-center w-full pl-8 mt-1">
         {showReply && (
           <div className="flex-1">
             {comment.replies.map((rep, index) => {
-              return <CommentSection key={rep.id} comment={rep} setComment={setComment} />;
+              return (
+                <CommentSection
+                  key={rep.id}
+                  comment={rep}
+                  setComment={setComment}
+                />
+              );
             })}
           </div>
         )}

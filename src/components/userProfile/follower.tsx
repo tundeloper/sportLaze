@@ -2,7 +2,7 @@ import { Avatar } from "@mui/material";
 import avat from "../../assets/user/man-studio.png";
 import { Link } from "react-router-dom";
 import { User } from "../../utils/interface";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import baseUrl from "../../utils/baseUrl";
 import { useSportlaze } from "../../hooks/useContext";
 
@@ -17,7 +17,6 @@ export default function Followers({
   setFollowings: Dispatch<SetStateAction<User[]>>;
   setFollow: Dispatch<SetStateAction<User[]>>;
 }) {
-  const [isHovered, setIsHovered] = useState(false);
   const { setSnackIsOpen, setMessage } = useSportlaze();
   const isFollowing = following.some((foll) => foll.id === follow.id);
 
@@ -132,8 +131,8 @@ export default function Followers({
         className={`border border-secondary  text-gray-700 px-4 py-1 rounded-full ${
           isFollowing ? "hover:bg-primary" : "hover:bg-secondary"
         } hover:text-white transition-all`}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        // onMouseEnter={() => setIsHovered(true)}
+        // onMouseLeave={() => setIsHovered(false)}
         onClick={followHandler}
       >
         {isFollowing ? "Unfollow" : "Follow"}

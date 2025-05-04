@@ -22,6 +22,7 @@ import { Monetization } from "./pages/monetization";
 import { PromotionPage } from "./pages/promotion";
 import { AdsTarget } from "./pages/adsTarget";
 import { Payment } from "./pages/payment";
+import Notifications from "./pages/notification";
 const Welcome = lazy(() => import("./pages/auth"));
 const Home = lazy(() => import("./pages/home"));
 const Lounge = lazy(() => import("./pages/lounge"));
@@ -111,6 +112,16 @@ function App() {
                 </Suspense>
               }
             />
+            <Route
+              path="/notifications"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Protect redirectPath="auth">
+                    <Notifications />
+                  </Protect>
+                </Suspense>
+              }
+            />c
              <Route
               path="/channels/:channelId"
               element={

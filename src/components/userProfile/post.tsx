@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   Avatar,
   Button,
@@ -8,14 +8,17 @@ import {
   Tooltip,
 } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
-import SendIcon from "../../assets/send";
+import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+// import SendIcon from "../../assets/send";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 // import postImage from "../../assets/posted picture.png"
 import CommentIcon from "../../assets/comment";
 import LikeIcon from "../../assets/like";
-import Bookmarkicon from "../../assets/bookmarkIcon";
+// import Bookmarkicon from "../../assets/bookmarkIcon";
 import { useSportlaze } from "../../hooks/useContext";
 import {
+  Bookmarks,
   commentsType,
   Post,
   Repost,
@@ -43,6 +46,8 @@ const UserPost: React.FC<{
   reposts: Repost[];
   setReposts?: Dispatch<SetStateAction<Repost[]>>;
   setPost?: Dispatch<SetStateAction<Post[]>>;
+  bookmarks: Bookmarks[];
+  setBookmarks: Dispatch<SetStateAction<Bookmarks[]>>;
 }> = ({
   feed,
   type,
@@ -51,6 +56,8 @@ const UserPost: React.FC<{
   setReposts,
   followers,
   setFollowers,
+  bookmarks,
+  setBookmarks,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -77,7 +84,11 @@ const UserPost: React.FC<{
       +`${feed.type === "repost" ? feed.post_id : feed.id}`
   );
 
-  // console.log(feed.comments_count, feed.reposts_count)
+  const isBookmarked = bookmarks?.some(
+    (bookmarks) =>
+      bookmarks.post_id ===
+      +`${feed.type === "repost" ? feed.post_id : feed.id}`
+  );
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -116,14 +127,12 @@ const UserPost: React.FC<{
 
   const deleteRePost = async () => {
     try {
-      const response = await axios.delete(
-        `${url}/social/reposts/${feed.post_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const feedId = feed.type === "repost" ? feed.post_id : feed.id;
+      const response = await axios.delete(`${url}/social/reposts/${feedId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.status === 200) {
         // setSnackIsOpen(true);
         // setMessage({ message: "Post deleted successfully", error: false });
@@ -135,15 +144,28 @@ const UserPost: React.FC<{
             })
           );
         }
-
-        if (setReposts && !type) {
-          setReposts((prevItems) =>
-            prevItems.filter((item) => item.id !== feed.post_id)
-          );
+        // remove for !type post and repost in the list of feed
+        if (
+          (!type && setReposts && feed.username === user.username) ||
+          (!type && setReposts && feed.reposter_username === user.username)
+        ) {
+          if (setPost)
+            setPost((prevItems) =>
+              prevItems.filter((item) => item.post_id !== feed.post_id)
+            );
         }
-        setReposts && setReposts([]);
 
-        console.log(reposts, "reposts");
+        //indicate post is not reposted
+        if (setReposts && !type) {
+          setReposts((prevItems) => {
+            return prevItems.filter((item) => {
+              const feedId = feed.type === "repost" ? feed.post_id : feed.id;
+              // console.log(item.post_id, feedId)
+              return item.post_id !== feedId;
+            });
+          });
+        }
+        // setReposts && setReposts([]);
 
         // remove for type post
         if (setPost && type) {
@@ -238,6 +260,17 @@ const UserPost: React.FC<{
                 : post;
             });
           });
+
+        if (setBookmarks)
+          setBookmarks((prev) => {
+            return prev.map((post) => {
+              console.log(post);
+              const feedId = feed.type === "repost" ? feed.post_id : feed.id;
+              return feedId === +id
+                ? { ...post, likes_count: post.post.likes_count + 1 }
+                : post;
+            });
+          });
       }
     } catch (error) {
       console.log(error);
@@ -276,10 +309,21 @@ const UserPost: React.FC<{
         if (setPost)
           setPost((prev) => {
             return prev.map((post) => {
-              const feedId = feed.type === "repost" ? post.post_id : post.id;
+              // const feedId = feed.type === "repost" ? post.post_id : post.id;
 
-              return feedId === +id
+              return post.id === feed.id
                 ? { ...post, likes_count: post.likes_count - 1 }
+                : post;
+            });
+          });
+
+        // remove for type post bookmarks
+        if (setBookmarks)
+          setBookmarks((prev) => {
+            return prev.map((post) => {
+              // const feedId = feed.type === "repost" ? post.post_id : post.id;
+              return post.post.id === feed.id
+                ? { ...post, likes_count: post.post.likes_count - 1 }
                 : post;
             });
           });
@@ -312,11 +356,23 @@ const UserPost: React.FC<{
           },
         }
       );
-      console.log(response);
       if (response.status === 200) {
         setReposts && setReposts((prev) => [...prev, response.data]);
         // setSnackIsOpen(true);
         // setMessage({ message: "Post Reposted ✅", error: false });
+
+        if (setPost)
+          setPost((prev) => {
+            return prev.map((post) => {
+              const feedId = feed.type === "repost" ? post.post_id : post.id;
+              //increment the list of reposts count
+              return feedId === feed.id
+                ? { ...post, reposts_count: post.reposts_count + 1 }
+                : post;
+            });
+          });
+
+        //add to the repost list to indicate it is reposted
         if (setPost && !type)
           setPost((prev) => {
             return prev.map((post) => {
@@ -406,7 +462,9 @@ const UserPost: React.FC<{
     const feedId = feed.type === "repost" ? feed.post_id : feed.id;
 
     try {
-      const { data } = await axios.get(`${url}/social/comments/${feedId}`, {headers : {Authorization: `Bearer ${token}`}});
+      const { data } = await axios.get(`${url}/social/comments/${feedId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       console.log(data);
 
@@ -459,6 +517,7 @@ const UserPost: React.FC<{
 
   const createBookmark = async () => {
     const feedId = feed.type === "repost" ? feed.post_id : feed.id;
+    console.log(bookmarks, "BOOKMARK ID");
 
     try {
       const response = await axios.post(
@@ -472,26 +531,42 @@ const UserPost: React.FC<{
       );
 
       if (response.status === 200) {
-        setComments((prev) => [...prev, response.data]);
         setSnackIsOpen(true);
-        setMessage({ message: "Comment added!", error: false });
-        // if (setPost)
-        //   setPost((prev) => {
-        //     return prev.map((post) => {
-        //       const feedId = feed.type === "repost" ? post.post_id : post.id;
-        //       return feedId === +`${feed.type === "repost" ? feed.id : feed.id}`
-        //         ? { ...post, comments_count: post.comments_count + 1 }
-        //         : post;
-        //     });
-        //   });
+        setMessage({ message: "Bookmark created", error: false });
+        setBookmarks && setBookmarks((prev) => [...prev, response.data]);
       }
     } catch (error) {
-      setMessage({ message: "Failed to comment", error: true });
+      setMessage({ message: "Already bookmarked", error: true });
     } finally {
       setTimeout(() => setSnackIsOpen(false), 3000);
     }
   };
-  
+
+  const deleteBookmark = async () => {
+    const feedId = feed.type === "repost" ? feed.post_id : feed.id;
+
+    try {
+      const response = await axios.delete(`${url}/social/bookmarks/${feedId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setBookmarks &&
+        setBookmarks((prev) =>
+          prev.filter((bookmarks) => bookmarks.post_id !== feedId)
+        );
+
+      if (response.status === 200) {
+        setSnackIsOpen(true);
+        setMessage({ message: "Bookmark deleted", error: false });
+      }
+    } catch (error) {
+      setMessage({ message: "Already bookmarked", error: true });
+    } finally {
+      setTimeout(() => setSnackIsOpen(false), 3000);
+    }
+  };
 
   const id = open ? "simple-popover" : undefined;
 
@@ -590,7 +665,13 @@ const UserPost: React.FC<{
             }}
           >
             <div className="flex flex-col p-2">
-              <Button>Bookmark Post</Button>
+              <Button
+                onClick={() => {
+                  isBookmarked ? deleteBookmark() : createBookmark();
+                }}
+              >
+                Bookmark Post
+              </Button>
               {type &&
                 (user.username === feed.username ||
                   feed.reposter_username === user.username) && (
@@ -704,27 +785,42 @@ const UserPost: React.FC<{
                       </p>
                     )}
                   </div>
-                  <div
-                    className="flex gap-2 cursor-pointer p-1 hover:bg-secondary rounded-md"
-                    onClick={() => setShowRepostWithQuote((prev) => !prev)}
-                  >
+                  {/* <div className="flex gap-2 cursor-pointer p-1 hover:bg-secondary rounded-md">
                     <RepostIcon fill={darkMode ? "#222222" : "white"} />
                     <p className="font-semibold text-white dark:text-black">
                       Quote
                     </p>
-                  </div>
+                  </div> */}
+                  {user.username === feed.reposter_username ||
+                  isRepost ? null : (
+                    <div
+                      className="flex gap-2 cursor-pointer p-1 hover:bg-secondary rounded-md"
+                      onClick={() => {
+                        setShowRepostWithQuote(true);
+                      }}
+                    >
+                      <RepostIcon fill={darkMode ? "#222222" : "white"} />
+                      <p className="font-semibold text-white dark:text-black">
+                        Quote
+                      </p>
+                    </div>
+                  )}
                 </div>
               </ClickAwayListener>
             )}
             {user.username === feed.reposter_username || isRepost ? (
               <>
                 <RepostIcon fill={"#6c55e7"} />
-                <p className="text-[13px] text-[#6c55e7]">{feed.reposts_count}</p>
+                <p className="text-[13px] text-[#6c55e7]">
+                  {feed.reposts_count}
+                </p>
               </>
             ) : (
               <>
                 <RepostIcon fill={darkMode ? "white" : "#222222"} />
-                <p className="text-[13px] dark:text-white">{feed.reposts_count}</p>
+                <p className="text-[13px] dark:text-white">
+                  {feed.reposts_count}
+                </p>
               </>
             )}
           </div>
@@ -740,8 +836,19 @@ const UserPost: React.FC<{
             <Share fill={darkMode ? "white" : "#222222"} />
             <p className="text-[13px] dark:text-white">{feed.comments_count}</p>
           </div>
-          <div className="mr-2" onClick={createBookmark}>
-            <Bookmarkicon fill={darkMode ? "white" : "#222222"} />
+          <div className="mr-2 cursor-pointer" onClick={createBookmark}>
+            {isBookmarked ? (
+              <BookmarkIcon
+                sx={{ color: `${darkMode ? "white" : "#222222"}` }}
+              />
+            ) : (
+              <BookmarkBorderOutlinedIcon
+                sx={{ color: `${darkMode ? "white" : "#222222"}` }}
+              />
+            )}
+            {/* <Bookmarkicon fill={darkMode ? "white" : "#222222"} /> */}
+
+            {/* <Bookmarkicon fill={darkMode ? "white" : "#222222"} /> */}
           </div>
         </div>
       </div>
@@ -791,11 +898,13 @@ const UserPost: React.FC<{
           setshowQuote={setShowRepostWithQuote}
           setReposts={setReposts}
           repostHandler={repostHandler}
+          setPosts={setPost}
           setRepost={setRepost}
         />
       )}
     </div>
   ) : (
+    //////////////////////// Repost Or Quote ////////////////////////
     <div className="bg-white p-0 pt-1 12 rounded-lg w-full mb-2  dark:bg-black md:p-4">
       {/* Shared Label */}
       {/* check if it persoal post or other feed 
@@ -890,7 +999,14 @@ const UserPost: React.FC<{
             }}
           >
             <div className="flex flex-col p-2">
-              <Button>Bookmark Post</Button>
+              <Button
+                sx={{ textTransform: "capitalizen" }}
+                onClick={() => {
+                  isBookmarked ? deleteBookmark() : createBookmark();
+                }}
+              >
+                {isBookmarked ? "delete Bookmark" : "Bookmarks"}
+              </Button>
               {type &&
                 (user.username === feed.username ||
                   feed.reposter_username === user.username) && (
@@ -972,7 +1088,7 @@ const UserPost: React.FC<{
           >
             <CommentIcon fill={darkMode ? "white" : "#33363F"} />
             <p className="text-[13px] dark:text-white">
-            {feed.comments_count ? feed.comments_count : 0}
+              {feed.comments_count ? feed.comments_count : 0}
             </p>
           </div>
 
@@ -1004,27 +1120,42 @@ const UserPost: React.FC<{
                       </p>
                     )}
                   </div>
-                  <div
-                    className="flex gap-2 cursor-pointer p-1 hover:bg-secondary rounded-md"
-                    onClick={() => setShowRepostWithQuote((prev) => !prev)}
-                  >
+                  {/* <div className="flex gap-2 cursor-pointer p-1 hover:bg-secondary rounded-md">
                     <RepostIcon fill={darkMode ? "#222222" : "white"} />
                     <p className="font-semibold text-white dark:text-black">
                       Quote
                     </p>
-                  </div>
+                  </div> */}
+                  {user.username === feed.reposter_username ||
+                  isRepost ? null : (
+                    <div
+                      className="flex gap-2 cursor-pointer p-1 hover:bg-secondary rounded-md"
+                      onClick={() => {
+                        setShowRepostWithQuote(true);
+                      }}
+                    >
+                      <RepostIcon fill={darkMode ? "#222222" : "white"} />
+                      <p className="font-semibold text-white dark:text-black">
+                        Quote
+                      </p>
+                    </div>
+                  )}
                 </div>
               </ClickAwayListener>
             )}
             {user.username === feed.reposter_username || isRepost ? (
               <>
                 <RepostIcon fill={"#6c55e7"} />
-                <p className="text-[13px] text-[#6c55e7]">{feed.reposts_count ? feed.reposts_count : 0}</p>
+                <p className="text-[13px] text-[#6c55e7]">
+                  {feed.reposts_count ? feed.reposts_count : 0}
+                </p>
               </>
             ) : (
               <>
                 <RepostIcon fill={darkMode ? "white" : "#222222"} />
-                <p className="text-[13px] dark:text-white">{feed.reposts_count ? feed.reposts_count : 0}</p>
+                <p className="text-[13px] dark:text-white">
+                  {feed.reposts_count ? feed.reposts_count : 0}
+                </p>
               </>
             )}
           </div>
@@ -1040,8 +1171,22 @@ const UserPost: React.FC<{
             <Share fill={darkMode ? "white" : "#222222"} />
             {/* <p className="text-[13px] dark:text-white">0</p> */}
           </div>
-          <div className="mr-2" onClick={createBookmark}>
-            <Bookmarkicon fill={darkMode ? "white" : "#222222"} />
+          <div
+            className="mr-2 cursor-pointer"
+            onClick={() => {
+              isBookmarked ? deleteBookmark() : createBookmark();
+            }}
+          >
+            {/* <Bookmarkicon fill={darkMode ? "white" : "#222222"} /> */}
+            {isBookmarked ? (
+              <BookmarkIcon
+                sx={{ color: `${darkMode ? "white" : "#222222"}` }}
+              />
+            ) : (
+              <BookmarkBorderOutlinedIcon
+                sx={{ color: `${darkMode ? "white" : "#222222"}` }}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -1089,6 +1234,7 @@ const UserPost: React.FC<{
           setshowQuote={setShowRepostWithQuote}
           setReposts={setReposts}
           repostHandler={repostHandler}
+          setPosts={setPost}
           setRepost={setRepost}
         />
       )}
