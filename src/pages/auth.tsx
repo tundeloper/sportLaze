@@ -11,10 +11,12 @@ import MUISnackbar from "../utils/snackBar"
 import Overlay from "../utils/overlay"
 import { useSportlaze } from "../hooks/useContext"
 import GoogleLoginButton from "../utils/googleLoginBtn"
+import OtpComponent from "./otpInput"
 
 const Login: React.FC = () => {
   const [signInIsVisible, setSignInIsVisible] = useState<boolean>(false)
   const [signUpIsVisible, setSignUpIsVisible] = useState<boolean>(false)
+  const [otpIsVisible, setOtpIsVisible] = useState<boolean>(false)
   // const navigate = useNavigate()
 
   const { loading } = useSportlaze()
@@ -22,15 +24,26 @@ const Login: React.FC = () => {
   const handleSignInClicked = () => {
     setSignInIsVisible(true)
     setSignUpIsVisible(false)
+    setOtpIsVisible(false)
   }
 
   const handleSignUpClicked = () => {
     setSignUpIsVisible(true)
     setSignInIsVisible(false)
+    setOtpIsVisible(false)
   }
+
+  const handleOTPClicked = () => {
+    setOtpIsVisible(true)
+    setSignInIsVisible(false)
+    setSignUpIsVisible(false)
+    return {}
+  }
+
   const removeHandler = () => {
     setSignInIsVisible(false)
     setSignUpIsVisible(false)
+    setOtpIsVisible(false)
   }
 
   const overlay = (signInIsVisible || signUpIsVisible)
@@ -58,7 +71,8 @@ const Login: React.FC = () => {
         <div className="flex-1 h-[.1px] bg-white" />
       </div>
       <Button sx={{ color: 'white', background: '#463a85', borderRadius: '2rem', textTransform: 'capitalize', padding: '10px' }} onClick={handleSignInClicked}>Sign In</Button>
-      <SignIn visible={signInIsVisible} setIsVisible={setSignInIsVisible} />
+      <SignIn visible={signInIsVisible} setIsVisible={setSignInIsVisible} handleOtp={handleOTPClicked} />
+      {/* <OtpComponent visible={otpIsVisible} setIsVisible={setOtpIsVisible} /> */}
       <SignUp visible={signUpIsVisible} />
     </div>
   </div>

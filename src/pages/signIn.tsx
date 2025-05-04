@@ -14,7 +14,8 @@ import baseUrl from "../utils/baseUrl";
 const SignIn: React.FC<{
   visible: boolean;
   setIsVisible: Dispatch<SetStateAction<boolean>>;
-}> = ({ visible, setIsVisible }) => {
+  handleOtp: () => {};
+}> = ({ visible, setIsVisible, handleOtp }) => {
   const { login, setLoading, setSnackIsOpen, setMessage, setInitUser } =
     useSportlaze();
   const navigate = useNavigate();
@@ -145,9 +146,9 @@ const SignIn: React.FC<{
                 style={{ borderRadius: "3rem" }}
                 type="password"
               />
-              <Link to="#" style={{ textDecoration: "underline" }}>
+              <button style={{ textDecoration: "underline" }} onClick={() => {handleOtp()}}>
                 <p>Forgot Password?</p>
-              </Link>
+              </button>
               <Button
                 sx={{
                   color: "white",
@@ -168,7 +169,7 @@ const SignIn: React.FC<{
       </div>
 
       <p className="text-center mb-2 mt-4">
-        Don't have an account?{" "}
+        Don't have an account?
         <Button
           className="font-bold"
           style={{
