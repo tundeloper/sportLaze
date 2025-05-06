@@ -71,7 +71,7 @@ export const SearchLouge: React.FC<{ lounge: LoungeType }> = ({ lounge }) => {
           <img src={lounge.icon} alt={lounge.slug} className="h-full w-full" />
         </div>
         <div className=" flex flex-col">
-          <p className="mb-2">{lounge.name}</p>
+          <p className="mb-1">{lounge.name}</p>
           <p className="">{lounge.description}</p>
         </div>
       </Link>

@@ -9,14 +9,6 @@ import LivesScoreIcon from "../assets/lounge/liveScoreIcon";
 import ChannelIIcon from "../assets/lounge/channelIcon";
 import ChallengeIcon from "../assets/lounge/challengeIcon";
 import HeartIcon from "../assets/lounge/heart";
-// import soccer from '../assets/lounge/soccer.png'
-import soccer from "../assets/svgs/ballEdit.jpg";
-// import basketBall from '../assets/svgs/Mask group.png'
-import basketBall from "../assets/svgs/basketball_big.jpg";
-// import hockey from '../assets/svgs/Hockey.png'
-import hockey from "../assets/svgs/hockey_big.jpg";
-// import nfl from '../assets/svgs/the nfl.png'
-import nfl from "../assets/svgs/nfl_big.jpg";
 import logo from "../assets/whitelogo.png";
 import InfoIcon from "../assets/lounge/infoIcon";
 import { LoungeType } from "../utils/interface";

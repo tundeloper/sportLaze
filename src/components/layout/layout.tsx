@@ -24,6 +24,13 @@ import baseUrl, { socketUrl } from "../../utils/baseUrl";
 import { SearchType } from "../../utils/interface";
 import { SearchLouge, SearchUser } from "./search";
 // import { Search } from "@mui/icons-material";
+import { Howl } from "howler";
+
+
+const sound = new Howl({
+  src: ["/notification.mp3"], 
+  volume: 1,
+});
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [profile, setProfile] = useState<boolean>(false);
@@ -35,14 +42,15 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     users: [],
     hashtags: [],
   });
-
+ 
   // const [notifications, setNotifications] = useState<Notification[]>([]);
   const socketRef = useRef<WebSocket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
   // const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
   const [unreadCount, setUnreadCount] = useState<number>(0);
-  const { logout, user, notifications, setNotifications } = useSportlaze();
+  const [unreaMesaagecount, setUnreaMesaagecount] = useState<number>(0);
+  const { logout, user, setNotifications } = useSportlaze();
   const url = baseUrl();
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -83,10 +91,14 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           case "unread_notifications":
             // console.log("📬 Unread notifications count:", payload);
             setUnreadCount(payload.count);
+            // if(payload.count > 0) sound.play(); 
             break;
 
           case "direct_message":
-            console.log("📨 Direct message:", payload);
+            // console.log("📨 Direct message:", payload);
+            // setMessages((prev) => [...prev, payload]);
+            // if (payload.sender !== 'userId') sound.play();
+            // if (payload.sender !== 'userId') sound.play();
             break;
 
           case "direct_message_sent":
@@ -95,6 +107,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
           case "unread_messages":
             console.log("📥 Unread messages count:", payload);
+            setUnreaMesaagecount(payload.count);
+            // if(payload.count > 0) sound.play();
             break;
 
           default:
@@ -300,12 +314,12 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <img src={whiteImg} alt="logo" className="w-[2.5rem]" />
               </Link>
             </div>
-            <div
+            <Link to="/messages"
               className="p-[10px] bg-primary relative"
               style={{ borderRadius: "10rem" }}
             >
               <MessageIcon />
-              {isConnected && (
+              {isConnected && unreaMesaagecount > 0 && (
                 <div
                   className="flex justify-center items-center bg-[white] text-[red] text-[10px] w-4 h-4"
                   style={{
@@ -315,10 +329,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     borderRadius: "2rem",
                   }}
                 >
-                  3
+                  {unreaMesaagecount}
                 </div>
               )}
-            </div>
+            </Link>
             <Link
               to="/notifications"
               className="p-2 bg-primary relative"

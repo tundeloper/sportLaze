@@ -23,6 +23,8 @@ import { PromotionPage } from "./pages/promotion";
 import { AdsTarget } from "./pages/adsTarget";
 import { Payment } from "./pages/payment";
 import Notifications from "./pages/notification";
+import Messages from "./pages/messages";
+import UserChat from "./pages/chat";
 const Welcome = lazy(() => import("./pages/auth"));
 const Home = lazy(() => import("./pages/home"));
 const Lounge = lazy(() => import("./pages/lounge"));
@@ -58,6 +60,26 @@ function App() {
                 <Suspense fallback={<div>Loading...</div>}>
                   <Protect redirectPath="auth">
                     <Follower />
+                  </Protect>
+                </Suspense>
+              }
+            />
+            <Route
+              path="/messages"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Protect redirectPath="auth">
+                    <Messages />
+                  </Protect>
+                </Suspense>
+              }
+            />
+            <Route
+              path="/messages/:user_id"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Protect redirectPath="auth">
+                    <UserChat />
                   </Protect>
                 </Suspense>
               }

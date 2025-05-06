@@ -195,7 +195,7 @@ export type Notification = {
   sender_name: string;
   sender_username: string;
   sender_profile_picture: string;
-  type: "like" | "comment" | "repost" | "follow" | "mention" | "quote_repost" | "message";
+  type: "like" | "comment" | "repost" | "follow" | "quote_repost" | "message";
   content: string;
   reference_id: number;
   reference_type: string;
@@ -214,7 +214,34 @@ export enum NotificationType {
 }
 
 export type SearchType = {
-  hashtags:{hashtag: string, count: number}[];
+  hashtags: { hashtag: string; count: number }[];
   lounges: LoungeType[];
   users: User[];
+};
+
+export type conversation = {
+  user_id: number;
+  username: string;
+  name: string;
+  profile_picture: string;
+  latest_message: {
+    id: number;
+    content: string;
+    sender_id: string;
+    created_at: string;
+    is_read: boolean;
+  };
+  unread_count: number;
+};
+
+export type chats = {
+  content: string;
+  created_at: string;
+  id: string;
+  is_read: boolean;
+  recipient_id: string;
+  sender_id: number;
+  sender_name: string;
+  sender_profile_picture: string;
+  sender_username: string;
 };

@@ -92,7 +92,6 @@ const Landing = () => {
         );
         
         setRepost(data);
-        console.log(data, repost);
       } catch (error) {
         console.log(error);
       }
