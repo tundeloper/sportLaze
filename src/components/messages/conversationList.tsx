@@ -1,7 +1,7 @@
 import { Avatar } from "@mui/material";
-import { formatFullDate } from "../../utils/format-date";
 import { conversation } from "../../utils/interface";
 import { Link } from "react-router-dom";
+import formatDateTime from "../../utils/messageDateFormat";
 
 const ConversationList: React.FC<{conversation: conversation}> = ({conversation}) => {
     
@@ -27,7 +27,7 @@ const ConversationList: React.FC<{conversation: conversation}> = ({conversation}
                 <span className="font-semibold text-black truncate max-w-[60%]">
                   {conversation.name}
                 </span>
-                <span className="ml-4">{formatFullDate(conversation.latest_message.created_at)}</span>
+                <span className="ml-4">{formatDateTime(conversation.latest_message.created_at)}</span>
                 </div>
                 {conversation.unread_count > 0 && <span className="bg-primary rounded-full p-1 w-min h-min text-white font-semibold">{conversation.unread_count}</span>}
               </div>

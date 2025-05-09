@@ -71,7 +71,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     socketRef.current = new WebSocket(socketUrl());
 
     socketRef.current.onopen = (event) => {
-      console.log("✅ WebSocket connected");
+      // console.log("✅ WebSocket connected");
       console.log("Socket ID:", event.currentTarget);
       setIsConnected(true);
     };

@@ -25,6 +25,8 @@ import { Payment } from "./pages/payment";
 import Notifications from "./pages/notification";
 import Messages from "./pages/messages";
 import UserChat from "./pages/chat";
+import Verification from "./pages/verify";
+import ForgetPassword from "./pages/forget-passord";
 const Welcome = lazy(() => import("./pages/auth"));
 const Home = lazy(() => import("./pages/home"));
 const Lounge = lazy(() => import("./pages/lounge"));
@@ -51,6 +53,22 @@ function App() {
               element={
                 <Suspense fallback={<div>Loading...</div>}>
                   <Welcome />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/auth/verification"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Verification />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/auth/forgot-password"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <ForgetPassword />
                 </Suspense>
               }
             />
@@ -115,7 +133,7 @@ function App() {
               }
             />
             <Route
-              path={`/posts/:id`}
+              path={`/post/:id`}
               element={
                 <Suspense fallback={<div>Loading...</div>}>
                   <Protect redirectPath="auth">

@@ -19,13 +19,23 @@ const Chat: React.FC<{ chat: chats }> = ({ chat }) => {
   return (
     <>
       <div
-        className={`max-w-xs p-2 rounded-lg ${
+        className={`max-w-xs p-2 rounded-lg mb-2 ${
           user_id && chat.sender_id !== +user_id
-            ? "ml-auto bg-blue-500 text-white"
+            ? "ml-auto bg-secondary text-white"
             : "mr-auto bg-gray-200 text-black"
         }`}
       >
-        {chat.content}
+        <p>{chat.content}</p>
+        <span className={`text-xs text-gray-500 ${
+          user_id && chat.sender_id !== +user_id
+            ? "ml-auto text-white"
+            : "mr-auto text-gray-500"
+        }`}>
+          {new Date(chat.created_at).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </span>
       </div>
       <div ref={messagesEndRef} />
     </>

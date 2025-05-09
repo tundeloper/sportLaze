@@ -15,7 +15,7 @@ const SignIn: React.FC<{
   visible: boolean;
   setIsVisible: Dispatch<SetStateAction<boolean>>;
   handleOtp: () => {};
-}> = ({ visible, setIsVisible, handleOtp }) => {
+}> = ({ visible, setIsVisible,  }) => {
   const { login, setLoading, setSnackIsOpen, setMessage, setInitUser } =
     useSportlaze();
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ const SignIn: React.FC<{
     return () => window.removeEventListener("keydown", handleKeydown);
   }, [visible, setIsVisible]);
 
-  const url = baseUrl()
+  const url = baseUrl();
 
   return (
     <div
@@ -69,10 +69,7 @@ const SignIn: React.FC<{
               formData.append("password", values.password);
               setLoading(true);
               setSnackIsOpen(false);
-              const response = await axios.post(
-                `${url}/auth/token`,
-                formData
-              );
+              const response = await axios.post(`${url}/auth/token`, formData);
               const { data } = response;
               if (data.access_token) {
                 login(data?.access_token);
@@ -91,11 +88,11 @@ const SignIn: React.FC<{
             } catch (error) {
               setSnackIsOpen(true);
               if (axios.isAxiosError(error)) {
-                setLoading(false)
+                setLoading(false);
                 console.log(error);
                 if (error.message === "Network Error") {
                   setMessage({ message: error.message, error: true });
-                } else { 
+                } else {
                   setMessage({
                     message: error.response?.data.detail,
                     error: true,
@@ -146,9 +143,15 @@ const SignIn: React.FC<{
                 style={{ borderRadius: "3rem" }}
                 type="password"
               />
-              <button style={{ textDecoration: "underline" }} onClick={() => {handleOtp()}}>
+              <Link
+              to="/auth/forgot-password"
+                style={{ textDecoration: "underline" }}
+                // onClick={() => {
+                //   handleOtp();
+                // }}
+              >
                 <p>Forgot Password?</p>
-              </button>
+              </Link>
               <Button
                 sx={{
                   color: "white",

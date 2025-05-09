@@ -2,10 +2,10 @@ import * as Yup from "yup"
 const validationSchema = Yup.object({
     name: Yup.string().required('Username is required'),
     email: Yup.string().email("Invalid email format").required("Email is required"),
-    password: Yup.string()
-        .min(6, "Password must be at least 6 characters")
+    // password: Yup.string()
+    //     .min(6, "Password must be at least 6 characters")
         // .matches(/^[a-zA-Z0-9]+$/, "Password must be alphanumeric")
-        .required("Password is required"),
+        // .required("Password is required"),
     //   date: Yup.object().required('Please select a date'),
     //   country: Yup.object().required('Please select a country'),
     //   FavSport: Yup.object().required('Please select a Favourite Sport'),

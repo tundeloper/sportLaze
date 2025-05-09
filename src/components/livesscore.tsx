@@ -9,30 +9,29 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export interface liveType {
-    away_logo: string;
-    away_score: number;
-    away_team: string;
-    date: string;
-    elapsed: number;
-    home_logo: string;
-    home_score: number;
-    home_team: string;
-    id: string;
-    league_country: string;
-    league_id: number;
-    league_logo: string;
-    league_name: string;
-    score_fulltime: { home: null | number; away: null | number };
-    score_halftime: { home: null | number; away: null | number };
-    status: string;
-    venue: { id: number; name: string; city: string };
-  }
+  away_logo: string;
+  away_score: number;
+  away_team: string;
+  date: string;
+  elapsed: number;
+  home_logo: string;
+  home_score: number;
+  home_team: string;
+  id: string;
+  league_country: string;
+  league_id: number;
+  league_logo: string;
+  league_name: string;
+  score_fulltime: { home: null | number; away: null | number };
+  score_halftime: { home: null | number; away: null | number };
+  status: string;
+  venue: { id: number; name: string; city: string };
+}
 
-const LiveScore : React.FC = () => {
-  const [slides, setSlides] = useState<liveType[]>([])
-  const [loading, setLoading] = useState<Boolean>(false)
-  const navigate = useNavigate()
-
+const LiveScore: React.FC = () => {
+  const [slides, setSlides] = useState<liveType[]>([]);
+  const [loading, setLoading] = useState<Boolean>(false);
+  const navigate = useNavigate();
 
   const fetchLiveScores = async () => {
     const token = localStorage.getItem("access_token"); // Get token from storage
@@ -46,17 +45,19 @@ const LiveScore : React.FC = () => {
     setLoading(true);
     // setError("");
     try {
-      const response = await axios.get(
-        `https://lazeapi-v1.onrender.com/v1/livescores/live`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(response.data);
-      setSlides(response.data.matches);
+      if (slides.length > 0) {
+        const response = await axios.get(
+          `https://lazeapi-v1.onrender.com/v1/livescores/live`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(response.data);
+        setSlides(response.data.matches);
+      }
     } catch (err) {
       // setError("Failed to fetch live scores");
     } finally {
@@ -68,24 +69,23 @@ const LiveScore : React.FC = () => {
     fetchLiveScores();
   }, []);
 
+  //   const responsive = {
+  //     desktop: {
+  //       breakpoint: { max: 3000, min: 1024 },
+  //       items: 1,
+  //     },
+  //     tablet: {
+  //       breakpoint: { max: 1024, min: 464 },
+  //       items: 1,
+  //     },
+  //     mobile: {
+  //       breakpoint: { max: 464, min: 0 },
+  //       items: 1,
+  //     },
+  //   };
 
-//   const responsive = {
-//     desktop: {
-//       breakpoint: { max: 3000, min: 1024 },
-//       items: 1,
-//     },
-//     tablet: {
-//       breakpoint: { max: 1024, min: 464 },
-//       items: 1,
-//     },
-//     mobile: {
-//       breakpoint: { max: 464, min: 0 },
-//       items: 1,
-//     },
-//   };
-
-const {darkMode} = useSportlaze()
-const fill = darkMode ? 'white' : '#3E0F51'
+  const { darkMode } = useSportlaze();
+  const fill = darkMode ? "white" : "#3E0F51";
 
   // const slides = [
   //   {
@@ -140,7 +140,10 @@ const fill = darkMode ? 'white' : '#3E0F51'
 
   return (
     <Box className="bg-white overflow-hidden rounded-[1rem] shadow-md h-[23rem] dark:bg-[black] max-w-sm mx-auto mb-4">
-      <Typography variant="h6" className="text-center font-bold text-white gradient p-[1.2rem]">
+      <Typography
+        variant="h6"
+        className="text-center font-bold text-white gradient p-[1.2rem]"
+      >
         LIVE SCORE
       </Typography>
 
@@ -154,18 +157,21 @@ const fill = darkMode ? 'white' : '#3E0F51'
         containerClass="carousel-container"
       > */}
       <Carousel
-            indicators={false} // Hide pagination dots
-            navButtonsAlwaysVisible={false}
-            animation="slide"
-            autoPlay
-            duration={200}
-            activeIndicatorIconButtonProps={{
-                style: { color: '#463a85'}
-            }}
-        >
+        indicators={false} // Hide pagination dots
+        navButtonsAlwaysVisible={false}
+        animation="slide"
+        autoPlay
+        duration={200}
+        activeIndicatorIconButtonProps={{
+          style: { color: "#463a85" },
+        }}
+      >
         {/* {slides.length === 0  && <div className="text-black font-semibold flex items-center justify-center mt6 dark:text-white">No live Match currently</div>} */}
         {slides.map((slide, index) => (
-          <Box key={index} className="p-5 bg-white dark:bg-[black] rounded-lg h-[100%]" >
+          <Box
+            key={index}
+            className="p-5 bg-white dark:bg-[black] rounded-lg h-[100%]"
+          >
             {/* Team Logos */}
             <Box className="flex justify-between items-center">
               <Box className="flex flex-col items-center">
@@ -174,7 +180,10 @@ const fill = darkMode ? 'white' : '#3E0F51'
                   alt={`${slide.home_team} Logo`}
                   className="h-16 w-16 rounded-full"
                 />
-                <Typography variant="body2" className="text-gray-600 mt-1 text-center data:text-white">
+                <Typography
+                  variant="body2"
+                  className="text-gray-600 mt-1 text-center data:text-white"
+                >
                   {slide.home_team}
                 </Typography>
               </Box>
@@ -199,7 +208,10 @@ const fill = darkMode ? 'white' : '#3E0F51'
                   alt={`${slide.away_team} Logo`}
                   className="h-16 w-16 rounded-full"
                 />
-                <Typography variant="body2" className="text-gray-600 mt-1 text-center data:text-white">
+                <Typography
+                  variant="body2"
+                  className="text-gray-600 mt-1 text-center data:text-white"
+                >
                   {slide.away_team}
                 </Typography>
               </Box>
@@ -210,7 +222,7 @@ const fill = darkMode ? 'white' : '#3E0F51'
               <Typography
                 variant="h4"
                 className="font-bold text-secondary shadow-lg w-[2rem] text-center rounded-lg dark:text-white"
-                style={{fontWeight: 'bolder'}}
+                style={{ fontWeight: "bolder" }}
               >
                 {slide.home_score}
               </Typography>
@@ -220,19 +232,16 @@ const fill = darkMode ? 'white' : '#3E0F51'
                   className="text-purple-600 font-semibol"
                 >
                   {/* period */}
-                  {slide.status} 
+                  {slide.status}
                 </Typography>
-                <Typography
-                  variant="h6"
-                  className="text-red-600 font-bold"
-                >
+                <Typography variant="h6" className="text-red-600 font-bold">
                   {slide.elapsed}
                 </Typography>
               </Box>
               <Typography
                 variant="h4"
                 className="font-bold text-secondary shadow-lg w-[2rem] text-center rounded-lg dark:text-white"
-                style={{fontWeight: 'bolder'}}
+                style={{ fontWeight: "bolder" }}
               >
                 {slide.away_score}
               </Typography>
@@ -242,14 +251,24 @@ const fill = darkMode ? 'white' : '#3E0F51'
             <Box className="grid grid-cols-2 mt-4 text-center text-gray-600 text-sm">
               <Box>
                 {[].map((scorer, idx) => (
-                  <Typography style={{fontSize: '11px'}}  key={idx} variant="body2" className="text-sm dark:text-white">
+                  <Typography
+                    style={{ fontSize: "11px" }}
+                    key={idx}
+                    variant="body2"
+                    className="text-sm dark:text-white"
+                  >
                     {scorer}
                   </Typography>
                 ))}
               </Box>
               <Box>
                 {[].map((scorer, idx) => (
-                  <Typography style={{fontSize: '11px'}} key={idx} variant="body2" className="text-sm dark:text-white">
+                  <Typography
+                    style={{ fontSize: "11px" }}
+                    key={idx}
+                    variant="body2"
+                    className="text-sm dark:text-white"
+                  >
                     {scorer}
                   </Typography>
                 ))}

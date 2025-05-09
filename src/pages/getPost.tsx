@@ -14,7 +14,7 @@ export function GetSinglePost() {
       // Fetch post by id
       try {
         const response = await axios.get(`${url}/posts/${id}`);
-        console.log(response);
+        console.log(response.data );
         setPost(response.data);
         
     } catch (error) {
@@ -26,5 +26,7 @@ export function GetSinglePost() {
     console.log(id);
   }, [id]);
 
-  return <UserProfile>{id}</UserProfile>;
+  return <UserProfile>
+    {id}
+  </UserProfile>;
 }
