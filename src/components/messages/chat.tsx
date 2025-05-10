@@ -19,7 +19,7 @@ const Chat: React.FC<{ chat: chats }> = ({ chat }) => {
   return (
     <>
       <div
-        className={`max-w-xs p-2 rounded-lg mb-2 ${
+        className={`max-w-xs p-2 rounded-lg ${
           user_id && chat.sender_id !== +user_id
             ? "ml-auto bg-secondary text-white"
             : "mr-auto bg-gray-200 text-black"

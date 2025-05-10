@@ -15,6 +15,7 @@ const UserChat = () => {
 
   const socketRef = useRef<WebSocket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { user_id } = useParams();
   const token = localStorage.getItem("access_token");
@@ -112,6 +113,7 @@ const UserChat = () => {
 
     //send message to the server
     try {
+      setLoading(true)
       const { data } = await axios.post(
         `${API_URL}/message/dm/send`,
         {
@@ -127,37 +129,45 @@ const UserChat = () => {
       console.log("Message sent:", data);
     } catch (error) {
       console.error("Error sending message:", error);
+    }finally{
+      setLoading(false)
     }
     // Update the chat state with the new message
   };
 
   return (
     <UserProfile>
-      <div className="flex h-screens">
+      <div className="flex" style={{height: "calc(100vh - 2rem)"}}>
+        {/* Sidebar */}
+        {/* <div className="w-1/4 border-r bg-gray-100 p-4">
+        <h2 className="text-lg font-semibold mb-4">Chats</h2>
+        <ul>
+          <li className="py-2 border-b">General Chat</li>
+        </ul>
+      </div> */}
+
+        {/* Chat Area */}
         <div className="flex-1 flex flex-col">
           <div className="flex-1 overflow-y-auto p-4 space-y-2">
-            {/* {chats.map(([date, messages]) => (
-              <div key={date} className="mb-4">
-                <div className="text-lg text-center flex justify-center items-centerrounded-sm mb-2">
-                  <p className=" bg-primary text-white rounded-md px-2 py-1">
-                  {new Date(date).toLocaleDateString("en-US", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                  </p>
+            {user_id &&
+              chats.map((msg) => (
+                <div>
+                  <Chat key={msg.id} chat={msg} />
                 </div>
-                {messages.map((message) => (
-                  <Chat key={message.id} chat={message} />
-                ))}
-              </div>
-            ))} */}
-
-            {chats.map((chat) => (
-              <Chat key={chat.id} chat={chat} />
-            ))}
+                // <div
+                //   key={msg.id}
+                //   className={`max-w-xs p-2 rounded-lg ${
+                //     msg.sender_id === +user_id
+                //       ? "ml-auto bg-blue-500 text-white"
+                //       : "mr-auto bg-gray-200 text-black"
+                //   }`}
+                // >
+                //   {msg.content}
+                // </div>
+              ))}
+            {/* <div ref={messagesEndRef} /> */}
           </div>
+
           <div className="p-4 border-t flex gap-2">
             <input
               value={input}
@@ -169,6 +179,7 @@ const UserChat = () => {
             <button
               onClick={sendMessage}
               className="bg-blue-600 text-white px-4 py-2 rounded"
+              disabled={loading}
             >
               Send
             </button>

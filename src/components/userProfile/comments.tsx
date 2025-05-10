@@ -14,7 +14,8 @@ import CommentFeild from "./commentField";
 const CommentSection: React.FC<{
   comment: commentsType;
   setComment: Dispatch<SetStateAction<commentsType[]>>;
-}> = ({ comment, setComment }) => {
+  postId?: number
+}> = ({ comment, setComment, postId }) => {
   const { darkMode, user, setMessage, setSnackIsOpen } = useSportlaze();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -30,17 +31,18 @@ const CommentSection: React.FC<{
   const [commentText, setCommentText] = useState("");
   const token = localStorage.getItem("access_token");
 
+
   const postComment = async () => {
     if (!commentText.trim()) return;
-    console.log(comment.id, "commentID");
     console.log(comment.post_id, "postID");
+    console.log(postId, "postId")
     // const feedId = feed.type === "repost" ? feed.post_id : feed.id;
 
     try {
       const response = await axios.post(
         `${url}/social/comments`,
         {
-          post_id: comment.parent_id,
+          post_id: comment.post_id,
           parent_id: comment.id,
           content: commentText,
         },
@@ -208,6 +210,10 @@ const CommentSection: React.FC<{
               <Button onClick={() => setShowReplyInput((prev) => !prev)}>
                 Reply
               </Button>
+              <Button onClick={postComment}>
+                Submit comment
+              </Button>
+              
               {/* <Button>Bookmark Post</Button> */}
               {user.username === comment.author_username && (
                 <Button onClick={deleteComment} sx={{ color: "red" }}>
@@ -299,11 +305,13 @@ const CommentSection: React.FC<{
         </div> */}
       </div>
       {showReplyInput && (
+        <>
         <CommentFeild
           commentText={commentText}
           setCommentText={setCommentText}
           postComment={postComment}
         />
+        </>
       )}
       <div className="flex justify-between items-center w-full pl-8 mt-1">
         {showReply && (

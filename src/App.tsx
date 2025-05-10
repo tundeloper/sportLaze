@@ -136,9 +136,9 @@ function App() {
               path={`/post/:id`}
               element={
                 <Suspense fallback={<div>Loading...</div>}>
-                  <Protect redirectPath="auth">
+                  {/* <Protect redirectPath="auth"> */}
                     <GetSinglePost />
-                  </Protect>
+                  {/* </Protect> */}
                 </Suspense>
               }
             />

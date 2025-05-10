@@ -878,6 +878,7 @@ const UserPost: React.FC<{
                       comment={comment}
                       key={idx}
                       setComment={setComments}
+                      postId={comment.post_id}
                       // setPost={setPost}
                       // postId={feed.type === "repost" ? feed.post_id : feed.id}
                     />

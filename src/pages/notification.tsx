@@ -13,6 +13,8 @@ import {
   Quote,
 } from "lucide-react";
 import { useSportlaze } from "../hooks/useContext";
+import { Link } from "react-router-dom";
+import { Notification } from "../utils/interface";
 
 const token = localStorage.getItem("access_token");
 
@@ -143,11 +145,19 @@ export default function Notifications() {
 
   console.log("Notifications:", notifications);
 
+  const redirectNot = (not: Notification ): string => {
+    if(not.type === 'message') return `/messages/${not.sender_id}`
+    if(not.type === 'like') return `/post/${not.reference_id}`
+    if(not.type === "comment") return `/post/${not.reference_id}`
+    return '#'
+  }
+
   return (
     <UserProfile>
       {/* <p>Status: {isConnected ? "🟢 Connected" : "🔴 Disconnected"}</p> */}
       <div className="p-3">
         {notifications.map((not) => (
+          <Link to={redirectNot(not)}>
           <div
             className={`flex mb-3 items-start gap-3 p-4 rounded-xl shadow-sm hover:bg-gray-100 transition ${
               not.is_read ? "bg-white" : "bg-blue-50"
@@ -176,6 +186,7 @@ export default function Notifications() {
               <span className="w-2 h-2 bg-blue-500 rounded-full self-center" />
             )}
           </div>
+          </Link>
         ))}
       </div>
       {/* <h1>Notifications</h1> */}

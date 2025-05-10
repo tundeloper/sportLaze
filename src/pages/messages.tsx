@@ -7,7 +7,7 @@ import baseUrl, { socketUrl } from "../utils/baseUrl";
 import { useSportlaze } from "../hooks/useContext";
 import ConversationList from "../components/messages/conversationList";
 import { conversation, User } from "../utils/interface";
-import { Avatar } from "@mui/material";
+import { Avatar, CircularProgress } from "@mui/material";
 import { Link } from "react-router-dom";
 
 // const sound = new Howl({
@@ -197,7 +197,7 @@ const Messages = () => {
                 conversation={conversation}
               />
             ))
-          : `${loading ? "Loading..." : "No conversations found"}`}
+          : loading ? <div className="flex justify-center items-center mt-8"><CircularProgress /></div> : "No conversations found"}
         {/* <ConversationList /> */}
       </div>
     </UserProfile>
