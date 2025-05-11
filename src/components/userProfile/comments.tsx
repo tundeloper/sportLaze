@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 import { Avatar, Button, IconButton, Popover, Tooltip } from "@mui/material";
 import { commentsType } from "../../utils/interface";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
+import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import { Link } from "react-router-dom";
 import { formatFullDate, timeAgo } from "../../utils/format-date";
 import CommentIcon from "../../assets/comment";
@@ -10,16 +11,24 @@ import { useSportlaze } from "../../hooks/useContext";
 import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
 import CommentFeild from "./commentField";
+import insertReply, { removeComment } from "../../utils/add_comment";
+import toggleLike from "../../utils/togglecommentlike";
 
 const CommentSection: React.FC<{
   comment: commentsType;
   setComment: Dispatch<SetStateAction<commentsType[]>>;
-  postId?: number
+  postId?: number;
 }> = ({ comment, setComment, postId }) => {
   const { darkMode, user, setMessage, setSnackIsOpen } = useSportlaze();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
+
+  let storedIds: string[] = JSON.parse(
+    localStorage.getItem("commentIds") || "[]"
+  );
+  const [myLikes, setMylikes] = useState<string[]>(storedIds || []); //setting likes temp
+
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -31,11 +40,10 @@ const CommentSection: React.FC<{
   const [commentText, setCommentText] = useState("");
   const token = localStorage.getItem("access_token");
 
-
   const postComment = async () => {
     if (!commentText.trim()) return;
     console.log(comment.post_id, "postID");
-    console.log(postId, "postId")
+    console.log(postId, "postId");
     // const feedId = feed.type === "repost" ? feed.post_id : feed.id;
 
     try {
@@ -58,6 +66,8 @@ const CommentSection: React.FC<{
         setCommentText("");
         setSnackIsOpen(true);
         setMessage({ message: "Comment added!", error: false });
+        console.log(response.data);
+        setComment((prev) => insertReply(prev, response.data));
         // if (setPost)
         //   setPost((prev) => {
         //     return prev.map((post) => {
@@ -81,10 +91,11 @@ const CommentSection: React.FC<{
         `${url}/social/comments/${comment.id}`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
+      setComment((prev) => removeComment(prev, comment.id));
       if (response.status === 200) {
         setSnackIsOpen(true);
         setMessage({ message: "Comment deleted successfully", error: false });
@@ -114,6 +125,49 @@ const CommentSection: React.FC<{
         setSnackIsOpen(false);
         setMessage({ message: "", error: false });
       }, 5000);
+    }
+  };
+
+  const favouriteComment = (id: string) => {
+    if (comment.is_liked) {
+      unlikeComment(id);
+    } else {
+      likeComment(id);
+    }
+    setComment((prev) => toggleLike(prev, comment.id));
+  };
+
+  const likeComment = async (id: string) => {
+    try {
+      const { data } = await axios.post(
+        `${url}/social/comments/like`,
+        {
+          comment_id: id,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (data) {
+        console.log(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const unlikeComment = async (id: string) => {
+    try {
+      const { data } = await axios.post(
+        `${url}/social/comments/unlike`,
+        {
+          comment_id: id,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (data) {
+        console.log(data);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -210,10 +264,8 @@ const CommentSection: React.FC<{
               <Button onClick={() => setShowReplyInput((prev) => !prev)}>
                 Reply
               </Button>
-              <Button onClick={postComment}>
-                Submit comment
-              </Button>
-              
+              {/* <Button onClick={postComment}>Submit comment</Button> */}
+
               {/* <Button>Bookmark Post</Button> */}
               {user.username === comment.author_username && (
                 <Button onClick={deleteComment} sx={{ color: "red" }}>
@@ -258,21 +310,35 @@ const CommentSection: React.FC<{
       <div className="flex justify-between items-center w-full pl-12 mt-1">
         <div className="flex items-center justify-center gap-4">
           <div
-            className="flex gap-[4px] items-center pointer"
-            // onClick={() => {
-            //   favouriteHandler(feed.id.toString());
-            // }}
+            className="flex gap-[4px] items-center cursor-pointer"
+            onClick={() => {
+              favouriteComment(comment.id.toString());
+            }}
           >
-            <LikeIcon fill={darkMode ? "white" : "#33363F"} />
+            {/* <LikeIcon fill={darkMode ? "white" : "#33363F"} /> */}
+            {/* myLikes.includes(comment.id.toString()) */}
+            {comment.is_liked ? (
+              <FavoriteRoundedIcon color="primary" sx={{ color: "red" }} />
+            ) : (
+              <LikeIcon fill={darkMode ? "white" : "#33363F"} />
+            )}
 
-            {/* <p className="text-[13px] dark:text-white">0</p> */}
+            {comment.likes_count > 0 && (
+              <p className="text-[13px] dark:text-white">
+                {comment.likes_count}
+              </p>
+            )}
           </div>
           <div
             className="flex gap-[4px] items-center cursor-pointer"
             onClick={() => setShowReply((prev) => !prev)}
           >
             <CommentIcon fill={darkMode ? "white" : "#33363F"} />
-            {/* <p className="text-[13px] dark:text-white">0</p> */}
+            {comment.replies.length > 0 && (
+              <p className="text-[13px] dark:text-white">
+                {comment.replies.length}
+              </p>
+            )}
           </div>
           {/* <div
             className="flex gap-[4px] items-center cursor-pointer"
@@ -306,11 +372,11 @@ const CommentSection: React.FC<{
       </div>
       {showReplyInput && (
         <>
-        <CommentFeild
-          commentText={commentText}
-          setCommentText={setCommentText}
-          postComment={postComment}
-        />
+          <CommentFeild
+            commentText={commentText}
+            setCommentText={setCommentText}
+            postComment={postComment}
+          />
         </>
       )}
       <div className="flex justify-between items-center w-full pl-8 mt-1">

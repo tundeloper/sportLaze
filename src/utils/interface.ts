@@ -162,6 +162,8 @@ export type commentsType = {
   author_id: 14;
   post_id: 58;
   parent_id: number;
+  likes_count: number;
+  is_liked: boolean;  
   author_name: string;
   author_username: string;
   author_profile_picture: string;

@@ -108,6 +108,19 @@ const UserChat = () => {
     };
   }, []);
 
+  const sendDirectMessage = () => {
+    if (!input.trim()) return;
+    if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+      socketRef.current.send(JSON.stringify({
+        event: 'direct_message_sent',
+        data: { recipient_id: user_id, content: input, }
+      }));
+      setInput("");
+    } else {
+      console.warn('WebSocket not open');
+    }
+  };
+
   const sendMessage = async () => {
     if (!input.trim()) return;
 

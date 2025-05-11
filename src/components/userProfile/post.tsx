@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   Avatar,
   Button,
+  CircularProgress,
   ClickAwayListener,
   IconButton,
   Popover,
@@ -67,6 +68,7 @@ const UserPost: React.FC<{
   let storedIds: string[] = JSON.parse(localStorage.getItem("postIds") || "[]");
   const [myLikes, setMylikes] = useState<string[]>(storedIds || []); //setting likes temp
   const [showComments, setSHowComments] = useState<boolean>(false);
+  const [commentIsLoading, setcommentIsLoading] = useState<boolean>(false);
   const [commentText, setCommentText] = useState("");
   const [repost, setRepost] = useState<boolean>(false);
   const [showRepostWithQuote, setShowRepostWithQuote] =
@@ -255,22 +257,24 @@ const UserPost: React.FC<{
           setPost((prev) => {
             return prev.map((post) => {
               const feedId = feed.type === "repost" ? feed.post_id : feed.id;
-              return feedId === +id
+              const postID = post.type === "repost" ? post.post_id : post.id;
+              // post.id === feed.id
+              return feedId === +postID
                 ? { ...post, likes_count: post.likes_count + 1 }
                 : post;
             });
           });
 
-        if (setBookmarks)
-          setBookmarks((prev) => {
-            return prev.map((post) => {
-              console.log(post);
-              const feedId = feed.type === "repost" ? feed.post_id : feed.id;
-              return feedId === +id
-                ? { ...post, likes_count: post.post.likes_count + 1 }
-                : post;
-            });
-          });
+        // if (setBookmarks)
+        //   setBookmarks((prev) => {
+        //     return prev.map((post) => {
+        //       console.log(post);
+        //       const feedId = feed.type === "repost" ? feed.post_id : feed.id;
+        //       return feedId === +id
+        //         ? { ...post, likes_count: post.post.likes_count + 1 }
+        //         : post;
+        //     });
+        //   });
       }
     } catch (error) {
       console.log(error);
@@ -462,6 +466,7 @@ const UserPost: React.FC<{
     const feedId = feed.type === "repost" ? feed.post_id : feed.id;
 
     try {
+      setcommentIsLoading(true)
       const { data } = await axios.get(`${url}/social/comments/${feedId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -475,6 +480,7 @@ const UserPost: React.FC<{
       setMessage({ message: "Failed to comment", error: true });
     } finally {
       setTimeout(() => setSnackIsOpen(false), 3000);
+      setcommentIsLoading(false)
     }
   };
 
@@ -863,7 +869,7 @@ const UserPost: React.FC<{
       {showComments && (
         <ClickAwayListener onClickAway={() => setSHowComments(false)}>
           <>
-            <div className="flex justify-between flex-col w-full pl-12 mt-4 pr-4">
+            <div className="flex justify-between flex-col w-full mt-4">
               <CommentFeild
                 commentText={commentText}
                 setCommentText={setCommentText}
@@ -883,9 +889,9 @@ const UserPost: React.FC<{
                       // postId={feed.type === "repost" ? feed.post_id : feed.id}
                     />
                   ))
-                ) : (
+                ) : commentIsLoading ? <CircularProgress size={20}/> : (
                   <p className="text-xs text-gray-400 flex justify-center">
-                    No comments yet, be the first to comment
+                    No comments yet,
                   </p>
                 )}
               </div>
