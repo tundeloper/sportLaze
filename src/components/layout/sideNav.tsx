@@ -84,17 +84,7 @@ const SideNav: React.FC<{
 
     if (token.length > 0 && token) {
       getProfile(token)
-        .then((data) => {
-          console.log(data, "user profile");
-          // setLoading(false);
-        })
-        .catch((error) => {
-          // setError(error.message);
-          // setLoading(false);
-        })
-        .finally(() => {
-          // setLoading(false);
-        });
+        
     }
   }, []);
 

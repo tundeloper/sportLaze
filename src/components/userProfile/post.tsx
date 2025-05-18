@@ -9,6 +9,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
+import LinkIcon from '@mui/icons-material/Link';
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 // import SendIcon from "../../assets/send";
@@ -37,6 +38,7 @@ import CommentSection from "./comments";
 import CommentFeild from "./commentField";
 import { RepostIcon } from "../../assets/svgs/repost";
 import RepostWithQuote from "./repostwithQuote";
+import ShareButton from "./shareButton";
 
 const UserPost: React.FC<{
   feed: Post;
@@ -71,11 +73,13 @@ const UserPost: React.FC<{
   const [commentIsLoading, setcommentIsLoading] = useState<boolean>(false);
   const [commentText, setCommentText] = useState("");
   const [repost, setRepost] = useState<boolean>(false);
+  const [share, setShare] = useState<boolean>(false);
   const [showRepostWithQuote, setShowRepostWithQuote] =
     useState<boolean>(false);
   const [comments, setComments] = useState<commentsType[]>([]);
   const url = baseUrl();
   const token = localStorage.getItem("access_token");
+  const domainURl = typeof window !== "undefined" ? window.location.href : "";
 
   const followedUser =
     followers && followers.some((user) => user.username === feed.username);
@@ -466,7 +470,7 @@ const UserPost: React.FC<{
     const feedId = feed.type === "repost" ? feed.post_id : feed.id;
 
     try {
-      setcommentIsLoading(true)
+      setcommentIsLoading(true);
       const { data } = await axios.get(`${url}/social/comments/${feedId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -480,7 +484,7 @@ const UserPost: React.FC<{
       setMessage({ message: "Failed to comment", error: true });
     } finally {
       setTimeout(() => setSnackIsOpen(false), 3000);
-      setcommentIsLoading(false)
+      setcommentIsLoading(false);
     }
   };
 
@@ -571,6 +575,20 @@ const UserPost: React.FC<{
       setMessage({ message: "Already bookmarked", error: true });
     } finally {
       setTimeout(() => setSnackIsOpen(false), 3000);
+    }
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      const postId = feed.type === "repost" ? feed.post_id : feed.id;
+      await navigator.clipboard.writeText(`${domainURl}post/${postId}`);
+      setSnackIsOpen(true);
+      setMessage({ message: "Link copied to clipboard", error: false });
+      setShare(false);
+      // setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => setSnackIsOpen(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy:", err);
     }
   };
 
@@ -838,9 +856,35 @@ const UserPost: React.FC<{
         </div>
         {/* Bookmark */}
         <div className="flex items-center justify-center gap-4">
-          <div className="flex gap-[2px] items-center">
+          <div className="flex gap-[2px] items-center cursor-pointer relative" onClick={() => setShare(true)}>
             <Share fill={darkMode ? "white" : "#222222"} />
             <p className="text-[13px] dark:text-white">{feed.comments_count}</p>
+            {share && (
+              <ClickAwayListener onClickAway={() => setShare(false)}>
+                <div className="absolute w-max top-6 right-0 bg-black dark:bg-white rounded-md shadow-lg" style={{ zIndex: 100 }}>
+                  <div
+                    className="flex gap-2 cursor-pointer p-3 hover:bg-secondary rounded-md"
+                    onClick={handleCopyLink}
+                  >      
+                      <LinkIcon sx={{color: 'white'}} />
+                  <p className="font-semibold text-white dark:text-black">
+                      Copy link
+                    </p>
+                  </div>
+                  
+                    <div
+                      className="flex gap-2 cursor-pointer p-3 hover:bg-secondary rounded-md"
+                      onClick={() => {
+                        // setShowRepostWithQuote(true);
+                      }}
+                    >
+                      <p className="font-semibold text-white dark:text-black">
+                        <ShareButton post_id={feed.type === "repost" ? feed.post_id : feed.id}/>
+                      </p>
+                    </div>
+                </div>
+              </ClickAwayListener>
+            )}
           </div>
           <div className="mr-2 cursor-pointer" onClick={createBookmark}>
             {isBookmarked ? (
@@ -889,7 +933,11 @@ const UserPost: React.FC<{
                       // postId={feed.type === "repost" ? feed.post_id : feed.id}
                     />
                   ))
-                ) : commentIsLoading ? <CircularProgress size={20}/> : (
+                ) : commentIsLoading ? (
+                  <div className="flex justify-center">
+                    <CircularProgress size={20} />
+                  </div>
+                ) : (
                   <p className="text-xs text-gray-400 flex justify-center">
                     No comments yet,
                   </p>
@@ -1174,9 +1222,33 @@ const UserPost: React.FC<{
         </div>
         {/* Bookmark */}
         <div className="flex items-center justify-center gap-4">
-          <div className="flex gap-[2px] items-center">
+          <div className="flex gap-[2px] items-center cursor-pointer relative" onClick={() => setShare(true)}>
             <Share fill={darkMode ? "white" : "#222222"} />
             {/* <p className="text-[13px] dark:text-white">0</p> */}
+            {share && (
+              <ClickAwayListener onClickAway={() => setShare(false)}>
+                <div className="absolute w-max top-6 right-0 bg-black dark:bg-white rounded-md shadow-lg" style={{ zIndex: 100 }}>
+                  <div
+                    className="flex gap-2 cursor-pointer p-3 hover:bg-secondary rounded-md"
+                    onClick={handleCopyLink}
+                  >      
+                      <LinkIcon sx={{color: 'white'}} />
+                  <p className="font-semibold text-white dark:text-black">
+                      Copy link
+                    </p>
+                  </div>
+                  
+                    <div
+                      className="flex gap-2 cursor-pointer p-3 hover:bg-secondary rounded-md"
+                      onClick={() => {
+                        // setShowRepostWithQuote(true);
+                      }}
+                    >
+                         <ShareButton post_id={feed.type === "repost" ? feed.post_id : feed.id}/>
+                    </div>
+                </div>
+              </ClickAwayListener>
+            )}
           </div>
           <div
             className="mr-2 cursor-pointer"

@@ -29,7 +29,7 @@ import ForgetPassword from "./pages/forget-passord";
 const Welcome = lazy(() => import("./pages/auth"));
 const Home = lazy(() => import("./pages/home"));
 const Lounge = lazy(() => import("./pages/lounge"));
-
+const LivescorePage = lazy(() => import("./pages/LivescorePage"));
 function App() {
 
   return (
@@ -188,6 +188,14 @@ function App() {
                   <Protect redirectPath="auth">
                     <Lounge />
                   </Protect>
+                </Suspense>
+              }
+            />
+            <Route
+              path="/livescore"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                    <LivescorePage />
                 </Suspense>
               }
             />

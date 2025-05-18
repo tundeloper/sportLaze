@@ -168,7 +168,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         const { data } = await axios.get(`${url}/notifications`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log(data);
         if (data) setNotifications([...data]);
       } catch (error) {
         console.log(error, "unable to read unread message count");

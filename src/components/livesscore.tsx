@@ -45,7 +45,7 @@ const LiveScore: React.FC = () => {
     setLoading(true);
     // setError("");
     try {
-      if (slides.length > 0) {
+      if (!(slides.length > 0)) {
         const response = await axios.get(
           `https://lazeapi-v1.onrender.com/v1/livescores/live`,
           {
@@ -55,7 +55,7 @@ const LiveScore: React.FC = () => {
             },
           }
         );
-        console.log(response.data);
+        console.log(response.data,);
         setSlides(response.data.matches);
       }
     } catch (err) {

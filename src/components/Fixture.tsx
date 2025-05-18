@@ -4,6 +4,7 @@ import FixtureMatch from "./fixtureMatch";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import baseUrl from "../utils/baseUrl";
+import { Link } from "react-router-dom";
 // import { useSportlaze } from "../hooks/useContext";
 
 const Fixture = () => {
@@ -51,8 +52,10 @@ const Fixture = () => {
           SUNDAY 20 OCTOBER
         </div>
         <FixtureMatch />
-        <Button
-          sx={{
+        <Link
+        to="/livescore"
+          className="text-center text-[15px] text-secondary border border-primary rounded-[1rem] px-4 mb-2 dark:border-white dark:text-white"
+          style={{
             color: "white",
             background: "#9a1b39",
             marginTop: "8px",
@@ -63,7 +66,7 @@ const Fixture = () => {
           }}
         >
           View All
-        </Button>
+        </Link>
       </div>
     </div>
   );
